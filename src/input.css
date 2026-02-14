@@ -1,0 +1,96 @@
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-cairo bg-slate-50 text-slate-800;
+  }
+}
+
+@layer components {
+  .nav-link-modern {
+    @apply relative inline-flex whitespace-nowrap rounded-xl px-3 py-2 text-white/90 transition duration-300 hover:-translate-y-0.5 hover:text-white;
+  }
+
+  .nav-link-modern::before {
+    content: "";
+    @apply absolute inset-0 -z-10 rounded-xl bg-white/0 transition duration-300;
+  }
+
+  .nav-link-modern::after {
+    content: "";
+    @apply absolute -bottom-0.5 right-3 h-0.5 w-0 rounded-full bg-cyan-300 shadow-[0_0_12px_rgba(103,232,249,0.8)] transition-all duration-300;
+  }
+
+  .nav-link-modern:hover::before {
+    @apply bg-white/15;
+  }
+
+  .nav-link-modern:hover::after {
+    @apply w-[calc(100%-1.5rem)];
+  }
+
+  .hero-slider {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .hero-slide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transform: scale(1.03);
+    transition: opacity 900ms ease, transform 6s linear;
+    will-change: opacity, transform;
+  }
+
+  .hero-slide.is-active {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 700ms ease, transform 700ms ease;
+  }
+
+  .animate-on-scroll.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .social-icon {
+    @apply inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/25 text-white shadow-lg transition duration-300 hover:-translate-y-0.5 hover:shadow-xl;
+  }
+
+  .social-icon--facebook {
+    @apply bg-gradient-to-br from-[#1877F2] to-[#0b57c2] hover:from-[#2f86f6] hover:to-[#0c63de];
+  }
+
+  .social-icon--whatsapp {
+    @apply bg-gradient-to-br from-[#25D366] to-[#179c48] hover:from-[#38dd75] hover:to-[#1ab353];
+  }
+
+  .social-icon--youtube {
+    @apply bg-gradient-to-br from-[#ff3030] to-[#c81414] hover:from-[#ff4b4b] hover:to-[#e21b1b];
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

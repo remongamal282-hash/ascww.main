@@ -1,0 +1,13 @@
+﻿{
+  "name": "static",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ASCWW static website",
+  "scripts": {
+    "build:css": "tailwindcss -i ./src/input.css -o ./css/main.css --minify",
+    "watch:css": "tailwindcss -i ./src/input.css -o ./css/main.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  }
+}
