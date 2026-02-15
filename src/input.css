@@ -155,7 +155,7 @@
   }
 
   .hero-title {
-    @apply mx-auto max-w-5xl text-4xl font-extrabold leading-tight text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)] sm:text-5xl lg:text-6xl;
+    @apply mx-auto max-w-5xl text-3xl font-extrabold leading-tight text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)] sm:text-4xl lg:text-5xl;
   }
 
   .animate-on-scroll {
@@ -188,7 +188,7 @@
 
 @media (max-width: 1023px) {
   .hero-title {
-    @apply text-3xl;
+    @apply text-2xl;
   }
 }
 

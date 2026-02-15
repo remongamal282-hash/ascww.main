@@ -1,13 +1,27 @@
-﻿{
-  "name": "static",
+{
+  "name": "ascww-react-ts",
   "version": "1.0.0",
   "private": true,
-  "description": "ASCWW static website",
+  "type": "module",
+  "description": "ASCWW website migrated to React + TypeScript",
   "scripts": {
+    "dev": "vite",
+    "build": "npm run typecheck && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
     "build:css": "tailwindcss -i ./src/input.css -o ./css/main.css --minify",
     "watch:css": "tailwindcss -i ./src/input.css -o ./css/main.css --watch"
   },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
   "devDependencies": {
-    "tailwindcss": "^3.4.17"
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react-swc": "^3.7.1",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.3",
+    "vite": "^6.0.5"
   }
 }
