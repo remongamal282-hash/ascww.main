@@ -3,6 +3,13 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --logo-blue: #0a3555;
+    --logo-blue-dark: #082b47;
+    --logo-gold: #d7b05a;
+    --logo-gold-strong: #c79d41;
+  }
+
   html {
     scroll-behavior: smooth;
   }
@@ -13,26 +20,114 @@
 }
 
 @layer components {
-  .nav-link-modern {
-    @apply relative inline-flex whitespace-nowrap rounded-xl px-3 py-2 text-white/90 transition duration-300 hover:-translate-y-0.5 hover:text-white;
+  .site-mainbar {
+    position: relative;
+    z-index: 50;
   }
 
-  .nav-link-modern::before {
+  .site-mainbar.is-pinned {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 60;
+  }
+
+  .topbar-link {
+    @apply inline-flex items-center gap-1.5 text-sm font-semibold text-slate-100 transition hover:text-white;
+  }
+
+  .top-social {
+    @apply inline-flex h-7 w-7 items-center justify-center rounded-full border border-[#d7b05a]/45 text-[#d7b05a] transition hover:bg-[#d7b05a] hover:text-[#0a3555];
+  }
+
+  .nav-link-classic {
+    @apply relative inline-flex rounded-lg px-3 py-2 text-slate-700 transition duration-300 hover:bg-[#0a3555]/5 hover:text-[#0a3555];
+  }
+
+  .nav-link-classic::after {
     content: "";
-    @apply absolute inset-0 -z-10 rounded-xl bg-white/0 transition duration-300;
+    @apply absolute -bottom-1 right-3 h-0.5 w-0 rounded-full bg-[#d7b05a] transition-all duration-300;
   }
 
-  .nav-link-modern::after {
-    content: "";
-    @apply absolute -bottom-0.5 right-3 h-0.5 w-0 rounded-full bg-cyan-300 shadow-[0_0_12px_rgba(103,232,249,0.8)] transition-all duration-300;
-  }
-
-  .nav-link-modern:hover::before {
-    @apply bg-white/15;
-  }
-
-  .nav-link-modern:hover::after {
+  .nav-link-classic:hover::after {
     @apply w-[calc(100%-1.5rem)];
+  }
+
+  .nav-link-classic--active {
+    @apply text-[#c79d41];
+  }
+
+  .nav-link-classic--active::after {
+    @apply w-[calc(100%-1.5rem)];
+  }
+
+  .main-menu-wrap {
+    @apply overflow-visible whitespace-nowrap;
+  }
+
+  .nav-dropdown {
+    @apply relative inline-flex;
+  }
+
+  .nav-dropdown-trigger {
+    @apply relative inline-flex items-center rounded-lg px-2.5 py-2 text-slate-700 transition duration-300 hover:bg-[#0a3555]/5 hover:text-[#0a3555];
+  }
+
+  .nav-dropdown-trigger::after {
+    content: "";
+    @apply absolute -bottom-1 right-3 h-0.5 w-0 rounded-full bg-[#d7b05a] transition-all duration-300;
+  }
+
+  .nav-dropdown:hover .nav-dropdown-trigger::after,
+  .nav-dropdown:focus-within .nav-dropdown-trigger::after {
+    @apply w-[calc(100%-1.5rem)];
+  }
+
+  .nav-dropdown-menu {
+    @apply pointer-events-none invisible absolute right-0 top-full z-[60] mt-1.5 w-72 rounded-xl border border-[#d7b05a]/35 bg-white p-2 opacity-0 shadow-xl transition duration-200;
+    white-space: normal;
+  }
+
+  .nav-dropdown:hover .nav-dropdown-menu,
+  .nav-dropdown:focus-within .nav-dropdown-menu {
+    @apply pointer-events-auto visible opacity-100;
+  }
+
+  .nav-dropdown-item {
+    @apply block whitespace-normal rounded-lg px-3 py-2 text-right text-sm font-semibold leading-6 text-slate-700 transition hover:bg-[#0a3555]/10 hover:text-[#0a3555];
+  }
+
+  .nav-dropdown--sewage .nav-dropdown-menu {
+    @apply w-[25rem];
+  }
+
+  .nav-dropdown--sewage .nav-dropdown-item {
+    @apply text-[14px];
+  }
+
+  .mobile-nav-group {
+    @apply rounded-lg border border-slate-200 bg-slate-50;
+  }
+
+  .mobile-nav-group summary {
+    @apply cursor-pointer list-none px-3 py-2 font-bold text-[#0a3555];
+  }
+
+  .mobile-nav-group[open] summary {
+    @apply border-b border-slate-200;
+  }
+
+  .mobile-nav-group summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .mobile-nav-submenu {
+    @apply grid gap-1 p-2;
+  }
+
+  .mobile-nav-submenu a {
+    @apply rounded-md bg-white px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-100;
   }
 
   .hero-slider {
@@ -48,6 +143,7 @@
     background-position: center;
     background-repeat: no-repeat;
     opacity: 0;
+    filter: grayscale(100%);
     transform: scale(1.03);
     transition: opacity 900ms ease, transform 6s linear;
     will-change: opacity, transform;
@@ -56,6 +152,10 @@
   .hero-slide.is-active {
     opacity: 1;
     transform: scale(1.08);
+  }
+
+  .hero-title {
+    @apply mx-auto max-w-5xl text-4xl font-extrabold leading-tight text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)] sm:text-5xl lg:text-6xl;
   }
 
   .animate-on-scroll {
@@ -83,6 +183,12 @@
 
   .social-icon--youtube {
     @apply bg-gradient-to-br from-[#ff3030] to-[#c81414] hover:from-[#ff4b4b] hover:to-[#e21b1b];
+  }
+}
+
+@media (max-width: 1023px) {
+  .hero-title {
+    @apply text-3xl;
   }
 }
 

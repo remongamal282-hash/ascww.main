@@ -4,8 +4,13 @@
 
   const toggle = document.getElementById('mobile-toggle');
   const mobileMenu = document.getElementById('mobile-menu');
-  const header = document.getElementById('site-header');
+  const topBar = document.getElementById('site-topbar');
+  const mainBar = document.getElementById('site-mainbar');
+  const mainBarOffset = document.getElementById('mainbar-offset');
   const heroSlides = Array.from(document.querySelectorAll('.hero-slide'));
+  const heroTitle = document.getElementById('hero-title');
+  const heroSubtitle = document.getElementById('hero-subtitle');
+  const heroCta = document.getElementById('hero-cta');
 
   if (toggle && mobileMenu) {
     const closeMenu = () => {
@@ -31,29 +36,87 @@
     });
   }
 
-  const handleHeaderShadow = () => {
-    if (!header) return;
+  const getTopBarHeight = () => {
+    if (!topBar) return 0;
+    const topBarStyle = window.getComputedStyle(topBar);
+    if (topBarStyle.display === 'none' || topBarStyle.visibility === 'hidden') return 0;
+    return topBar.offsetHeight;
+  };
+
+  let topBarHeight = getTopBarHeight();
+
+  const syncMainBar = () => {
+    if (!mainBar) return;
+
+    const shouldPin = window.scrollY > topBarHeight;
+    mainBar.classList.toggle('is-pinned', shouldPin);
+
+    if (mainBarOffset) {
+      mainBarOffset.style.height = shouldPin ? `${mainBar.offsetHeight}px` : '0px';
+    }
+
     if (window.scrollY > 12) {
-      header.classList.add('shadow-lg');
+      mainBar.classList.add('shadow-lg');
     } else {
-      header.classList.remove('shadow-lg');
+      mainBar.classList.remove('shadow-lg');
     }
   };
 
-  handleHeaderShadow();
-  window.addEventListener('scroll', handleHeaderShadow, { passive: true });
+  syncMainBar();
+  window.addEventListener('scroll', syncMainBar, { passive: true });
+  window.addEventListener('resize', () => {
+    topBarHeight = getTopBarHeight();
+    syncMainBar();
+  }, { passive: true });
+
+  const updateHeroContent = (slideIndex) => {
+    const slide = heroSlides[slideIndex];
+    if (!slide) return;
+
+    const title = (slide.dataset.title || '').trim();
+    const subtitle = (slide.dataset.subtitle || '').trim();
+    const link = (slide.dataset.link || '').trim();
+    const cta = (slide.dataset.cta || '').trim();
+
+    if (heroTitle && title) heroTitle.textContent = title;
+
+    if (heroSubtitle) {
+      if (subtitle) {
+        heroSubtitle.textContent = subtitle;
+        heroSubtitle.classList.remove('hidden');
+      } else {
+        heroSubtitle.textContent = '';
+        heroSubtitle.classList.add('hidden');
+      }
+    }
+
+    if (heroCta) {
+      if (link) {
+        heroCta.href = link;
+        heroCta.classList.remove('hidden');
+      } else {
+        heroCta.classList.add('hidden');
+      }
+
+      if (cta) heroCta.textContent = cta;
+    }
+  };
 
   const motionReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (heroSlides.length > 1) {
+  if (heroSlides.length > 0) {
     let currentSlide = heroSlides.findIndex((slide) => slide.classList.contains('is-active'));
     if (currentSlide < 0) currentSlide = 0;
+    updateHeroContent(currentSlide);
 
-    setInterval(() => {
-      const nextSlide = (currentSlide + 1) % heroSlides.length;
-      heroSlides[currentSlide].classList.remove('is-active');
-      heroSlides[nextSlide].classList.add('is-active');
-      currentSlide = nextSlide;
-    }, 5000);
+    if (heroSlides.length > 1) {
+      setInterval(() => {
+        const nextSlide = (currentSlide + 1) % heroSlides.length;
+        heroSlides[currentSlide].classList.remove('is-active');
+        heroSlides[nextSlide].classList.add('is-active');
+        currentSlide = nextSlide;
+        updateHeroContent(currentSlide);
+      }, 5000);
+    }
   }
 
   if (motionReduced) {
