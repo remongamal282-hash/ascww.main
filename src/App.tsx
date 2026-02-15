@@ -14,6 +14,9 @@ function App() {
     const heroTitle = document.getElementById('hero-title');
     const heroSubtitle = document.getElementById('hero-subtitle');
     const heroCta = document.getElementById('hero-cta') as HTMLAnchorElement | null;
+    const heroContent = document.getElementById('hero-content');
+    const heroPrev = document.getElementById('hero-prev') as HTMLButtonElement | null;
+    const heroNext = document.getElementById('hero-next') as HTMLButtonElement | null;
 
     const cleanups: Array<() => void> = [];
 
@@ -124,18 +127,61 @@ function App() {
     if (heroSlides.length > 0) {
       let currentSlide = heroSlides.findIndex((slide) => slide.classList.contains('is-active'));
       if (currentSlide < 0) currentSlide = 0;
+
+      const triggerHeroTextAnimation = () => {
+        if (!heroContent) return;
+        heroContent.classList.remove('hero-content-animate');
+        void heroContent.offsetWidth;
+        heroContent.classList.add('hero-content-animate');
+      };
+
+      const moveToSlide = (nextIndex: number) => {
+        heroSlides[currentSlide]?.classList.remove('is-active');
+        heroSlides[nextIndex]?.classList.add('is-active');
+        currentSlide = nextIndex;
+        updateHeroContent(currentSlide);
+        triggerHeroTextAnimation();
+      };
+
       updateHeroContent(currentSlide);
+      triggerHeroTextAnimation();
+
+      let intervalId: number | undefined;
+      const startAutoplay = () => {
+        if (heroSlides.length <= 1) return;
+        intervalId = window.setInterval(() => {
+          const nextSlide = (currentSlide + 1) % heroSlides.length;
+          moveToSlide(nextSlide);
+        }, 5000);
+      };
+
+      const stopAutoplay = () => {
+        if (intervalId) window.clearInterval(intervalId);
+      };
 
       if (heroSlides.length > 1) {
-        const intervalId = window.setInterval(() => {
-          const nextSlide = (currentSlide + 1) % heroSlides.length;
-          heroSlides[currentSlide]?.classList.remove('is-active');
-          heroSlides[nextSlide]?.classList.add('is-active');
-          currentSlide = nextSlide;
-          updateHeroContent(currentSlide);
-        }, 5000);
+        startAutoplay();
 
-        cleanups.push(() => window.clearInterval(intervalId));
+        const onPrev = () => {
+          const nextSlide = (currentSlide - 1 + heroSlides.length) % heroSlides.length;
+          moveToSlide(nextSlide);
+          stopAutoplay();
+          startAutoplay();
+        };
+
+        const onNext = () => {
+          const nextSlide = (currentSlide + 1) % heroSlides.length;
+          moveToSlide(nextSlide);
+          stopAutoplay();
+          startAutoplay();
+        };
+
+        heroPrev?.addEventListener('click', onPrev);
+        heroNext?.addEventListener('click', onNext);
+
+        cleanups.push(() => stopAutoplay());
+        cleanups.push(() => heroPrev?.removeEventListener('click', onPrev));
+        cleanups.push(() => heroNext?.removeEventListener('click', onNext));
       }
     }
 
@@ -469,30 +515,6 @@ function App() {
         <div
           className="hero-slide is-active"
           style={{ backgroundImage: "url('/images/slider/1.jpg')" }}
-          data-title="شركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد"
-          data-subtitle="ترحب بكم و نفخر بأننا احدي الشركات الرائده في جمهوريه مصر العربيه"
-          data-link="https://ascww.org/an-elsherka"
-          data-cta="تعرف عل المزيد"
-        ></div>
-        <div
-          className="hero-slide"
-          style={{ backgroundImage: "url('/images/slider/2.jpg')" }}
-          data-title="مركز خدمة العملاء"
-          data-subtitle="مراكز خدمه العملاء وطرق التواصل وعنوان أقرب فرع"
-          data-link="https://ascww.org/call-center"
-          data-cta="تعرف عل المزيد"
-        ></div>
-        <div
-          className="hero-slide"
-          style={{ backgroundImage: "url('/images/slider/3.jpg')" }}
-          data-title="الإداره العامه للتدريب"
-          data-subtitle="متاح حجز قاعات التدريب من داخل و خارج الشركة"
-          data-link="https://ascww.org/general-admin-training"
-          data-cta="تعرف عل المزيد"
-        ></div>
-        <div
-          className="hero-slide"
-          style={{ backgroundImage: "url('/images/slider/4.jpg')" }}
           data-title="معامل علي اعلي مستوي"
           data-subtitle="الاهتمام بمعايير منظمة الصحه العالمية للتاكد من جودة المياه بأحدث المعايير والتقنيات"
           data-link="https://ascww.org/lab-of-company-water"
@@ -500,19 +522,61 @@ function App() {
         ></div>
         <div
           className="hero-slide"
-          style={{ backgroundImage: "url('/images/slider/5.jpg')" }}
+          style={{ backgroundImage: "url('/images/slider/2.jpg')" }}
           data-title="لتنزيل برنامج قرائتي اضغط هنا"
           data-subtitle=""
           data-link="https://ascww.org/readme"
           data-cta="فتح الخدمة"
         ></div>
+        <div
+          className="hero-slide"
+          style={{ backgroundImage: "url('/images/slider/3.jpg')" }}
+          data-title="شركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد"
+          data-subtitle="ترحب بكم و نفخر بأننا احدي الشركات الرائده في جمهوريه مصر العربيه"
+          data-link="https://ascww.org/an-elsherka"
+          data-cta="تعرف عل المزيد"
+        ></div>
+        <div
+          className="hero-slide"
+          style={{ backgroundImage: "url('/images/slider/4.jpg')" }}
+          data-title="الإداره العامه للتدريب"
+          data-subtitle="متاح حجز قاعات التدريب من داخل و خارج الشركة"
+          data-link="https://ascww.org/general-admin-training"
+          data-cta="تعرف عل المزيد"
+        ></div>
+        <div
+          className="hero-slide"
+          style={{ backgroundImage: "url('/images/slider/5.jpg')" }}
+          data-title="مركز خدمة العملاء"
+          data-subtitle="مراكز خدمه العملاء وطرق التواصل وعنوان أقرب فرع"
+          data-link="https://ascww.org/call-center"
+          data-cta="تعرف عل المزيد"
+        ></div>
+        <div
+          className="hero-slide"
+          style={{ backgroundImage: "url('/images/slider/6.png')" }}
+          data-title="لتنزيل برنامج الخط الساخن أضغط هنا"
+          data-subtitle=""
+          data-link="https://ascww.org/hotline125"
+          data-cta="فتح الخدمة"
+        ></div>
       </div>
-      <div className="absolute inset-0 -z-10 bg-gradient-to-l from-[#0a3555]/80 via-[#082b47]/65 to-black/70"></div>
+      <div className="absolute inset-0 -z-10 bg-gradient-to-l from-[#0a3555]/55 via-[#082b47]/45 to-black/50"></div>
+      <button id="hero-prev" type="button" aria-label="السلايد السابق" className="hero-nav-btn hero-nav-btn--left">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path strokeLinecap="round" strokeLinejoin="round" d="m15 18-6-6 6-6" />
+        </svg>
+      </button>
+      <button id="hero-next" type="button" aria-label="السلايد التالي" className="hero-nav-btn hero-nav-btn--right">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path strokeLinecap="round" strokeLinejoin="round" d="m9 18 6-6-6-6" />
+        </svg>
+      </button>
       <div className="mx-auto grid min-h-[78vh] max-w-7xl items-center px-4 py-16 sm:px-6 lg:px-8">
-        <div className="text-center text-white">
-          <h1 id="hero-title" className="hero-title">شركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد</h1>
-          <p id="hero-subtitle" className="mx-auto mt-4 max-w-4xl text-base leading-8 text-slate-100 sm:text-lg">ترحب بكم و نفخر بأننا احدي الشركات الرائده في جمهوريه مصر العربيه</p>
-          <a id="hero-cta" href="https://ascww.org/an-elsherka" target="_blank" rel="noopener noreferrer" className="mt-7 inline-flex rounded-full border border-[#d7b05a]/80 bg-[#d7b05a]/90 px-6 py-3 text-sm font-bold text-[#0a3555] transition hover:bg-[#d7b05a]">تعرف عل المزيد</a>
+        <div id="hero-content" className="hero-content-animate text-center text-white">
+          <h1 id="hero-title" className="hero-title hero-anim-item">شركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد</h1>
+          <p id="hero-subtitle" className="hero-anim-item mx-auto mt-4 max-w-4xl text-base leading-8 text-slate-100 sm:text-lg">ترحب بكم و نفخر بأننا احدي الشركات الرائده في جمهوريه مصر العربيه</p>
+          <a id="hero-cta" href="https://ascww.org/an-elsherka" target="_blank" rel="noopener noreferrer" className="hero-anim-item mt-7 inline-flex rounded-full border border-[#d7b05a]/80 bg-[#d7b05a]/90 px-6 py-3 text-sm font-bold text-[#0a3555] transition hover:bg-[#d7b05a]">تعرف عل المزيد</a>
         </div>
       </div>
     </section>
@@ -603,6 +667,7 @@ function App() {
         <img src="/images/slider/3.jpg" alt="صورة 3" className="h-44 w-full rounded-xl object-cover animate-on-scroll" loading="lazy" data-delay="150" />
         <img src="/images/slider/4.jpg" alt="صورة 4" className="h-44 w-full rounded-xl object-cover animate-on-scroll" loading="lazy" data-delay="200" />
         <img src="/images/slider/5.jpg" alt="صورة 5" className="h-44 w-full rounded-xl object-cover animate-on-scroll" loading="lazy" data-delay="250" />
+        <img src="/images/slider/6.png" alt="صورة 6" className="h-44 w-full rounded-xl object-cover animate-on-scroll" loading="lazy" data-delay="300" />
       </div>
     </section>
 
