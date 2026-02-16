@@ -1,6 +1,61 @@
-﻿import { useEffect } from 'react';
+﻿import { useEffect, useState } from 'react';
+type AdminInfoResponse = {
+  boss_title?: string;
+  boss_name?: string;
+  boss_speech?: string;
+  boss_image?: string;
+  has_boss_image?: boolean;
+};
+const ADMIN_INFO_ENDPOINT = import.meta.env.DEV ? '/api/admin-info' : 'https://backend.ascww.org/api/admin-info';
+const ADMIN_IMAGE_ENDPOINT = import.meta.env.DEV ? '/api/image' : 'https://backend.ascww.org/api/image';
+const sanitizeBossSpeechHtml = (html: string) => {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  doc.querySelectorAll('script, style, iframe, object, embed, link, meta').forEach((node) => node.remove());
+  doc.body.querySelectorAll('*').forEach((element) => {
+    Array.from(element.attributes).forEach((attribute) => {
+      const attributeName = attribute.name.toLowerCase();
+      const attributeValue = attribute.value.trim().toLowerCase();
+      if (attributeName.startsWith('on')) {
+        element.removeAttribute(attribute.name);
+      }
+      if ((attributeName === 'href' || attributeName === 'src') && attributeValue.startsWith('javascript:')) {
+        element.removeAttribute(attribute.name);
+      }
+    });
+  });
+  return doc.body.innerHTML;
+};
 
 function App() {
+  const [adminInfo, setAdminInfo] = useState<AdminInfoResponse | null>(null);
+  const [adminInfoLoading, setAdminInfoLoading] = useState(true);
+  const [adminInfoError, setAdminInfoError] = useState<string | null>(null);
+  useEffect(() => {
+    const controller = new AbortController();
+    let active = true;
+    const loadAdminInfo = async () => {
+      try {
+        const response = await fetch(ADMIN_INFO_ENDPOINT, { signal: controller.signal });
+        if (!response.ok) {
+          throw new Error(`Admin info request failed with status ${response.status}`);
+        }
+        const data = (await response.json()) as AdminInfoResponse;
+        if (!active) return;
+        setAdminInfo(data);
+      } catch {
+        if (!active) return;
+        setAdminInfoError('تعذر تحميل كلمة الرئيس حاليًا.');
+      } finally {
+        if (active) setAdminInfoLoading(false);
+      }
+    };
+    loadAdminInfo();
+    return () => {
+      active = false;
+      controller.abort();
+    };
+  }, []);
   useEffect(() => {
     const yearEl = document.getElementById('current-year');
     if (yearEl) yearEl.textContent = String(new Date().getFullYear());
@@ -218,6 +273,13 @@ function App() {
     };
   }, []);
 
+  const bossTitle = adminInfo?.boss_title?.trim() || 'السيد المهندس';
+  const bossName = adminInfo?.boss_name?.trim() || 'رئيس مجلس الإدارة';
+  const speechHtml = adminInfo?.boss_speech?.trim()
+    ? sanitizeBossSpeechHtml(adminInfo.boss_speech)
+    : '<p>نسعى دائمًا إلى تقديم خدمات مياه الشرب والصرف الصحي بأعلى جودة، مع التطوير المستمر للبنية التحتية ورفع كفاءة التشغيل لخدمة المواطنين.</p>';
+  const bossImageName = (adminInfo?.boss_image || 'boss.jpg').split('/').pop() || 'boss.jpg';
+  const bossImageUrl = `${ADMIN_IMAGE_ENDPOINT}/${encodeURIComponent(bossImageName)}`;
   return (
     <>
 <header id="site-header" className="relative w-full bg-white">
@@ -254,7 +316,7 @@ function App() {
           <img src="/images/ascww-logo.png" alt="شعار الشركة" className="h-12 w-auto sm:h-14" />
         </a>
 
-        <nav className="main-menu-wrap hidden min-w-0 items-center justify-center gap-1 text-base font-bold text-slate-800 xl:flex">
+        <nav className="main-menu-wrap hidden min-w-0 items-center justify-center gap-1 text-sm font-bold text-slate-800 xl:flex">
           <a className="nav-link-classic nav-link-classic--active" href="/">الرئيسية</a>
 
           <div className="nav-dropdown group">
@@ -561,7 +623,7 @@ function App() {
           data-cta="فتح الخدمة"
         ></div>
       </div>
-      <div className="absolute inset-0 -z-10 bg-gradient-to-l from-[#0a3555]/55 via-[#082b47]/45 to-black/50"></div>
+      <div className="hero-overlay"></div>
       <button id="hero-prev" type="button" aria-label="السلايد السابق" className="hero-nav-btn hero-nav-btn--left">
         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path strokeLinecap="round" strokeLinejoin="round" d="m15 18-6-6 6-6" />
@@ -577,6 +639,47 @@ function App() {
           <h1 id="hero-title" className="hero-title hero-anim-item">شركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد</h1>
           <p id="hero-subtitle" className="hero-anim-item mx-auto mt-4 max-w-4xl text-base leading-8 text-slate-100 sm:text-lg">ترحب بكم و نفخر بأننا احدي الشركات الرائده في جمهوريه مصر العربيه</p>
           <a id="hero-cta" href="https://ascww.org/an-elsherka" target="_blank" rel="noopener noreferrer" className="hero-anim-item mt-7 inline-flex rounded-full border border-[#d7b05a]/80 bg-[#d7b05a]/90 px-6 py-3 text-sm font-bold text-[#0a3555] transition hover:bg-[#d7b05a]">تعرف عل المزيد</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="boss-word" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <div className="boss-word-card animate-on-scroll rounded-2xl border border-[#d7b05a]/35 bg-white shadow-soft" data-delay="70">
+        <div className="grid gap-0 lg:grid-cols-[minmax(0,1fr)_340px]">
+          <div className="order-2 p-6 sm:p-8 lg:order-2">
+            <p className="text-sm font-bold text-brand-700">كلمة الرئيس</p>
+            <h2 className="mt-2 text-2xl font-extrabold text-slate-900 sm:text-3xl">
+              {bossTitle} <span className="text-[#0a3555]">{bossName}</span>
+            </h2>
+            <div className="mt-5" aria-live="polite">
+              {adminInfoLoading ? (
+                <p className="leading-8 text-slate-600">جاري تحميل كلمة الرئيس...</p>
+              ) : adminInfoError ? (
+                <p className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-800">{adminInfoError}</p>
+              ) : (
+                <div className="boss-speech-content" dangerouslySetInnerHTML={{ __html: speechHtml }}></div>
+              )}
+            </div>
+          </div>
+
+          <div className="order-1 relative min-h-[280px] overflow-hidden bg-slate-100 lg:order-1">
+            <img
+              src={bossImageUrl}
+              alt={`صورة ${bossName}`}
+              className="h-full w-full object-cover"
+              loading="lazy"
+              onError={(event) => {
+                const image = event.currentTarget;
+                if (image.dataset.fallbackApplied) return;
+                image.dataset.fallbackApplied = 'true';
+                image.src = `${ADMIN_IMAGE_ENDPOINT}/boss.jpg`;
+              }}
+            />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0a3555]/45 via-transparent to-transparent"></div>
+            <div className="absolute inset-x-0 bottom-0 px-4 py-3 text-sm font-bold text-white">
+              {bossName}
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -746,3 +849,5 @@ function App() {
 }
 
 export default App;
+
+

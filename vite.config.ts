@@ -2,5 +2,15 @@
 import react from '@vitejs/plugin-react-swc';
 
 export default defineConfig({
-  plugins: [react()]
+  plugins: [react()],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://backend.ascww.org',
+        changeOrigin: true,
+        secure: true
+      }
+    }
+  }
 });
+

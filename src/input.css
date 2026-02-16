@@ -155,6 +155,61 @@
     filter: grayscale(0) brightness(1);
   }
 
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: -10;
+    pointer-events: none;
+    background-image:
+      linear-gradient(110deg, rgba(10, 53, 85, 0.62) 5%, rgba(8, 43, 71, 0.45) 42%, rgba(0, 0, 0, 0.55) 100%),
+      radial-gradient(circle at 20% 20%, rgba(215, 176, 90, 0.16), transparent 42%),
+      radial-gradient(circle at 78% 80%, rgba(255, 255, 255, 0.09), transparent 38%);
+  }
+
+  .boss-word-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .boss-word-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(circle at top left, rgba(215, 176, 90, 0.16), transparent 46%);
+  }
+
+  .boss-speech-content {
+    @apply text-base leading-8 text-slate-700;
+  }
+
+  .boss-speech-content p {
+    margin-bottom: 0.9rem;
+  }
+
+  .boss-speech-content p:last-child {
+    margin-bottom: 0;
+  }
+
+  .boss-speech-content .ql-align-center {
+    text-align: center;
+  }
+
+  .boss-speech-content .ql-direction-rtl {
+    direction: rtl;
+  }
+
+  .boss-speech-content strong {
+    color: #0a3555;
+    font-weight: 700;
+  }
+
+  .boss-speech-content em {
+    color: #c79d41;
+    font-style: normal;
+    font-weight: 700;
+  }
+
   .hero-nav-btn {
     @apply absolute top-1/2 z-20 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/50 bg-white/20 text-white backdrop-blur-sm transition hover:bg-white/35;
   }
