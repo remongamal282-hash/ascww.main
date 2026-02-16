@@ -167,28 +167,49 @@
   }
 
   .boss-word-card {
+    @apply rounded-3xl bg-slate-200/80 px-2 py-3 sm:px-4 sm:py-5;
     position: relative;
-    overflow: hidden;
   }
 
   .boss-word-card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: radial-gradient(circle at top left, rgba(215, 176, 90, 0.16), transparent 46%);
+    content: none;
+  }
+
+  .boss-word-grid {
+    @apply grid gap-3 lg:grid-cols-[560px_minmax(0,1fr)] lg:items-center lg:gap-7;
+  }
+
+  .boss-word-content {
+    @apply text-center lg:px-3;
+  }
+
+  .boss-word-kicker {
+    @apply text-base font-extrabold leading-tight text-[#2f4fa0] sm:text-lg lg:text-xl;
+  }
+
+  .boss-word-title {
+    @apply mt-4 text-2xl font-extrabold leading-tight text-slate-900 sm:text-3xl;
+  }
+
+  .boss-word-body {
+    @apply mx-auto mt-3 max-w-3xl lg:mx-0 lg:max-w-none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
   }
 
   .boss-speech-content {
-    @apply text-base leading-8 text-slate-700;
+    @apply text-[15px] text-slate-800 sm:text-base;
+    line-height: 1.6;
+    text-wrap: pretty;
   }
 
   .boss-speech-content p {
-    margin-bottom: 0.9rem;
+    margin: 0;
   }
 
-  .boss-speech-content p:last-child {
-    margin-bottom: 0;
+  .boss-speech-content p + p {
+    margin-top: 0.5rem;
   }
 
   .boss-speech-content .ql-align-center {
@@ -197,6 +218,22 @@
 
   .boss-speech-content .ql-direction-rtl {
     direction: rtl;
+  }
+
+  .boss-speech-content .boss-speech-single-line-row {
+    margin-top: 0.65rem;
+    margin-bottom: 0.45rem;
+    text-align: center;
+  }
+
+  .boss-speech-content .boss-speech-single-line {
+    display: inline-block;
+    white-space: nowrap;
+    font-weight: 700;
+    color: #0a3555;
+    letter-spacing: 0;
+    word-spacing: 0.02em;
+    line-height: 1.6;
   }
 
   .boss-speech-content strong {
@@ -208,6 +245,49 @@
     color: #c79d41;
     font-style: normal;
     font-weight: 700;
+  }
+
+  .boss-word-signature {
+    @apply mt-1 text-base font-bold text-slate-900 sm:text-lg;
+    line-height: 1.7;
+  }
+
+  .boss-word-signature p:last-child {
+    @apply text-slate-900;
+  }
+
+  .boss-word-media {
+    @apply border border-slate-400/40 shadow-[0_26px_50px_rgba(15,23,42,0.32),0_8px_18px_rgba(15,23,42,0.2)];
+    border-radius: 1.6rem;
+    min-height: 420px;
+  }
+
+  .boss-word-photo {
+    object-position: 74% 10%;
+    transform: scale(1.24);
+    transform-origin: center 20%;
+  }
+
+  @media (max-width: 1023px) {
+    .boss-word-kicker {
+      @apply text-sm;
+    }
+
+    .boss-word-media {
+      min-height: 300px;
+    }
+
+    .boss-word-photo {
+      object-position: 68% 14%;
+      transform: scale(1.16);
+      transform-origin: center 20%;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .boss-word-kicker {
+      white-space: nowrap;
+    }
   }
 
   .hero-nav-btn {

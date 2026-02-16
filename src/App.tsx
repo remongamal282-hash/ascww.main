@@ -9,6 +9,8 @@ type AdminInfoResponse = {
 const API_BASE_ENDPOINT = import.meta.env.VITE_API_BASE_URL || '/api';
 const ADMIN_INFO_ENDPOINT = `${API_BASE_ENDPOINT}/admin-info`;
 const ADMIN_IMAGE_ENDPOINT = `${API_BASE_ENDPOINT}/image`;
+const BOSS_SINGLE_LINE_PHRASE = 'تحية تقدير وإعزاز لكل مواطن يساعد ويساهم في تحقيق هذا الهدف المنشود';
+
 const sanitizeBossSpeechHtml = (html: string) => {
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');
@@ -20,11 +22,35 @@ const sanitizeBossSpeechHtml = (html: string) => {
       if (attributeName.startsWith('on')) {
         element.removeAttribute(attribute.name);
       }
+      if (attributeName === 'style') {
+        element.removeAttribute(attribute.name);
+      }
       if ((attributeName === 'href' || attributeName === 'src') && attributeValue.startsWith('javascript:')) {
         element.removeAttribute(attribute.name);
       }
     });
   });
+
+  // Remove empty paragraphs added by editors (e.g. <p><br></p>) to avoid large visual gaps.
+  doc.body.querySelectorAll('p').forEach((paragraph) => {
+    const hasMedia = paragraph.querySelector('img, video, iframe, object, embed');
+    const text = (paragraph.textContent || '').replace(/\u00a0/g, ' ').trim();
+    if (!hasMedia && text.length === 0) {
+      paragraph.remove();
+    }
+  });
+
+  doc.body.querySelectorAll('p').forEach((paragraph) => {
+    const text = (paragraph.textContent || '').replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
+    if (!text.includes(BOSS_SINGLE_LINE_PHRASE)) return;
+
+    paragraph.classList.add('boss-speech-single-line-row');
+    paragraph.innerHTML = paragraph.innerHTML.replace(
+      BOSS_SINGLE_LINE_PHRASE,
+      `<span class="boss-speech-single-line">${BOSS_SINGLE_LINE_PHRASE}</span>`
+    );
+  });
+
   return doc.body.innerHTML;
 };
 
@@ -46,7 +72,7 @@ function App() {
         setAdminInfo(data);
       } catch {
         if (!active) return;
-        setAdminInfoError('تعذر تحميل كلمة الرئيس حاليًا.');
+        setAdminInfoError('تعذر تحميل كلمة السيد رئيس مجلس الإداره والعضو المنتدب حاليًا.');
       } finally {
         if (active) setAdminInfoLoading(false);
       }
@@ -645,29 +671,32 @@ function App() {
     </section>
 
     <section id="boss-word" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-      <div className="boss-word-card animate-on-scroll rounded-2xl border border-[#d7b05a]/35 bg-white shadow-soft" data-delay="70">
-        <div className="grid gap-0 lg:grid-cols-[minmax(0,1fr)_340px]">
-          <div className="order-2 p-6 sm:p-8 lg:order-2">
-            <p className="text-sm font-bold text-brand-700">كلمة الرئيس</p>
-            <h2 className="mt-2 text-2xl font-extrabold text-slate-900 sm:text-3xl">
-              {bossTitle} <span className="text-[#0a3555]">{bossName}</span>
-            </h2>
-            <div className="mt-5" aria-live="polite">
+      <div className="boss-word-card animate-on-scroll" data-delay="70">
+        <div className="boss-word-grid">
+          <div className="boss-word-content order-2 p-6 sm:p-8 lg:order-2">
+            <p className="boss-word-kicker">كلمة السيد رئيس مجلس الإداره والعضو المنتدب</p>
+            <div className="boss-word-body" aria-live="polite">
               {adminInfoLoading ? (
-                <p className="leading-8 text-slate-600">جاري تحميل كلمة الرئيس...</p>
+                <p className="leading-8 text-slate-600">جاري تحميل كلمة السيد رئيس مجلس الإداره والعضو المنتدب...</p>
               ) : adminInfoError ? (
                 <p className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-800">{adminInfoError}</p>
               ) : (
-                <div className="boss-speech-content" dangerouslySetInnerHTML={{ __html: speechHtml }}></div>
+                <>
+                  <div className="boss-speech-content" dangerouslySetInnerHTML={{ __html: speechHtml }}></div>
+                  <div className="boss-word-signature">
+                    <p>{bossTitle}</p>
+                    <p>{bossName}</p>
+                  </div>
+                </>
               )}
             </div>
           </div>
 
-          <div className="order-1 relative min-h-[280px] overflow-hidden bg-slate-100 lg:order-1">
+          <div className="boss-word-media order-1 relative overflow-hidden bg-slate-100 lg:order-1">
             <img
               src={bossImageUrl}
               alt={`صورة ${bossName}`}
-              className="h-full w-full object-cover"
+              className="boss-word-photo h-full w-full object-cover"
               loading="lazy"
               onError={(event) => {
                 const image = event.currentTarget;
@@ -676,10 +705,6 @@ function App() {
                 image.src = `${ADMIN_IMAGE_ENDPOINT}/boss.jpg`;
               }}
             />
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0a3555]/45 via-transparent to-transparent"></div>
-            <div className="absolute inset-x-0 bottom-0 px-4 py-3 text-sm font-bold text-white">
-              {bossName}
-            </div>
           </div>
         </div>
       </div>
