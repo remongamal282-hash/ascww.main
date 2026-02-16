@@ -28,6 +28,7 @@ const API_BASE_ENDPOINT = import.meta.env.VITE_API_BASE_URL || '/api';
 const ADMIN_INFO_ENDPOINT = `${API_BASE_ENDPOINT}/admin-info`;
 const ADMIN_IMAGE_ENDPOINT = `${API_BASE_ENDPOINT}/image`;
 const NEWS_ENDPOINT = `${API_BASE_ENDPOINT}/news`;
+const NEWS_IMAGE_ENDPOINT = `${API_BASE_ENDPOINT}/news/image`;
 const NEWS_ARCHIVE_PATH = '/news-company';
 const BOSS_SINGLE_LINE_PHRASE = 'تحية تقدير وإعزاز لكل مواطن يساعد ويساهم في تحقيق هذا الهدف المنشود';
 
@@ -347,74 +348,88 @@ function App() {
       let intervalId: number | undefined;
       const startAutoplay = () => {
         if (heroSlides.length <= 1) return;
+        stopAutoplay();
         intervalId = window.setInterval(() => {
-          const nextSlide = (currentSlide + 1) % heroSlides.length;
-          moveToSlide(nextSlide);
-        }, 5000);
+          const nextIndex = (currentSlide + 1) % heroSlides.length;
+          moveToSlide(nextIndex);
+        }, 6000);
       };
 
       const stopAutoplay = () => {
-        if (intervalId) window.clearInterval(intervalId);
+        if (intervalId) {
+          clearInterval(intervalId);
+          intervalId = undefined;
+        }
       };
 
-      if (heroSlides.length > 1) {
-        startAutoplay();
+      startAutoplay();
 
-        const onPrev = () => {
-          const nextSlide = (currentSlide - 1 + heroSlides.length) % heroSlides.length;
-          moveToSlide(nextSlide);
+      if (heroPrev) {
+        const onPrevClick = () => {
           stopAutoplay();
+          const nextIndex = (currentSlide - 1 + heroSlides.length) % heroSlides.length;
+          moveToSlide(nextIndex);
           startAutoplay();
         };
+        heroPrev.addEventListener('click', onPrevClick);
+        cleanups.push(() => heroPrev.removeEventListener('click', onPrevClick));
+      }
 
-        const onNext = () => {
-          const nextSlide = (currentSlide + 1) % heroSlides.length;
-          moveToSlide(nextSlide);
+      if (heroNext) {
+        const onNextClick = () => {
           stopAutoplay();
+          const nextIndex = (currentSlide + 1) % heroSlides.length;
+          moveToSlide(nextIndex);
           startAutoplay();
         };
-
-        heroPrev?.addEventListener('click', onPrev);
-        heroNext?.addEventListener('click', onNext);
-
-        cleanups.push(() => stopAutoplay());
-        cleanups.push(() => heroPrev?.removeEventListener('click', onPrev));
-        cleanups.push(() => heroNext?.removeEventListener('click', onNext));
+        heroNext.addEventListener('click', onNextClick);
+        cleanups.push(() => heroNext.removeEventListener('click', onNextClick));
       }
+
+      cleanups.push(stopAutoplay);
     }
 
-    const motionReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (motionReduced) {
-      document.querySelectorAll('.animate-on-scroll').forEach((el) => el.classList.add('in-view'));
-      return () => cleanups.forEach((cleanup) => cleanup());
-    }
-
-    const animatedElements = document.querySelectorAll<HTMLElement>('.animate-on-scroll');
-    const observer = new IntersectionObserver(
-      (entries, obs) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-
-          const element = entry.target as HTMLElement;
-          const delay = Number(element.dataset.delay || 0);
-          element.style.transitionDelay = `${delay}ms`;
-          element.classList.add('in-view');
-          obs.unobserve(element);
-        });
-      },
-      {
-        threshold: 0.15,
-        rootMargin: '0px 0px -60px 0px'
-      }
-    );
-
-    animatedElements.forEach((element) => observer.observe(element));
-
-    return () => {
-      observer.disconnect();
-      cleanups.forEach((cleanup) => cleanup());
-    };
+    return () => cleanups.forEach((fn) => fn());
   }, []);
+
+  // Animation on scroll observer - Re-runs when new content (like news) is loaded
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const target = entry.target as HTMLElement;
+          const delay = target.dataset.delay;
+
+          if (delay) {
+            setTimeout(() => {
+              target.classList.add('in-view');
+            }, Number(delay));
+          } else {
+            target.classList.add('in-view');
+          }
+
+          obs.unobserve(target);
+        }
+      });
+    }, observerOptions);
+
+    const elements = document.querySelectorAll('.animate-on-scroll');
+    elements.forEach(el => {
+      observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, [latestNews, newsLoading]);
+
+
+
+
 
   const bossTitle = adminInfo?.boss_title?.trim() || 'السيد المهندس';
   const bossName = adminInfo?.boss_name?.trim() || 'رئيس مجلس الإدارة';
@@ -425,651 +440,834 @@ function App() {
   const bossImageUrl = `${ADMIN_IMAGE_ENDPOINT}/${encodeURIComponent(bossImageName)}`;
   return (
     <>
-<header id="site-header" className="relative w-full bg-white">
-    <div id="site-topbar" className="hidden border-b border-[#d7b05a]/35 bg-[#0a3555] text-white lg:block">
-      <div className="mx-auto flex max-w-[1600px] items-center justify-between px-8 py-2 text-sm">
-        <div className="flex items-center gap-6">
-          <a href="mailto:media-water@ascww.com.eg" className="topbar-link">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-[#d7b05a]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 4h16v16H4z"/><path d="m22 6-10 7L2 6"/></svg>
-            <span>media-water@ascww.com.eg</span>
-          </a>
-          <a href="tel:2331604" className="topbar-link">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-[#d7b05a]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.86 19.86 0 0 1 2.12 4.2 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.1 9.91a16 16 0 0 0 6 6l1.27-1.26a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            <span>رقم الهاتف : 2331604</span>
-          </a>
+      <header id="site-header" className="relative w-full bg-white">
+        <div id="site-topbar" className="hidden border-b border-[#d7b05a]/35 bg-[#0a3555] text-white lg:block">
+          <div className="mx-auto flex max-w-[1600px] items-center justify-between px-8 py-2 text-sm">
+            <div className="flex items-center gap-6">
+              <a href="mailto:media-water@ascww.com.eg" className="topbar-link">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-[#d7b05a]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 4h16v16H4z" /><path d="m22 6-10 7L2 6" /></svg>
+                <span>media-water@ascww.com.eg</span>
+              </a>
+              <a href="tel:2331604" className="topbar-link">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-[#d7b05a]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.86 19.86 0 0 1 2.12 4.2 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.1 9.91a16 16 0 0 0 6 6l1.27-1.26a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
+                <span>رقم الهاتف : 2331604</span>
+              </a>
+            </div>
+            <div className="flex items-center gap-3">
+              <a href="https://api.whatsapp.com/send?phone=01280733990" target="_blank" rel="noopener noreferrer" aria-label="واتساب" className="top-social">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M19.05 4.94A9.94 9.94 0 0 0 12 2a10 10 0 0 0-8.66 15l-1.3 4.74 4.86-1.27A10 10 0 1 0 19.05 4.94ZM12 20a8 8 0 0 1-4.07-1.11l-.29-.17-2.89.76.77-2.82-.18-.29A8 8 0 1 1 12 20Zm4.38-5.51c-.24-.12-1.43-.7-1.65-.78-.22-.08-.38-.12-.54.12s-.62.78-.76.94c-.14.16-.28.18-.52.06a6.54 6.54 0 0 1-1.92-1.18 7.33 7.33 0 0 1-1.35-1.68c-.14-.24 0-.37.1-.49.1-.1.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.79-.2-.47-.4-.4-.54-.41h-.46c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2 0 1.18.86 2.32.98 2.48.12.16 1.7 2.6 4.12 3.65.58.25 1.03.4 1.38.52.58.18 1.1.16 1.51.1.46-.07 1.43-.58 1.63-1.14.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28Z" /></svg>
+              </a>
+              <a href="https://youtube.com/channel/UC73LZeR5Yr5TE7fsTzvZSVw" target="_blank" rel="noopener noreferrer" aria-label="يوتيوب" className="top-social">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M21.58 7.19a2.75 2.75 0 0 0-1.94-1.94C17.93 4.8 12 4.8 12 4.8s-5.93 0-7.64.45A2.75 2.75 0 0 0 2.42 7.2 28.4 28.4 0 0 0 2 12a28.4 28.4 0 0 0 .42 4.81 2.75 2.75 0 0 0 1.94 1.94c1.7.45 7.64.45 7.64.45s5.93 0 7.64-.45a2.75 2.75 0 0 0 1.94-1.94A28.4 28.4 0 0 0 22 12a28.4 28.4 0 0 0-.42-4.81ZM10 15.5v-7l6 3.5-6 3.5Z" /></svg>
+              </a>
+              <a href="https://www.facebook.com/ASCWWeg" target="_blank" rel="noopener noreferrer" aria-label="فيسبوك" className="top-social">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M14 8h3V4h-3c-3.3 0-6 2.7-6 6v2H6v4h2v6h4v-6h3l1-4h-4v-2c0-1.1.9-2 2-2Z" /></svg>
+              </a>
+              <span className="text-xs font-bold text-[#d7b05a]">العربية</span>
+            </div>
+          </div>
         </div>
-        <div className="flex items-center gap-3">
-          <a href="https://api.whatsapp.com/send?phone=01280733990" target="_blank" rel="noopener noreferrer" aria-label="واتساب" className="top-social">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M19.05 4.94A9.94 9.94 0 0 0 12 2a10 10 0 0 0-8.66 15l-1.3 4.74 4.86-1.27A10 10 0 1 0 19.05 4.94ZM12 20a8 8 0 0 1-4.07-1.11l-.29-.17-2.89.76.77-2.82-.18-.29A8 8 0 1 1 12 20Zm4.38-5.51c-.24-.12-1.43-.7-1.65-.78-.22-.08-.38-.12-.54.12s-.62.78-.76.94c-.14.16-.28.18-.52.06a6.54 6.54 0 0 1-1.92-1.18 7.33 7.33 0 0 1-1.35-1.68c-.14-.24 0-.37.1-.49.1-.1.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.79-.2-.47-.4-.4-.54-.41h-.46c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2 0 1.18.86 2.32.98 2.48.12.16 1.7 2.6 4.12 3.65.58.25 1.03.4 1.38.52.58.18 1.1.16 1.51.1.46-.07 1.43-.58 1.63-1.14.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28Z"/></svg>
-          </a>
-          <a href="https://youtube.com/channel/UC73LZeR5Yr5TE7fsTzvZSVw" target="_blank" rel="noopener noreferrer" aria-label="يوتيوب" className="top-social">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M21.58 7.19a2.75 2.75 0 0 0-1.94-1.94C17.93 4.8 12 4.8 12 4.8s-5.93 0-7.64.45A2.75 2.75 0 0 0 2.42 7.2 28.4 28.4 0 0 0 2 12a28.4 28.4 0 0 0 .42 4.81 2.75 2.75 0 0 0 1.94 1.94c1.7.45 7.64.45 7.64.45s5.93 0 7.64-.45a2.75 2.75 0 0 0 1.94-1.94A28.4 28.4 0 0 0 22 12a28.4 28.4 0 0 0-.42-4.81ZM10 15.5v-7l6 3.5-6 3.5Z"/></svg>
-          </a>
-          <a href="https://www.facebook.com/ASCWWeg" target="_blank" rel="noopener noreferrer" aria-label="فيسبوك" className="top-social">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M14 8h3V4h-3c-3.3 0-6 2.7-6 6v2H6v4h2v6h4v-6h3l1-4h-4v-2c0-1.1.9-2 2-2Z"/></svg>
-          </a>
-          <span className="text-xs font-bold text-[#d7b05a]">العربية</span>
+
+        <div id="site-mainbar" className="site-mainbar border-b border-[#d7b05a]/35 bg-white transition-shadow duration-300">
+          <div className="mx-auto grid w-full max-w-[1600px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 px-4 py-4 sm:px-6 lg:px-8">
+            <a href="#home" className="flex items-center justify-self-end gap-3">
+              <img src="/images/ascww-logo.png" alt="شعار الشركة" className="h-12 w-auto sm:h-14" />
+            </a>
+
+            <nav className="main-menu-wrap hidden min-w-0 items-center justify-center gap-1 text-sm font-bold text-slate-800 xl:flex">
+              <a className="nav-link-classic nav-link-classic--active" href="/">الرئيسية</a>
+
+              <div className="nav-dropdown group">
+                <a className="nav-dropdown-trigger" href="/an-elsherka">عن الشركة</a>
+                <div className="nav-dropdown-menu">
+                  <a className="nav-dropdown-item" href="/an-elsherka">نبذة عن الشركة</a>
+                  <a className="nav-dropdown-item" href="/birth-of-company">قرار إنشاء الشركة</a>
+                  <a className="nav-dropdown-item" href="/branch-of-company">فروع الشركه</a>
+                  <a className="nav-dropdown-item" href="/projects-company">مشروعات الشركة</a>
+                  <a className="nav-dropdown-item" href="/news-company">أرشيف الأخبار</a>
+                  <a className="nav-dropdown-item" href="/vision-and-message">الرؤيه والرساله</a>
+                  <a className="nav-dropdown-item" href="/organization-structure">الهيكل التنظيمي</a>
+                  <a className="nav-dropdown-item" href="/company-achivement">إنجازات الشركة</a>
+                  <a className="nav-dropdown-item" href="/contract-and-sell">اللائحه الموحده للعقود والمشتريات</a>
+                </div>
+              </div>
+
+              <div className="nav-dropdown group">
+                <a className="nav-dropdown-trigger" href="/adviceAndContact">التوعية والاتصال</a>
+                <div className="nav-dropdown-menu">
+                  <a className="nav-dropdown-item" href="/adviceAndContact">التوعية والأتصال</a>
+                  <a className="nav-dropdown-item" href="/forKids">ركن الأطفال</a>
+                  <a className="nav-dropdown-item" href="/toWomen">لك سيدتي</a>
+                </div>
+              </div>
+
+              <div className="nav-dropdown group">
+                <a className="nav-dropdown-trigger" href="/water-quality">جودة المياه</a>
+                <div className="nav-dropdown-menu">
+                  <a className="nav-dropdown-item" href="/water-quality">جودة المياه</a>
+                  <a className="nav-dropdown-item" href="/refining-water">تنقية مياه الشرب</a>
+                  <a className="nav-dropdown-item" href="/lab-of-company-water">المعمل المركزي لمياه الشرب</a>
+                </div>
+              </div>
+
+              <div className="nav-dropdown group">
+                <a className="nav-dropdown-trigger" href="/allTenders">المناقصات</a>
+                <div className="nav-dropdown-menu">
+                  <a className="nav-dropdown-item" href="/allTenders">جميع المناقصات الموجوده بالشركة</a>
+                </div>
+              </div>
+
+              <div className="nav-dropdown nav-dropdown--sewage group">
+                <a className="nav-dropdown-trigger" href="/sewage-treatment">الصرف الصحي</a>
+                <div className="nav-dropdown-menu">
+                  <a className="nav-dropdown-item" href="/sewage-treatment">معالجه الصرف الصحي</a>
+                  <a className="nav-dropdown-item" href="/Riddence-waste-water">تعريف بأهميه التخلص الاَمن من الصرف الصحي</a>
+                  <a className="nav-dropdown-item" href="/kind-of-waste-water">معالجه الصرف الصحي الخام و أنواع محطات المعالجه</a>
+                  <a className="nav-dropdown-item" href="/save-web-waste-water">أهميه الحفاظ علي شبكه الصرف الصحي</a>
+                  <a className="nav-dropdown-item" href="/waste-water-in-manufactring">دور إداره الصرف الصناعي</a>
+                  <a className="nav-dropdown-item" href="/manufactring-waste">الصرف الصناعي</a>
+                </div>
+              </div>
+
+              <div className="nav-dropdown group">
+                <a className="nav-dropdown-trigger" href="/general-admin-training">التدريب</a>
+                <div className="nav-dropdown-menu">
+                  <a className="nav-dropdown-item" href="/general-admin-training">أنواع التدريب والقاعات</a>
+                  <a className="nav-dropdown-item" href="/Result-of-school">نتائج المدرسه</a>
+                </div>
+              </div>
+
+              <div className="nav-dropdown group">
+                <a className="nav-dropdown-trigger" href="/jobs-and-competition">وظائف</a>
+                <div className="nav-dropdown-menu">
+                  <a className="nav-dropdown-item" href="/jobs-and-competition">مسابقات و وظائف</a>
+                  <a className="nav-dropdown-item" href="/result_of_worker">نتائج المسابقات</a>
+                </div>
+              </div>
+
+              <div className="nav-dropdown group">
+                <a className="nav-dropdown-trigger" href="/inquire-your-bill">خدمات</a>
+                <div className="nav-dropdown-menu">
+                  <a className="nav-dropdown-item" href="/inquire-your-bill">استعلم عن فاتورتك</a>
+                  <a className="nav-dropdown-item" href="/call-center">خدمه العملاء</a>
+                  <a className="nav-dropdown-item" href="/Customer-Charter">ميثاق المتعاملين</a>
+                  <a className="nav-dropdown-item" href="/Services-Evidance">دليل الخدمات</a>
+                  <a className="nav-dropdown-item" href="/Contract-On-Service">رحلة المتعامل للتعاقد على طلب خدمة</a>
+                  <a className="nav-dropdown-item" href="/provide-request">تقديم طلب</a>
+                  <a className="nav-dropdown-item" href="/provide-complaine">تقديم شكوي</a>
+                </div>
+              </div>
+
+              <div className="nav-dropdown group">
+                <a className="nav-dropdown-trigger" href="/nabza-an-daam-elnazaha">دعم النزاهة</a>
+                <div className="nav-dropdown-menu">
+                  <a className="nav-dropdown-item" href="/nabza-an-daam-elnazaha">نبذه عن إداره دعم النزاهة</a>
+                  <a className="nav-dropdown-item" href="/abrz-amaal-daam-elnazaha">أبرز أعمال دعم النزاهة</a>
+                  <a className="nav-dropdown-item" href="/elslookElwazefy">السلوك الوظيفي</a>
+                </div>
+              </div>
+
+              <div className="nav-dropdown group">
+                <a className="nav-dropdown-trigger" href="/trips-the-boss">معرض الصور</a>
+                <div className="nav-dropdown-menu">
+                  <a className="nav-dropdown-item" href="/trips-the-boss">جولات رئيس مجلس الإداره</a>
+                  <a className="nav-dropdown-item" href="/lab-of-company">معامل الشركه</a>
+                  <a className="nav-dropdown-item" href="/waste-of-company">محطات الصرف</a>
+                  <a className="nav-dropdown-item" href="/traning-of-company">مركز التدريب</a>
+                  <a className="nav-dropdown-item" href="/information-technology-of-company">قطاع تكنولوجيا المعلومات</a>
+                  <a className="nav-dropdown-item" href="/school-new-assuit">المدرسه الفنيه</a>
+                  <a className="nav-dropdown-item" href="/sport-of-company">النشاط الرياضي</a>
+                </div>
+              </div>
+            </nav>
+
+            <div className="flex items-center justify-self-start gap-3">
+              <form className="relative hidden xl:flex xl:w-52 2xl:w-64" role="search" aria-label="بحث في الموقع">
+                <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-[#0a3555]/70">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                </span>
+                <input
+                  type="search"
+                  name="q"
+                  placeholder="ابحث هنا..."
+                  className="h-10 w-full rounded-full border border-[#d7b05a]/55 bg-white pr-9 pl-4 text-sm text-slate-700 outline-none transition focus:border-[#0a3555] focus:ring-2 focus:ring-[#0a3555]/15"
+                />
+              </form>
+              <button id="mobile-toggle" className="inline-flex rounded-lg border border-slate-300 p-2 text-slate-700 xl:hidden" aria-expanded="false" aria-controls="mobile-menu" aria-label="فتح القائمة">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+        <div id="mainbar-offset" className="h-0"></div>
 
-    <div id="site-mainbar" className="site-mainbar border-b border-[#d7b05a]/35 bg-white transition-shadow duration-300">
-      <div className="mx-auto grid w-full max-w-[1600px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 px-4 py-4 sm:px-6 lg:px-8">
-        <a href="#home" className="flex items-center justify-self-end gap-3">
-          <img src="/images/ascww-logo.png" alt="شعار الشركة" className="h-12 w-auto sm:h-14" />
-        </a>
+        <nav id="mobile-menu" className="hidden border-b border-[#d7b05a]/35 bg-white px-4 py-3 text-base font-semibold text-slate-800 xl:hidden">
+          <div className="grid grid-cols-1 gap-2">
+            <a className="rounded-lg bg-slate-100 px-3 py-2" href="/">الرئيسية</a>
 
-        <nav className="main-menu-wrap hidden min-w-0 items-center justify-center gap-1 text-sm font-bold text-slate-800 xl:flex">
-          <a className="nav-link-classic nav-link-classic--active" href="/">الرئيسية</a>
+            <details className="mobile-nav-group">
+              <summary>عن الشركة</summary>
+              <div className="mobile-nav-submenu">
+                <a href="/an-elsherka">نبذة عن الشركة</a>
+                <a href="/birth-of-company">قرار إنشاء الشركة</a>
+                <a href="/branch-of-company">فروع الشركه</a>
+                <a href="/projects-company">مشروعات الشركة</a>
+                <a href="/news-company">أرشيف الأخبار</a>
+                <a href="/vision-and-message">الرؤيه والرساله</a>
+                <a href="/organization-structure">الهيكل التنظيمي</a>
+                <a href="/company-achivement">إنجازات الشركة</a>
+                <a href="/contract-and-sell">اللائحه الموحده للعقود والمشتريات</a>
+              </div>
+            </details>
 
-          <div className="nav-dropdown group">
-            <a className="nav-dropdown-trigger" href="/an-elsherka">عن الشركة</a>
-            <div className="nav-dropdown-menu">
-              <a className="nav-dropdown-item" href="/an-elsherka">نبذة عن الشركة</a>
-              <a className="nav-dropdown-item" href="/birth-of-company">قرار إنشاء الشركة</a>
-              <a className="nav-dropdown-item" href="/branch-of-company">فروع الشركه</a>
-              <a className="nav-dropdown-item" href="/projects-company">مشروعات الشركة</a>
-              <a className="nav-dropdown-item" href="/news-company">أرشيف الأخبار</a>
-              <a className="nav-dropdown-item" href="/vision-and-message">الرؤيه والرساله</a>
-              <a className="nav-dropdown-item" href="/organization-structure">الهيكل التنظيمي</a>
-              <a className="nav-dropdown-item" href="/company-achivement">إنجازات الشركة</a>
-              <a className="nav-dropdown-item" href="/contract-and-sell">اللائحه الموحده للعقود والمشتريات</a>
-            </div>
-          </div>
+            <details className="mobile-nav-group">
+              <summary>التوعية والاتصال</summary>
+              <div className="mobile-nav-submenu">
+                <a href="/adviceAndContact">التوعية والأتصال</a>
+                <a href="/forKids">ركن الأطفال</a>
+                <a href="/toWomen">لك سيدتي</a>
+              </div>
+            </details>
 
-          <div className="nav-dropdown group">
-            <a className="nav-dropdown-trigger" href="/adviceAndContact">التوعية والاتصال</a>
-            <div className="nav-dropdown-menu">
-              <a className="nav-dropdown-item" href="/adviceAndContact">التوعية والأتصال</a>
-              <a className="nav-dropdown-item" href="/forKids">ركن الأطفال</a>
-              <a className="nav-dropdown-item" href="/toWomen">لك سيدتي</a>
-            </div>
-          </div>
+            <details className="mobile-nav-group">
+              <summary>جودة المياه</summary>
+              <div className="mobile-nav-submenu">
+                <a href="/water-quality">جودة المياه</a>
+                <a href="/refining-water">تنقية مياه الشرب</a>
+                <a href="/lab-of-company-water">المعمل المركزي لمياه الشرب</a>
+              </div>
+            </details>
 
-          <div className="nav-dropdown group">
-            <a className="nav-dropdown-trigger" href="/water-quality">جودة المياه</a>
-            <div className="nav-dropdown-menu">
-              <a className="nav-dropdown-item" href="/water-quality">جودة المياه</a>
-              <a className="nav-dropdown-item" href="/refining-water">تنقية مياه الشرب</a>
-              <a className="nav-dropdown-item" href="/lab-of-company-water">المعمل المركزي لمياه الشرب</a>
-            </div>
-          </div>
+            <details className="mobile-nav-group">
+              <summary>المناقصات</summary>
+              <div className="mobile-nav-submenu">
+                <a href="/allTenders">جميع المناقصات الموجوده بالشركة</a>
+              </div>
+            </details>
 
-          <div className="nav-dropdown group">
-            <a className="nav-dropdown-trigger" href="/allTenders">المناقصات</a>
-            <div className="nav-dropdown-menu">
-              <a className="nav-dropdown-item" href="/allTenders">جميع المناقصات الموجوده بالشركة</a>
-            </div>
-          </div>
+            <details className="mobile-nav-group">
+              <summary>الصرف الصحي</summary>
+              <div className="mobile-nav-submenu">
+                <a href="/sewage-treatment">معالجه الصرف الصحي</a>
+                <a href="/Riddence-waste-water">تعريف بأهميه التخلص الاَمن من الصرف الصحي</a>
+                <a href="/kind-of-waste-water">معالجه الصرف الصحي الخام و أنواع محطات المعالجه</a>
+                <a href="/save-web-waste-water">أهميه الحفاظ علي شبكه الصرف الصحي</a>
+                <a href="/waste-water-in-manufactring">دور إداره الصرف الصناعي</a>
+                <a href="/manufactring-waste">الصرف الصناعي</a>
+              </div>
+            </details>
 
-          <div className="nav-dropdown nav-dropdown--sewage group">
-            <a className="nav-dropdown-trigger" href="/sewage-treatment">الصرف الصحي</a>
-            <div className="nav-dropdown-menu">
-              <a className="nav-dropdown-item" href="/sewage-treatment">معالجه الصرف الصحي</a>
-              <a className="nav-dropdown-item" href="/Riddence-waste-water">تعريف بأهميه التخلص الاَمن من الصرف الصحي</a>
-              <a className="nav-dropdown-item" href="/kind-of-waste-water">معالجه الصرف الصحي الخام و أنواع محطات المعالجه</a>
-              <a className="nav-dropdown-item" href="/save-web-waste-water">أهميه الحفاظ علي شبكه الصرف الصحي</a>
-              <a className="nav-dropdown-item" href="/waste-water-in-manufactring">دور إداره الصرف الصناعي</a>
-              <a className="nav-dropdown-item" href="/manufactring-waste">الصرف الصناعي</a>
-            </div>
-          </div>
+            <details className="mobile-nav-group">
+              <summary>التدريب</summary>
+              <div className="mobile-nav-submenu">
+                <a href="/general-admin-training">أنواع التدريب والقاعات</a>
+                <a href="/Result-of-school">نتائج المدرسه</a>
+              </div>
+            </details>
 
-          <div className="nav-dropdown group">
-            <a className="nav-dropdown-trigger" href="/general-admin-training">التدريب</a>
-            <div className="nav-dropdown-menu">
-              <a className="nav-dropdown-item" href="/general-admin-training">أنواع التدريب والقاعات</a>
-              <a className="nav-dropdown-item" href="/Result-of-school">نتائج المدرسه</a>
-            </div>
-          </div>
+            <details className="mobile-nav-group">
+              <summary>وظائف</summary>
+              <div className="mobile-nav-submenu">
+                <a href="/jobs-and-competition">مسابقات و وظائف</a>
+                <a href="/result_of_worker">نتائج المسابقات</a>
+              </div>
+            </details>
 
-          <div className="nav-dropdown group">
-            <a className="nav-dropdown-trigger" href="/jobs-and-competition">وظائف</a>
-            <div className="nav-dropdown-menu">
-              <a className="nav-dropdown-item" href="/jobs-and-competition">مسابقات و وظائف</a>
-              <a className="nav-dropdown-item" href="/result_of_worker">نتائج المسابقات</a>
-            </div>
-          </div>
+            <details className="mobile-nav-group">
+              <summary>خدمات</summary>
+              <div className="mobile-nav-submenu">
+                <a href="/inquire-your-bill">استعلم عن فاتورتك</a>
+                <a href="/call-center">خدمه العملاء</a>
+                <a href="/Customer-Charter">ميثاق المتعاملين</a>
+                <a href="/Services-Evidance">دليل الخدمات</a>
+                <a href="/Contract-On-Service">رحلة المتعامل للتعاقد على طلب خدمة</a>
+                <a href="/provide-request">تقديم طلب</a>
+                <a href="/provide-complaine">تقديم شكوي</a>
+              </div>
+            </details>
 
-          <div className="nav-dropdown group">
-            <a className="nav-dropdown-trigger" href="/inquire-your-bill">خدمات</a>
-            <div className="nav-dropdown-menu">
-              <a className="nav-dropdown-item" href="/inquire-your-bill">استعلم عن فاتورتك</a>
-              <a className="nav-dropdown-item" href="/call-center">خدمه العملاء</a>
-              <a className="nav-dropdown-item" href="/Customer-Charter">ميثاق المتعاملين</a>
-              <a className="nav-dropdown-item" href="/Services-Evidance">دليل الخدمات</a>
-              <a className="nav-dropdown-item" href="/Contract-On-Service">رحلة المتعامل للتعاقد على طلب خدمة</a>
-              <a className="nav-dropdown-item" href="/provide-request">تقديم طلب</a>
-              <a className="nav-dropdown-item" href="/provide-complaine">تقديم شكوي</a>
-            </div>
-          </div>
+            <details className="mobile-nav-group">
+              <summary>دعم النزاهة</summary>
+              <div className="mobile-nav-submenu">
+                <a href="/nabza-an-daam-elnazaha">نبذه عن إداره دعم النزاهة</a>
+                <a href="/abrz-amaal-daam-elnazaha">أبرز أعمال دعم النزاهة</a>
+                <a href="/elslookElwazefy">السلوك الوظيفي</a>
+              </div>
+            </details>
 
-          <div className="nav-dropdown group">
-            <a className="nav-dropdown-trigger" href="/nabza-an-daam-elnazaha">دعم النزاهة</a>
-            <div className="nav-dropdown-menu">
-              <a className="nav-dropdown-item" href="/nabza-an-daam-elnazaha">نبذه عن إداره دعم النزاهة</a>
-              <a className="nav-dropdown-item" href="/abrz-amaal-daam-elnazaha">أبرز أعمال دعم النزاهة</a>
-              <a className="nav-dropdown-item" href="/elslookElwazefy">السلوك الوظيفي</a>
-            </div>
-          </div>
+            <details className="mobile-nav-group">
+              <summary>معرض الصور</summary>
+              <div className="mobile-nav-submenu">
+                <a href="/trips-the-boss">جولات رئيس مجلس الإداره</a>
+                <a href="/lab-of-company">معامل الشركه</a>
+                <a href="/waste-of-company">محطات الصرف</a>
+                <a href="/traning-of-company">مركز التدريب</a>
+                <a href="/information-technology-of-company">قطاع تكنولوجيا المعلومات</a>
+                <a href="/school-new-assuit">المدرسه الفنيه</a>
+                <a href="/sport-of-company">النشاط الرياضي</a>
+              </div>
+            </details>
 
-          <div className="nav-dropdown group">
-            <a className="nav-dropdown-trigger" href="/trips-the-boss">معرض الصور</a>
-            <div className="nav-dropdown-menu">
-              <a className="nav-dropdown-item" href="/trips-the-boss">جولات رئيس مجلس الإداره</a>
-              <a className="nav-dropdown-item" href="/lab-of-company">معامل الشركه</a>
-              <a className="nav-dropdown-item" href="/waste-of-company">محطات الصرف</a>
-              <a className="nav-dropdown-item" href="/traning-of-company">مركز التدريب</a>
-              <a className="nav-dropdown-item" href="/information-technology-of-company">قطاع تكنولوجيا المعلومات</a>
-              <a className="nav-dropdown-item" href="/school-new-assuit">المدرسه الفنيه</a>
-              <a className="nav-dropdown-item" href="/sport-of-company">النشاط الرياضي</a>
+            <a className="rounded-lg bg-[#0a3555] px-3 py-2 text-center text-white" href="tel:2331604">الخط الساخن: 2331604</a>
+            <div className="col-span-2 mt-1 flex items-center justify-center gap-3 rounded-lg bg-slate-100 px-3 py-3">
+              <a href="https://www.facebook.com/ASCWWeg" target="_blank" rel="noopener noreferrer" aria-label="فيسبوك" className="social-icon social-icon--facebook">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 2h-3a6 6 0 0 0-6 6v4H7v4h2v6h4v-6h3l1-4h-4V8a2 2 0 0 1 2-2h1z" /></svg>
+              </a>
+              <a href="https://api.whatsapp.com/send?phone=01280733990" target="_blank" rel="noopener noreferrer" aria-label="واتساب" className="social-icon social-icon--whatsapp">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
+              </a>
+              <a href="https://youtube.com/channel/UC73LZeR5Yr5TE7fsTzvZSVw" target="_blank" rel="noopener noreferrer" aria-label="يوتيوب" className="social-icon social-icon--youtube">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.96-2C18.88 4 12 4 12 4s-6.88 0-8.58.46a2.78 2.78 0 0 0-1.96 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.42 19c1.7.46 8.58.46 8.58.46s6.88 0 8.58-.46a2.78 2.78 0 0 0 1.96-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z" /><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" /></svg>
+              </a>
             </div>
           </div>
         </nav>
+      </header>
 
-        <div className="flex items-center justify-self-start gap-3">
-          <form className="relative hidden xl:flex xl:w-52 2xl:w-64" role="search" aria-label="بحث في الموقع">
-            <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-[#0a3555]/70">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="11" cy="11" r="8"></circle>
-                <path d="m21 21-4.35-4.35"></path>
-              </svg>
-            </span>
-            <input
-              type="search"
-              name="q"
-              placeholder="ابحث هنا..."
-              className="h-10 w-full rounded-full border border-[#d7b05a]/55 bg-white pr-9 pl-4 text-sm text-slate-700 outline-none transition focus:border-[#0a3555] focus:ring-2 focus:ring-[#0a3555]/15"
-            />
-          </form>
-          <button id="mobile-toggle" className="inline-flex rounded-lg border border-slate-300 p-2 text-slate-700 xl:hidden" aria-expanded="false" aria-controls="mobile-menu" aria-label="فتح القائمة">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+      <main>
+        <section id="home" className="relative overflow-hidden">
+          <div className="hero-slider absolute inset-0 -z-20" aria-hidden="true">
+            <div
+              className="hero-slide is-active"
+              style={{ backgroundImage: "url('/images/slider/1.jpg')" }}
+              data-title="معامل علي اعلي مستوي"
+              data-subtitle="الاهتمام بمعايير منظمة الصحه العالمية للتاكد من جودة المياه بأحدث المعايير والتقنيات"
+              data-link="https://ascww.org/lab-of-company-water"
+              data-cta="تعرف عل المزيد"
+            ></div>
+            <div
+              className="hero-slide"
+              style={{ backgroundImage: "url('/images/slider/2.jpg')" }}
+              data-title="لتنزيل برنامج قرائتي اضغط هنا"
+              data-subtitle=""
+              data-link="https://ascww.org/readme"
+              data-cta="فتح الخدمة"
+            ></div>
+            <div
+              className="hero-slide"
+              style={{ backgroundImage: "url('/images/slider/3.jpg')" }}
+              data-title="شركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد"
+              data-subtitle="ترحب بكم و نفخر بأننا احدي الشركات الرائده في جمهوريه مصر العربيه"
+              data-link="https://ascww.org/an-elsherka"
+              data-cta="تعرف عل المزيد"
+            ></div>
+            <div
+              className="hero-slide"
+              style={{ backgroundImage: "url('/images/slider/4.jpg')" }}
+              data-title="الإداره العامه للتدريب"
+              data-subtitle="متاح حجز قاعات التدريب من داخل و خارج الشركة"
+              data-link="https://ascww.org/general-admin-training"
+              data-cta="تعرف عل المزيد"
+            ></div>
+            <div
+              className="hero-slide"
+              style={{ backgroundImage: "url('/images/slider/5.jpg')" }}
+              data-title="مركز خدمة العملاء"
+              data-subtitle="مراكز خدمه العملاء وطرق التواصل وعنوان أقرب فرع"
+              data-link="https://ascww.org/call-center"
+              data-cta="تعرف عل المزيد"
+            ></div>
+            <div
+              className="hero-slide"
+              style={{ backgroundImage: "url('/images/slider/6.png')" }}
+              data-title="لتنزيل برنامج الخط الساخن أضغط هنا"
+              data-subtitle=""
+              data-link="https://ascww.org/hotline125"
+              data-cta="فتح الخدمة"
+            ></div>
+          </div>
+          <div className="hero-overlay"></div>
+          <button id="hero-prev" type="button" aria-label="السلايد السابق" className="hero-nav-btn hero-nav-btn--left">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="m15 18-6-6 6-6" />
             </svg>
           </button>
-        </div>
-      </div>
-    </div>
-    <div id="mainbar-offset" className="h-0"></div>
-
-    <nav id="mobile-menu" className="hidden border-b border-[#d7b05a]/35 bg-white px-4 py-3 text-base font-semibold text-slate-800 xl:hidden">
-      <div className="grid grid-cols-1 gap-2">
-        <a className="rounded-lg bg-slate-100 px-3 py-2" href="/">الرئيسية</a>
-
-        <details className="mobile-nav-group">
-          <summary>عن الشركة</summary>
-          <div className="mobile-nav-submenu">
-            <a href="/an-elsherka">نبذة عن الشركة</a>
-            <a href="/birth-of-company">قرار إنشاء الشركة</a>
-            <a href="/branch-of-company">فروع الشركه</a>
-            <a href="/projects-company">مشروعات الشركة</a>
-            <a href="/news-company">أرشيف الأخبار</a>
-            <a href="/vision-and-message">الرؤيه والرساله</a>
-            <a href="/organization-structure">الهيكل التنظيمي</a>
-            <a href="/company-achivement">إنجازات الشركة</a>
-            <a href="/contract-and-sell">اللائحه الموحده للعقود والمشتريات</a>
+          <button id="hero-next" type="button" aria-label="السلايد التالي" className="hero-nav-btn hero-nav-btn--right">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="m9 18 6-6-6-6" />
+            </svg>
+          </button>
+          <div className="mx-auto grid min-h-[78vh] max-w-7xl items-center px-4 py-16 sm:px-6 lg:px-8">
+            <div id="hero-content" className="hero-content-animate text-center text-white">
+              <h1 id="hero-title" className="hero-title hero-anim-item">شركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد</h1>
+              <p id="hero-subtitle" className="hero-anim-item mx-auto mt-4 max-w-4xl text-base leading-8 text-slate-100 sm:text-lg">ترحب بكم و نفخر بأننا احدي الشركات الرائده في جمهوريه مصر العربيه</p>
+              <a id="hero-cta" href="https://ascww.org/an-elsherka" target="_blank" rel="noopener noreferrer" className="hero-anim-item mt-7 inline-flex rounded-full border border-[#d7b05a]/80 bg-[#d7b05a]/90 px-6 py-3 text-sm font-bold text-[#0a3555] transition hover:bg-[#d7b05a]">تعرف عل المزيد</a>
+            </div>
           </div>
-        </details>
+        </section>
 
-        <details className="mobile-nav-group">
-          <summary>التوعية والاتصال</summary>
-          <div className="mobile-nav-submenu">
-            <a href="/adviceAndContact">التوعية والأتصال</a>
-            <a href="/forKids">ركن الأطفال</a>
-            <a href="/toWomen">لك سيدتي</a>
+        <section id="boss-word" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+          <div className="boss-word-card animate-on-scroll" data-delay="70">
+            <div className="boss-word-grid">
+              <div className="boss-word-content order-2 p-6 sm:p-8 lg:order-2">
+                <p className="boss-word-kicker">كلمة السيد رئيس مجلس الإداره والعضو المنتدب</p>
+                <div className="boss-word-body" aria-live="polite">
+                  {adminInfoLoading ? (
+                    <p className="leading-8 text-slate-600">جاري تحميل كلمة السيد رئيس مجلس الإداره والعضو المنتدب...</p>
+                  ) : adminInfoError ? (
+                    <p className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-800">{adminInfoError}</p>
+                  ) : (
+                    <>
+                      <div className="boss-speech-content" dangerouslySetInnerHTML={{ __html: speechHtml }}></div>
+                      <div className="boss-word-signature">
+                        <p>{bossTitle}</p>
+                        <p>{bossName}</p>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              <div className="boss-word-media order-1 relative overflow-hidden bg-slate-100 lg:order-1">
+                <img
+                  src={bossImageUrl}
+                  alt={`صورة ${bossName}`}
+                  className="boss-word-photo h-full w-full object-cover"
+                  loading="lazy"
+                  onError={(event) => {
+                    const image = event.currentTarget;
+                    if (image.dataset.fallbackApplied) return;
+                    image.dataset.fallbackApplied = 'true';
+                    image.src = `${ADMIN_IMAGE_ENDPOINT}/boss.jpg`;
+                  }}
+                />
+              </div>
+            </div>
           </div>
-        </details>
+        </section>
 
-        <details className="mobile-nav-group">
-          <summary>جودة المياه</summary>
-          <div className="mobile-nav-submenu">
-            <a href="/water-quality">جودة المياه</a>
-            <a href="/refining-water">تنقية مياه الشرب</a>
-            <a href="/lab-of-company-water">المعمل المركزي لمياه الشرب</a>
-          </div>
-        </details>
+        <section id="latest-news" className="bg-white py-16">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h2 className="mt-1 text-2xl font-extrabold text-slate-900 sm:text-3xl">أحدث الأخبار</h2>
+              </div>
+              <a
+                href={NEWS_ARCHIVE_PATH}
+                className="inline-flex rounded-full border border-[#0a3555]/25 bg-[#0a3555] px-5 py-2 text-sm font-bold text-white transition hover:bg-[#082b47]"
+              >
+                الذهاب إلى أرشيف الأخبار
+              </a>
+            </div>
 
-        <details className="mobile-nav-group">
-          <summary>المناقصات</summary>
-          <div className="mobile-nav-submenu">
-            <a href="/allTenders">جميع المناقصات الموجوده بالشركة</a>
-          </div>
-        </details>
-
-        <details className="mobile-nav-group">
-          <summary>الصرف الصحي</summary>
-          <div className="mobile-nav-submenu">
-            <a href="/sewage-treatment">معالجه الصرف الصحي</a>
-            <a href="/Riddence-waste-water">تعريف بأهميه التخلص الاَمن من الصرف الصحي</a>
-            <a href="/kind-of-waste-water">معالجه الصرف الصحي الخام و أنواع محطات المعالجه</a>
-            <a href="/save-web-waste-water">أهميه الحفاظ علي شبكه الصرف الصحي</a>
-            <a href="/waste-water-in-manufactring">دور إداره الصرف الصناعي</a>
-            <a href="/manufactring-waste">الصرف الصناعي</a>
-          </div>
-        </details>
-
-        <details className="mobile-nav-group">
-          <summary>التدريب</summary>
-          <div className="mobile-nav-submenu">
-            <a href="/general-admin-training">أنواع التدريب والقاعات</a>
-            <a href="/Result-of-school">نتائج المدرسه</a>
-          </div>
-        </details>
-
-        <details className="mobile-nav-group">
-          <summary>وظائف</summary>
-          <div className="mobile-nav-submenu">
-            <a href="/jobs-and-competition">مسابقات و وظائف</a>
-            <a href="/result_of_worker">نتائج المسابقات</a>
-          </div>
-        </details>
-
-        <details className="mobile-nav-group">
-          <summary>خدمات</summary>
-          <div className="mobile-nav-submenu">
-            <a href="/inquire-your-bill">استعلم عن فاتورتك</a>
-            <a href="/call-center">خدمه العملاء</a>
-            <a href="/Customer-Charter">ميثاق المتعاملين</a>
-            <a href="/Services-Evidance">دليل الخدمات</a>
-            <a href="/Contract-On-Service">رحلة المتعامل للتعاقد على طلب خدمة</a>
-            <a href="/provide-request">تقديم طلب</a>
-            <a href="/provide-complaine">تقديم شكوي</a>
-          </div>
-        </details>
-
-        <details className="mobile-nav-group">
-          <summary>دعم النزاهة</summary>
-          <div className="mobile-nav-submenu">
-            <a href="/nabza-an-daam-elnazaha">نبذه عن إداره دعم النزاهة</a>
-            <a href="/abrz-amaal-daam-elnazaha">أبرز أعمال دعم النزاهة</a>
-            <a href="/elslookElwazefy">السلوك الوظيفي</a>
-          </div>
-        </details>
-
-        <details className="mobile-nav-group">
-          <summary>معرض الصور</summary>
-          <div className="mobile-nav-submenu">
-            <a href="/trips-the-boss">جولات رئيس مجلس الإداره</a>
-            <a href="/lab-of-company">معامل الشركه</a>
-            <a href="/waste-of-company">محطات الصرف</a>
-            <a href="/traning-of-company">مركز التدريب</a>
-            <a href="/information-technology-of-company">قطاع تكنولوجيا المعلومات</a>
-            <a href="/school-new-assuit">المدرسه الفنيه</a>
-            <a href="/sport-of-company">النشاط الرياضي</a>
-          </div>
-        </details>
-
-        <a className="rounded-lg bg-[#0a3555] px-3 py-2 text-center text-white" href="tel:2331604">الخط الساخن: 2331604</a>
-        <div className="col-span-2 mt-1 flex items-center justify-center gap-3 rounded-lg bg-slate-100 px-3 py-3">
-          <a href="https://www.facebook.com/ASCWWeg" target="_blank" rel="noopener noreferrer" aria-label="فيسبوك" className="social-icon social-icon--facebook">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 2h-3a6 6 0 0 0-6 6v4H7v4h2v6h4v-6h3l1-4h-4V8a2 2 0 0 1 2-2h1z"/></svg>
-          </a>
-          <a href="https://api.whatsapp.com/send?phone=01280733990" target="_blank" rel="noopener noreferrer" aria-label="واتساب" className="social-icon social-icon--whatsapp">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          </a>
-          <a href="https://youtube.com/channel/UC73LZeR5Yr5TE7fsTzvZSVw" target="_blank" rel="noopener noreferrer" aria-label="يوتيوب" className="social-icon social-icon--youtube">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.96-2C18.88 4 12 4 12 4s-6.88 0-8.58.46a2.78 2.78 0 0 0-1.96 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.42 19c1.7.46 8.58.46 8.58.46s6.88 0 8.58-.46a2.78 2.78 0 0 0 1.96-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
-          </a>
-        </div>
-      </div>
-    </nav>
-  </header>
-
-  <main>
-    <section id="home" className="relative overflow-hidden">
-      <div className="hero-slider absolute inset-0 -z-20" aria-hidden="true">
-        <div
-          className="hero-slide is-active"
-          style={{ backgroundImage: "url('/images/slider/1.jpg')" }}
-          data-title="معامل علي اعلي مستوي"
-          data-subtitle="الاهتمام بمعايير منظمة الصحه العالمية للتاكد من جودة المياه بأحدث المعايير والتقنيات"
-          data-link="https://ascww.org/lab-of-company-water"
-          data-cta="تعرف عل المزيد"
-        ></div>
-        <div
-          className="hero-slide"
-          style={{ backgroundImage: "url('/images/slider/2.jpg')" }}
-          data-title="لتنزيل برنامج قرائتي اضغط هنا"
-          data-subtitle=""
-          data-link="https://ascww.org/readme"
-          data-cta="فتح الخدمة"
-        ></div>
-        <div
-          className="hero-slide"
-          style={{ backgroundImage: "url('/images/slider/3.jpg')" }}
-          data-title="شركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد"
-          data-subtitle="ترحب بكم و نفخر بأننا احدي الشركات الرائده في جمهوريه مصر العربيه"
-          data-link="https://ascww.org/an-elsherka"
-          data-cta="تعرف عل المزيد"
-        ></div>
-        <div
-          className="hero-slide"
-          style={{ backgroundImage: "url('/images/slider/4.jpg')" }}
-          data-title="الإداره العامه للتدريب"
-          data-subtitle="متاح حجز قاعات التدريب من داخل و خارج الشركة"
-          data-link="https://ascww.org/general-admin-training"
-          data-cta="تعرف عل المزيد"
-        ></div>
-        <div
-          className="hero-slide"
-          style={{ backgroundImage: "url('/images/slider/5.jpg')" }}
-          data-title="مركز خدمة العملاء"
-          data-subtitle="مراكز خدمه العملاء وطرق التواصل وعنوان أقرب فرع"
-          data-link="https://ascww.org/call-center"
-          data-cta="تعرف عل المزيد"
-        ></div>
-        <div
-          className="hero-slide"
-          style={{ backgroundImage: "url('/images/slider/6.png')" }}
-          data-title="لتنزيل برنامج الخط الساخن أضغط هنا"
-          data-subtitle=""
-          data-link="https://ascww.org/hotline125"
-          data-cta="فتح الخدمة"
-        ></div>
-      </div>
-      <div className="hero-overlay"></div>
-      <button id="hero-prev" type="button" aria-label="السلايد السابق" className="hero-nav-btn hero-nav-btn--left">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path strokeLinecap="round" strokeLinejoin="round" d="m15 18-6-6 6-6" />
-        </svg>
-      </button>
-      <button id="hero-next" type="button" aria-label="السلايد التالي" className="hero-nav-btn hero-nav-btn--right">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path strokeLinecap="round" strokeLinejoin="round" d="m9 18 6-6-6-6" />
-        </svg>
-      </button>
-      <div className="mx-auto grid min-h-[78vh] max-w-7xl items-center px-4 py-16 sm:px-6 lg:px-8">
-        <div id="hero-content" className="hero-content-animate text-center text-white">
-          <h1 id="hero-title" className="hero-title hero-anim-item">شركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد</h1>
-          <p id="hero-subtitle" className="hero-anim-item mx-auto mt-4 max-w-4xl text-base leading-8 text-slate-100 sm:text-lg">ترحب بكم و نفخر بأننا احدي الشركات الرائده في جمهوريه مصر العربيه</p>
-          <a id="hero-cta" href="https://ascww.org/an-elsherka" target="_blank" rel="noopener noreferrer" className="hero-anim-item mt-7 inline-flex rounded-full border border-[#d7b05a]/80 bg-[#d7b05a]/90 px-6 py-3 text-sm font-bold text-[#0a3555] transition hover:bg-[#d7b05a]">تعرف عل المزيد</a>
-        </div>
-      </div>
-    </section>
-
-    <section id="boss-word" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-      <div className="boss-word-card animate-on-scroll" data-delay="70">
-        <div className="boss-word-grid">
-          <div className="boss-word-content order-2 p-6 sm:p-8 lg:order-2">
-            <p className="boss-word-kicker">كلمة السيد رئيس مجلس الإداره والعضو المنتدب</p>
-            <div className="boss-word-body" aria-live="polite">
-              {adminInfoLoading ? (
-                <p className="leading-8 text-slate-600">جاري تحميل كلمة السيد رئيس مجلس الإداره والعضو المنتدب...</p>
-              ) : adminInfoError ? (
-                <p className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-800">{adminInfoError}</p>
+            <div className="mt-8">
+              {newsLoading ? (
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                  {Array.from({ length: 4 }).map((_, index) => (
+                    <article key={`news-loading-${index}`} className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
+                      <div className="h-44 w-full animate-pulse bg-slate-200"></div>
+                      <div className="space-y-3 p-4">
+                        <div className="h-3 w-1/3 animate-pulse rounded bg-slate-200"></div>
+                        <div className="h-4 w-full animate-pulse rounded bg-slate-200"></div>
+                        <div className="h-4 w-5/6 animate-pulse rounded bg-slate-200"></div>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              ) : newsError ? (
+                <div className="rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm font-semibold text-amber-800">
+                  {newsError}
+                </div>
+              ) : latestNews.length === 0 ? (
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm font-semibold text-slate-600">
+                  لا توجد أخبار متاحة حاليًا.
+                </div>
               ) : (
-                <>
-                  <div className="boss-speech-content" dangerouslySetInnerHTML={{ __html: speechHtml }}></div>
-                  <div className="boss-word-signature">
-                    <p>{bossTitle}</p>
-                    <p>{bossName}</p>
-                  </div>
-                </>
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                  {latestNews.map((newsItem, index) => {
+                    const imagePath = getLatestNewsImagePath(newsItem);
+                    const imageUrl = imagePath ? `${NEWS_IMAGE_ENDPOINT}/${encodeURIComponent(imagePath)}` : '';
+                    const articleTitle = truncateText((newsItem.title || 'بدون عنوان').trim(), 80);
+                    const articleExcerpt = truncateText(extractPlainTextFromHtml(newsItem.description), 100) || 'للاطلاع على كامل الخبر يمكن زيارة أرشيف الأخبار.';
+                    const articleDate = formatArabicDate(newsItem.created_at || newsItem.updated_at);
+                    const shareUrl = encodeURIComponent(`https://ascww.org/news/${newsItem.id}`);
+                    const shareTitle = encodeURIComponent(articleTitle);
+
+                    return (
+                      <article
+                        key={newsItem.id ?? `${newsItem.slug || 'news'}-${index}`}
+                        className="flex flex-col animate-on-scroll overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm transition hover:shadow-md"
+                        data-delay={60 + index * 60}
+                      >
+                        {/* Image Section */}
+                        <a href={NEWS_ARCHIVE_PATH} className="relative block aspect-[4/3] w-full overflow-hidden bg-slate-100">
+                          {imageUrl ? (
+                            <img
+                              src={imageUrl}
+                              alt={newsItem.title || 'صورة الخبر'}
+                              className="h-full w-full object-cover transition duration-500 hover:scale-105"
+                              loading="lazy"
+                              onError={(event) => {
+                                event.currentTarget.style.display = 'none';
+                              }}
+                            />
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center text-sm font-bold text-slate-400">
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                              </svg>
+                            </div>
+                          )}
+                        </a>
+
+                        {/* Content Section */}
+                        <div className="flex flex-1 flex-col p-5">
+                          {/* Meta Data */}
+                          <div className="mb-3 flex items-center gap-2 text-xs font-medium text-slate-500">
+                            {articleDate && (
+                              <div className="flex items-center gap-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                <span>{articleDate}</span>
+                              </div>
+                            )}
+                            <span className="h-1 w-1 rounded-full bg-slate-300"></span>
+                            <span>المركز الإعلامي</span>
+                          </div>
+
+                          {/* Title */}
+                          <h3 className="mb-2 text-base font-bold leading-snug text-slate-900 transition hover:text-[#0a3555] line-clamp-2">
+                            <a href={NEWS_ARCHIVE_PATH} title={newsItem.title}>{articleTitle}</a>
+                          </h3>
+
+                          {/* Excerpt */}
+                          <p className="mb-4 text-sm leading-relaxed text-slate-600 line-clamp-3">
+                            {articleExcerpt}
+                          </p>
+
+                          {/* Footer Actions */}
+                          <div className="mt-auto flex items-center justify-between border-t border-slate-100 pt-4">
+                            <a href={NEWS_ARCHIVE_PATH} className="inline-flex items-center gap-1 text-sm font-bold text-[#1170b0] transition hover:text-[#0a3555]">
+                              <span>اقرأ المزيد</span>
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                              </svg>
+                            </a>
+
+                            <div className="flex items-center gap-2">
+                              <button
+                                type="button"
+                                className="flex h-8 w-8 items-center justify-center rounded-full bg-purple-50 text-purple-600 transition hover:bg-purple-100"
+                                aria-label="استماع"
+                                onClick={() => {
+                                  // Interactive feature placeholder
+                                  const utterance = new SpeechSynthesisUtterance(newsItem.title || '');
+                                  utterance.lang = 'ar-EG';
+                                  window.speechSynthesis.speak(utterance);
+                                }}
+                              >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                                  <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                                </svg>
+                              </button>
+
+                              <a
+                                href={`https://api.whatsapp.com/send?text=${shareTitle}%0A${shareUrl}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex h-8 w-8 items-center justify-center rounded-full bg-green-50 text-green-600 transition hover:bg-green-100"
+                                aria-label="مشاركة عبر واتساب"
+                              >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                                </svg>
+                              </a>
+
+                              <a
+                                href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-50 text-blue-600 transition hover:bg-blue-100"
+                                aria-label="مشاركة عبر فيسبوك"
+                              >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                                  <path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036c-2.148 0-2.797 1.657-2.797 2.895v1.077h3.616l-.55 3.667h-3.066v7.982c5.09-1.55 8.72-6.265 8.72-11.821 0-6.853-5.555-12.408-12.41-12.41C4.276 4.412 0 8.687 0 15.541c0 5.828 4.098 10.742 9.1 11.842Z" />
+                                </svg>
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </article>
+                    );
+                  })}
+                </div>
               )}
             </div>
           </div>
+        </section>
 
-          <div className="boss-word-media order-1 relative overflow-hidden bg-slate-100 lg:order-1">
-            <img
-              src={bossImageUrl}
-              alt={`صورة ${bossName}`}
-              className="boss-word-photo h-full w-full object-cover"
-              loading="lazy"
-              onError={(event) => {
-                const image = event.currentTarget;
-                if (image.dataset.fallbackApplied) return;
-                image.dataset.fallbackApplied = 'true';
-                image.src = `${ADMIN_IMAGE_ENDPOINT}/boss.jpg`;
-              }}
-            />
-          </div>
-        </div>
-      </div>
-    </section>
+        <section id="our-services" className="bg-slate-50 py-20">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="mb-12 text-center animate-on-scroll">
+              <h2 className="text-3xl font-extrabold text-slate-900 sm:text-4xl">خدماتنا الإلكترونية</h2>
+            </div>
 
-    <section id="latest-news" className="bg-white py-16">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <p className="text-sm font-bold text-brand-700">المركز الإعلامي</p>
-            <h2 className="mt-1 text-2xl font-extrabold text-slate-900 sm:text-3xl">أحدث الأخبار</h2>
-          </div>
-          <a
-            href={NEWS_ARCHIVE_PATH}
-            className="inline-flex rounded-full border border-[#0a3555]/25 bg-[#0a3555] px-5 py-2 text-sm font-bold text-white transition hover:bg-[#082b47]"
-          >
-            الذهاب إلى أرشيف الأخبار
-          </a>
-        </div>
-
-        <div className="mt-8">
-          {newsLoading ? (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {Array.from({ length: 4 }).map((_, index) => (
-                <article key={`news-loading-${index}`} className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
-                  <div className="h-44 w-full animate-pulse bg-slate-200"></div>
-                  <div className="space-y-3 p-4">
-                    <div className="h-3 w-1/3 animate-pulse rounded bg-slate-200"></div>
-                    <div className="h-4 w-full animate-pulse rounded bg-slate-200"></div>
-                    <div className="h-4 w-5/6 animate-pulse rounded bg-slate-200"></div>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {/* Service 1: Bill Inquiry */}
+              <div className="animate-on-scroll h-full" data-delay="50">
+                <a
+                  href="/inquire-your-bill"
+                  className="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-slate-900/5 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:ring-[#0a3555]/20"
+                >
+                  <div className="aspect-[4/3] w-full overflow-hidden bg-slate-100">
+                    <img
+                      src="https://ascww.org/img/3.f483b947.png"
+                      alt="استعلم عن فاتورتك"
+                      className="h-full w-full object-fill transition-transform duration-500 group-hover:scale-110"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                      }}
+                    />
                   </div>
-                </article>
-              ))}
-            </div>
-          ) : newsError ? (
-            <div className="rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm font-semibold text-amber-800">
-              {newsError}
-            </div>
-          ) : latestNews.length === 0 ? (
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm font-semibold text-slate-600">
-              لا توجد أخبار متاحة حاليًا.
-            </div>
-          ) : (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {latestNews.map((newsItem, index) => {
-                const imagePath = getLatestNewsImagePath(newsItem);
-                const imageUrl = imagePath ? `${ADMIN_IMAGE_ENDPOINT}/${encodeURIComponent(imagePath)}` : '';
-                const articleTitle = truncateText((newsItem.title || 'بدون عنوان').trim(), 95);
-                const articleExcerpt = truncateText(extractPlainTextFromHtml(newsItem.description), 135) || 'للاطلاع على كامل الخبر يمكن زيارة أرشيف الأخبار.';
-                const articleDate = formatArabicDate(newsItem.created_at || newsItem.updated_at);
+                  <div className="flex flex-1 items-center justify-center border-t border-slate-100 bg-white p-4 text-center">
+                    <h3 className="text-xl font-bold text-slate-800 transition-colors group-hover:text-[#0a3555]">استعلم عن فاتورتك</h3>
+                  </div>
+                </a>
+              </div>
 
-                return (
-                  <article
-                    key={newsItem.id ?? `${newsItem.slug || 'news'}-${index}`}
-                    className="animate-on-scroll overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-soft"
-                    data-delay={60 + index * 60}
-                  >
-                    <a href={NEWS_ARCHIVE_PATH} className="block h-full">
-                      <div className="relative h-44 overflow-hidden bg-slate-200">
-                        {imageUrl ? (
-                          <img
-                            src={imageUrl}
-                            alt={newsItem.title || 'صورة الخبر'}
-                            className="h-full w-full object-cover transition duration-300 hover:scale-105"
-                            loading="lazy"
-                            onError={(event) => {
-                              event.currentTarget.style.display = 'none';
-                            }}
-                          />
-                        ) : (
-                          <div className="flex h-full w-full items-center justify-center text-sm font-bold text-slate-500">لا توجد صورة</div>
-                        )}
-                      </div>
+              {/* Service 2: Enter Meter Reading */}
+              <div className="animate-on-scroll h-full" data-delay="100">
+                <a
+                  href="/enter-reading"
+                  className="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-slate-900/5 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:ring-[#0a3555]/20"
+                >
+                  <div className="aspect-[4/3] w-full overflow-hidden bg-slate-100">
+                    <img
+                      src="https://ascww.org/img/6.4c4f3d09.png"
+                      alt="أدخل قراءة عدادك"
+                      className="h-full w-full object-fill transition-transform duration-500 group-hover:scale-110"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                      }}
+                    />
+                  </div>
+                  <div className="flex flex-1 items-center justify-center border-t border-slate-100 bg-white p-4 text-center">
+                    <h3 className="text-xl font-bold text-slate-800 transition-colors group-hover:text-[#0a3555]">أدخل قراءة عدادك</h3>
+                  </div>
+                </a>
+              </div>
 
-                      <div className="p-4">
-                        {articleDate ? <p className="text-xs font-semibold text-[#0a3555]/70">{articleDate}</p> : null}
-                        <h3 className="mt-2 text-sm font-bold leading-6 text-slate-900">{articleTitle}</h3>
-                        <p className="mt-2 text-sm leading-6 text-slate-600">{articleExcerpt}</p>
-                      </div>
-                    </a>
-                  </article>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      </div>
-    </section>
+              {/* Service 3: Hotline App */}
+              <div className="animate-on-scroll h-full" data-delay="150">
+                <a
+                  href="/hotline-app"
+                  className="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-slate-900/5 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:ring-[#0a3555]/20"
+                >
+                  <div className="aspect-[4/3] w-full overflow-hidden bg-slate-100">
+                    <img
+                      src="https://ascww.org/img/hotline.6a220ebd.jpg"
+                      alt="تطبيق الخط الساخن"
+                      className="h-full w-full object-fill transition-transform duration-500 group-hover:scale-110"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                      }}
+                    />
+                  </div>
+                  <div className="flex flex-1 items-center justify-center border-t border-slate-100 bg-white p-4 text-center">
+                    <h3 className="text-xl font-bold text-slate-800 transition-colors group-hover:text-[#0a3555]">تطبيق الخط الساخن</h3>
+                  </div>
+                </a>
+              </div>
 
-    <section id="about" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-      <div className="grid items-center gap-8 lg:grid-cols-2">
-        <img src="/images/about-img.jpg" alt="محطة معالجة" className="h-full w-full rounded-2xl object-cover shadow-soft animate-on-scroll" loading="lazy" data-delay="80" />
-        <div className="animate-on-scroll" data-delay="180">
-          <p className="text-sm font-bold text-brand-700">عن الشركة</p>
-          <h2 className="mt-2 text-2xl font-extrabold text-slate-900 sm:text-3xl">خبرة تشغيلية ومهنية لخدمة المواطنين</h2>
-          <p className="mt-4 leading-8 text-slate-600">نسعى لتحسين جودة الحياة عبر توفير مياه شرب آمنة، وإدارة فعالة للصرف الصحي، والاعتماد على نظم متابعة وتحكم حديثة.</p>
-          <div className="mt-6 grid gap-3 sm:grid-cols-2">
-            <div className="rounded-xl border border-slate-200 bg-white p-4">التزام بمعايير الجودة والسلامة</div>
-            <div className="rounded-xl border border-slate-200 bg-white p-4">خطط تطوير مستمرة للبنية التحتية</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="services" className="bg-white py-16">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <h2 className="text-center text-2xl font-extrabold text-slate-900 sm:text-3xl">الخدمات الرئيسية</h2>
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5 animate-on-scroll" data-delay="50">إمداد مياه الشرب</article>
-          <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5 animate-on-scroll" data-delay="100">صيانة الشبكات</article>
-          <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5 animate-on-scroll" data-delay="150">خدمة العملاء والشكاوى</article>
-          <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5 animate-on-scroll" data-delay="200">تحاليل ومراقبة الجودة</article>
-          <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5 animate-on-scroll" data-delay="250">خدمات الصرف الصحي</article>
-          <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5 animate-on-scroll" data-delay="300">التوعية المجتمعية</article>
-        </div>
-      </div>
-    </section>
-
-    <section id="quality" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-      <div className="rounded-2xl bg-brand-50 p-6 sm:p-8 animate-on-scroll">
-        <h2 className="text-2xl font-extrabold text-brand-900">جودة المياه</h2>
-        <p className="mt-3 text-slate-700">متابعة دورية لعينات المياه من المحطات والشبكات لضمان المطابقة للمواصفات القياسية.</p>
-      </div>
-    </section>
-
-    <section id="sanitation" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <div className="rounded-2xl bg-white p-6 shadow-soft sm:p-8 animate-on-scroll">
-        <h2 className="text-2xl font-extrabold text-slate-900">الصرف الصحي</h2>
-        <p className="mt-3 text-slate-700">إدارة وتشغيل محطات المعالجة ورفع كفاءة الشبكات لتقليل الأعطال وتحسين الاستجابة.</p>
-      </div>
-    </section>
-
-    <section id="awareness" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <div className="rounded-2xl bg-white p-6 shadow-soft sm:p-8 animate-on-scroll">
-        <h2 className="text-2xl font-extrabold text-slate-900">التوعية والاتصالات</h2>
-        <p className="mt-3 text-slate-700">حملات توعوية لترشيد استهلاك المياه والتفاعل المباشر مع المواطنين عبر القنوات الرقمية.</p>
-      </div>
-    </section>
-
-    <section id="training" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <div className="rounded-2xl bg-white p-6 shadow-soft sm:p-8 animate-on-scroll">
-        <h2 className="text-2xl font-extrabold text-slate-900">التدريب</h2>
-        <p className="mt-3 text-slate-700">برامج تدريب فني وإداري مستمرة لرفع كفاءة الكوادر وتحسين جودة التشغيل.</p>
-      </div>
-    </section>
-
-    <section id="jobs" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <div className="rounded-2xl bg-white p-6 shadow-soft sm:p-8 animate-on-scroll">
-        <h2 className="text-2xl font-extrabold text-slate-900">الوظائف</h2>
-        <p className="mt-3 text-slate-700">متابعة فرص العمل المعلنة ومتطلبات التقديم طبقًا للضوابط الرسمية.</p>
-      </div>
-    </section>
-
-    <section id="tenders" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <div className="rounded-2xl bg-white p-6 shadow-soft sm:p-8 animate-on-scroll">
-        <h2 className="text-2xl font-extrabold text-slate-900">المناقصات</h2>
-        <p className="mt-3 text-slate-700">عرض المناقصات والممارسات المتاحة بشكل واضح مع بيانات التقديم والمواعيد.</p>
-      </div>
-    </section>
-
-    <section id="integrity" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <div className="rounded-2xl bg-white p-6 shadow-soft sm:p-8 animate-on-scroll">
-        <h2 className="text-2xl font-extrabold text-slate-900">دعم النزاهة</h2>
-        <p className="mt-3 text-slate-700">قنوات واضحة للإبلاغ ومكافحة الفساد بما يضمن الشفافية وحماية حقوق المواطنين.</p>
-      </div>
-    </section>
-
-    <section id="gallery" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-      <h2 className="text-center text-2xl font-extrabold text-slate-900 sm:text-3xl">معرض الصور</h2>
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-        <img src="/images/slider/1.jpg" alt="صورة 1" className="h-44 w-full rounded-xl object-cover animate-on-scroll" loading="lazy" data-delay="50" />
-        <img src="/images/slider/2.jpg" alt="صورة 2" className="h-44 w-full rounded-xl object-cover animate-on-scroll" loading="lazy" data-delay="100" />
-        <img src="/images/slider/3.jpg" alt="صورة 3" className="h-44 w-full rounded-xl object-cover animate-on-scroll" loading="lazy" data-delay="150" />
-        <img src="/images/slider/4.jpg" alt="صورة 4" className="h-44 w-full rounded-xl object-cover animate-on-scroll" loading="lazy" data-delay="200" />
-        <img src="/images/slider/5.jpg" alt="صورة 5" className="h-44 w-full rounded-xl object-cover animate-on-scroll" loading="lazy" data-delay="250" />
-        <img src="/images/slider/6.png" alt="صورة 6" className="h-44 w-full rounded-xl object-cover animate-on-scroll" loading="lazy" data-delay="300" />
-      </div>
-    </section>
-
-    <section id="contact" className="bg-brand-900 py-16 text-white">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <h2 className="text-center text-2xl font-extrabold sm:text-3xl">تواصل معنا</h2>
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="rounded-2xl bg-white/10 p-5 animate-on-scroll" data-delay="50">العنوان: أسيوط، جمهورية مصر العربية</div>
-          <div className="rounded-2xl bg-white/10 p-5 animate-on-scroll" data-delay="100">الخط الساخن: 2331604</div>
-          <div className="rounded-2xl bg-white/10 p-5 animate-on-scroll" data-delay="150">البريد: media-water@ascww.com.eg</div>
-          <div className="rounded-2xl bg-white/10 p-5 animate-on-scroll" data-delay="200">ساعات العمل: 24/7</div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer className="relative overflow-hidden bg-slate-950 text-slate-300">
-    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(17,112,176,0.22),_transparent_55%)]"></div>
-    <div className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-        <div className="animate-on-scroll">
-          <div className="mb-4 flex items-center gap-3">
-            <img src="/images/ascww-logo.png" alt="شعار الشركة" className="h-12 w-auto rounded bg-white p-1" />
-            <div>
-              <p className="text-sm font-bold text-white">شركة مياه الشرب والصرف الصحى بأسيوط</p>
-              <p className="text-xs text-slate-300">والوادى الجديد</p>
+              {/* Service 4: My Reading App */}
+              <div className="animate-on-scroll h-full" data-delay="200">
+                <a
+                  href="/my-reading-app"
+                  className="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-slate-900/5 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:ring-[#0a3555]/20"
+                >
+                  <div className="aspect-[4/3] w-full overflow-hidden bg-slate-100">
+                    <img
+                      src="https://ascww.org/img/readme.30ec1a0e.jpg"
+                      alt="تطبيق قراءتي"
+                      className="h-full w-full object-fill transition-transform duration-500 group-hover:scale-110"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                      }}
+                    />
+                  </div>
+                  <div className="flex flex-1 items-center justify-center border-t border-slate-100 bg-white p-4 text-center">
+                    <h3 className="text-xl font-bold text-slate-800 transition-colors group-hover:text-[#0a3555]">تطبيق قراءتي</h3>
+                  </div>
+                </a>
+              </div>
             </div>
           </div>
-          <p className="text-sm leading-7 text-slate-400">تطوير البوابة الإلكترونية لخدمات المواطنين بما يتماشى مع الموقع الرسمي للشركة ويركز على سهولة الوصول وسرعة الخدمة.</p>
-        </div>
+        </section>
 
-        <div className="animate-on-scroll" data-delay="80">
-          <h3 className="mb-4 text-base font-bold text-white">روابط مهمة</h3>
-          <div className="space-y-2 text-sm">
-            <a className="block transition hover:text-white" href="#services">الخدمات</a>
-            <a className="block transition hover:text-white" href="#quality">جودة المياه</a>
-            <a className="block transition hover:text-white" href="#tenders">المناقصات</a>
-            <a className="block transition hover:text-white" href="#integrity">دعم النزاهة</a>
+        <section id="about" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+          <div className="grid items-center gap-8 lg:grid-cols-2">
+            <img src="/images/about-img.jpg" alt="محطة معالجة" className="h-full w-full rounded-2xl object-cover shadow-soft animate-on-scroll" loading="lazy" data-delay="80" />
+            <div className="animate-on-scroll" data-delay="180">
+              <p className="text-sm font-bold text-brand-700">عن الشركة</p>
+              <h2 className="mt-2 text-2xl font-extrabold text-slate-900 sm:text-3xl">خبرة تشغيلية ومهنية لخدمة المواطنين</h2>
+              <p className="mt-4 leading-8 text-slate-600">نسعى لتحسين جودة الحياة عبر توفير مياه شرب آمنة، وإدارة فعالة للصرف الصحي، والاعتماد على نظم متابعة وتحكم حديثة.</p>
+              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                <div className="rounded-xl border border-slate-200 bg-white p-4">التزام بمعايير الجودة والسلامة</div>
+                <div className="rounded-xl border border-slate-200 bg-white p-4">خطط تطوير مستمرة للبنية التحتية</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="services" className="bg-white py-16">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <h2 className="text-center text-2xl font-extrabold text-slate-900 sm:text-3xl">الخدمات الرئيسية</h2>
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5 animate-on-scroll" data-delay="50">إمداد مياه الشرب</article>
+              <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5 animate-on-scroll" data-delay="100">صيانة الشبكات</article>
+              <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5 animate-on-scroll" data-delay="150">خدمة العملاء والشكاوى</article>
+              <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5 animate-on-scroll" data-delay="200">تحاليل ومراقبة الجودة</article>
+              <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5 animate-on-scroll" data-delay="250">خدمات الصرف الصحي</article>
+              <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5 animate-on-scroll" data-delay="300">التوعية المجتمعية</article>
+            </div>
+          </div>
+        </section>
+
+        <section id="quality" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+          <div className="rounded-2xl bg-brand-50 p-6 sm:p-8 animate-on-scroll">
+            <h2 className="text-2xl font-extrabold text-brand-900">جودة المياه</h2>
+            <p className="mt-3 text-slate-700">متابعة دورية لعينات المياه من المحطات والشبكات لضمان المطابقة للمواصفات القياسية.</p>
+          </div>
+        </section>
+
+        <section id="sanitation" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+          <div className="rounded-2xl bg-white p-6 shadow-soft sm:p-8 animate-on-scroll">
+            <h2 className="text-2xl font-extrabold text-slate-900">الصرف الصحي</h2>
+            <p className="mt-3 text-slate-700">إدارة وتشغيل محطات المعالجة ورفع كفاءة الشبكات لتقليل الأعطال وتحسين الاستجابة.</p>
+          </div>
+        </section>
+
+        <section id="awareness" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+          <div className="rounded-2xl bg-white p-6 shadow-soft sm:p-8 animate-on-scroll">
+            <h2 className="text-2xl font-extrabold text-slate-900">التوعية والاتصالات</h2>
+            <p className="mt-3 text-slate-700">حملات توعوية لترشيد استهلاك المياه والتفاعل المباشر مع المواطنين عبر القنوات الرقمية.</p>
+          </div>
+        </section>
+
+        <section id="training" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+          <div className="rounded-2xl bg-white p-6 shadow-soft sm:p-8 animate-on-scroll">
+            <h2 className="text-2xl font-extrabold text-slate-900">التدريب</h2>
+            <p className="mt-3 text-slate-700">برامج تدريب فني وإداري مستمرة لرفع كفاءة الكوادر وتحسين جودة التشغيل.</p>
+          </div>
+        </section>
+
+        <section id="jobs" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+          <div className="rounded-2xl bg-white p-6 shadow-soft sm:p-8 animate-on-scroll">
+            <h2 className="text-2xl font-extrabold text-slate-900">الوظائف</h2>
+            <p className="mt-3 text-slate-700">متابعة فرص العمل المعلنة ومتطلبات التقديم طبقًا للضوابط الرسمية.</p>
+          </div>
+        </section>
+
+        <section id="tenders" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+          <div className="rounded-2xl bg-white p-6 shadow-soft sm:p-8 animate-on-scroll">
+            <h2 className="text-2xl font-extrabold text-slate-900">المناقصات</h2>
+            <p className="mt-3 text-slate-700">عرض المناقصات والممارسات المتاحة بشكل واضح مع بيانات التقديم والمواعيد.</p>
+          </div>
+        </section>
+
+        <section id="integrity" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+          <div className="rounded-2xl bg-white p-6 shadow-soft sm:p-8 animate-on-scroll">
+            <h2 className="text-2xl font-extrabold text-slate-900">دعم النزاهة</h2>
+            <p className="mt-3 text-slate-700">قنوات واضحة للإبلاغ ومكافحة الفساد بما يضمن الشفافية وحماية حقوق المواطنين.</p>
+          </div>
+        </section>
+
+        <section id="gallery" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+          <h2 className="text-center text-2xl font-extrabold text-slate-900 sm:text-3xl">معرض الصور</h2>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+            <img src="/images/slider/1.jpg" alt="صورة 1" className="h-44 w-full rounded-xl object-cover animate-on-scroll" loading="lazy" data-delay="50" />
+            <img src="/images/slider/2.jpg" alt="صورة 2" className="h-44 w-full rounded-xl object-cover animate-on-scroll" loading="lazy" data-delay="100" />
+            <img src="/images/slider/3.jpg" alt="صورة 3" className="h-44 w-full rounded-xl object-cover animate-on-scroll" loading="lazy" data-delay="150" />
+            <img src="/images/slider/4.jpg" alt="صورة 4" className="h-44 w-full rounded-xl object-cover animate-on-scroll" loading="lazy" data-delay="200" />
+            <img src="/images/slider/5.jpg" alt="صورة 5" className="h-44 w-full rounded-xl object-cover animate-on-scroll" loading="lazy" data-delay="250" />
+            <img src="/images/slider/6.png" alt="صورة 6" className="h-44 w-full rounded-xl object-cover animate-on-scroll" loading="lazy" data-delay="300" />
+          </div>
+        </section>
+
+        <section id="contact" className="bg-brand-900 py-16 text-white">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <h2 className="text-center text-2xl font-extrabold sm:text-3xl">تواصل معنا</h2>
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="rounded-2xl bg-white/10 p-5 animate-on-scroll" data-delay="50">العنوان: أسيوط، جمهورية مصر العربية</div>
+              <div className="rounded-2xl bg-white/10 p-5 animate-on-scroll" data-delay="100">الخط الساخن: 2331604</div>
+              <div className="rounded-2xl bg-white/10 p-5 animate-on-scroll" data-delay="150">البريد: media-water@ascww.com.eg</div>
+              <div className="rounded-2xl bg-white/10 p-5 animate-on-scroll" data-delay="200">ساعات العمل: 24/7</div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer className="relative overflow-hidden bg-slate-950 text-slate-300">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(17,112,176,0.22),_transparent_55%)]"></div>
+        <div className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+            <div className="animate-on-scroll">
+              <div className="mb-4 flex items-center gap-3">
+                <img src="/images/ascww-logo.png" alt="شعار الشركة" className="h-12 w-auto rounded bg-white p-1" />
+                <div>
+                  <p className="text-sm font-bold text-white">شركة مياه الشرب والصرف الصحى بأسيوط</p>
+                  <p className="text-xs text-slate-300">والوادى الجديد</p>
+                </div>
+              </div>
+              <p className="text-sm leading-7 text-slate-400">تطوير البوابة الإلكترونية لخدمات المواطنين بما يتماشى مع الموقع الرسمي للشركة ويركز على سهولة الوصول وسرعة الخدمة.</p>
+            </div>
+
+            <div className="animate-on-scroll" data-delay="80">
+              <h3 className="mb-4 text-base font-bold text-white">روابط مهمة</h3>
+              <div className="space-y-2 text-sm">
+                <a className="block transition hover:text-white" href="#services">الخدمات</a>
+                <a className="block transition hover:text-white" href="#quality">جودة المياه</a>
+                <a className="block transition hover:text-white" href="#tenders">المناقصات</a>
+                <a className="block transition hover:text-white" href="#integrity">دعم النزاهة</a>
+              </div>
+            </div>
+
+            <div className="animate-on-scroll" data-delay="120">
+              <h3 className="mb-4 text-base font-bold text-white">بيانات التواصل</h3>
+              <div className="space-y-2 text-sm leading-7">
+                <p>العنوان: أسيوط، جمهورية مصر العربية</p>
+                <p>الخط الساخن: 2331604</p>
+                <p>البريد الإلكتروني: media-water@ascww.com.eg</p>
+                <p>مواعيد العمل: 24 ساعة / 7 أيام</p>
+              </div>
+            </div>
+
+            <div className="animate-on-scroll" data-delay="160">
+              <h3 className="mb-4 text-base font-bold text-white">تابعنا</h3>
+              <div className="mb-4 flex items-center gap-2">
+                <a href="https://www.facebook.com/ASCWWeg" target="_blank" rel="noopener noreferrer" aria-label="فيسبوك" className="social-icon social-icon--facebook">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 2h-3a6 6 0 0 0-6 6v4H7v4h2v6h4v-6h3l1-4h-4V8a2 2 0 0 1 2-2h1z" /></svg>
+                </a>
+                <a href="https://api.whatsapp.com/send?phone=01280733990" target="_blank" rel="noopener noreferrer" aria-label="واتساب" className="social-icon social-icon--whatsapp">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
+                </a>
+                <a href="https://youtube.com/channel/UC73LZeR5Yr5TE7fsTzvZSVw" target="_blank" rel="noopener noreferrer" aria-label="يوتيوب" className="social-icon social-icon--youtube">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.96-2C18.88 4 12 4 12 4s-6.88 0-8.58.46a2.78 2.78 0 0 0-1.96 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.42 19c1.7.46 8.58.46 8.58.46s6.88 0 8.58-.46a2.78 2.78 0 0 0 1.96-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z" /><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" /></svg>
+                </a>
+              </div>
+              <p className="text-xs text-slate-400">المصدر المرجعي للبيانات: ascww.org</p>
+            </div>
+          </div>
+
+          <div className="mt-10 border-t border-white/10 pt-5 text-center text-sm text-slate-400">
+            © <span id="current-year"></span> شركة مياه الشرب والصرف الصحى بأسيوط والوادى الجديد. جميع الحقوق محفوظة.
           </div>
         </div>
-
-        <div className="animate-on-scroll" data-delay="120">
-          <h3 className="mb-4 text-base font-bold text-white">بيانات التواصل</h3>
-          <div className="space-y-2 text-sm leading-7">
-            <p>العنوان: أسيوط، جمهورية مصر العربية</p>
-            <p>الخط الساخن: 2331604</p>
-            <p>البريد الإلكتروني: media-water@ascww.com.eg</p>
-            <p>مواعيد العمل: 24 ساعة / 7 أيام</p>
-          </div>
-        </div>
-
-        <div className="animate-on-scroll" data-delay="160">
-          <h3 className="mb-4 text-base font-bold text-white">تابعنا</h3>
-          <div className="mb-4 flex items-center gap-2">
-            <a href="https://www.facebook.com/ASCWWeg" target="_blank" rel="noopener noreferrer" aria-label="فيسبوك" className="social-icon social-icon--facebook">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 2h-3a6 6 0 0 0-6 6v4H7v4h2v6h4v-6h3l1-4h-4V8a2 2 0 0 1 2-2h1z"/></svg>
-            </a>
-            <a href="https://api.whatsapp.com/send?phone=01280733990" target="_blank" rel="noopener noreferrer" aria-label="واتساب" className="social-icon social-icon--whatsapp">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            </a>
-            <a href="https://youtube.com/channel/UC73LZeR5Yr5TE7fsTzvZSVw" target="_blank" rel="noopener noreferrer" aria-label="يوتيوب" className="social-icon social-icon--youtube">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.96-2C18.88 4 12 4 12 4s-6.88 0-8.58.46a2.78 2.78 0 0 0-1.96 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.42 19c1.7.46 8.58.46 8.58.46s6.88 0 8.58-.46a2.78 2.78 0 0 0 1.96-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
-            </a>
-          </div>
-          <p className="text-xs text-slate-400">المصدر المرجعي للبيانات: ascww.org</p>
-        </div>
-      </div>
-
-      <div className="mt-10 border-t border-white/10 pt-5 text-center text-sm text-slate-400">
-        © <span id="current-year"></span> شركة مياه الشرب والصرف الصحى بأسيوط والوادى الجديد. جميع الحقوق محفوظة.
-      </div>
-    </div>
-  </footer>
+      </footer>
     </>
   );
 }
