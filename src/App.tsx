@@ -6,8 +6,9 @@ type AdminInfoResponse = {
   boss_image?: string;
   has_boss_image?: boolean;
 };
-const ADMIN_INFO_ENDPOINT = import.meta.env.DEV ? '/api/admin-info' : 'https://backend.ascww.org/api/admin-info';
-const ADMIN_IMAGE_ENDPOINT = import.meta.env.DEV ? '/api/image' : 'https://backend.ascww.org/api/image';
+const API_BASE_ENDPOINT = import.meta.env.VITE_API_BASE_URL || '/api';
+const ADMIN_INFO_ENDPOINT = `${API_BASE_ENDPOINT}/admin-info`;
+const ADMIN_IMAGE_ENDPOINT = `${API_BASE_ENDPOINT}/image`;
 const sanitizeBossSpeechHtml = (html: string) => {
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');
