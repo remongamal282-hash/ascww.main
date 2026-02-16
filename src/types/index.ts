@@ -22,3 +22,20 @@ export type NewsItem = {
     updated_at?: string;
     news_images?: NewsImage[];
 };
+
+export type ProjectImage = {
+    id?: number;
+    path?: string;
+    main_image?: number;
+};
+
+export type ProjectItem = {
+    id?: number;
+    title?: string;
+    slug?: string;
+    active?: number;
+    description?: string;
+    created_at?: string;
+    updated_at?: string;
+    project_images?: ProjectImage[];
+};

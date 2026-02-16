@@ -1,4 +1,4 @@
-import type { NewsItem } from '../types';
+import type { NewsItem, ProjectItem } from '../types';
 
 export const API_BASE_ENDPOINT = import.meta.env.VITE_API_BASE_URL || '/api';
 export const ADMIN_INFO_ENDPOINT = `${API_BASE_ENDPOINT}/admin-info`;
@@ -6,6 +6,9 @@ export const ADMIN_IMAGE_ENDPOINT = `${API_BASE_ENDPOINT}/image`;
 export const NEWS_ENDPOINT = `${API_BASE_ENDPOINT}/news/home`;
 export const NEWS_IMAGE_ENDPOINT = `${API_BASE_ENDPOINT}/news/image`;
 export const NEWS_ARCHIVE_PATH = '/news-company';
+export const PROJECTS_ENDPOINT = `${API_BASE_ENDPOINT}/projects/home`;
+export const PROJECT_IMAGE_ENDPOINT = `${API_BASE_ENDPOINT}/projects/image`;
+export const PROJECTS_ARCHIVE_PATH = '/projects';
 export const BOSS_SINGLE_LINE_PHRASE = 'تحية تقدير وإعزاز لكل مواطن يساعد ويساهم في تحقيق هذا الهدف المنشود';
 
 export const extractPlainTextFromHtml = (html?: string) => {
@@ -33,6 +36,13 @@ export const formatArabicDate = (value?: string) => {
 
 export const getLatestNewsImagePath = (newsItem: NewsItem) => {
     const images = newsItem.news_images || [];
+    const mainImage = images.find((image) => Number(image.main_image) === 1);
+    const fallbackImage = images[0];
+    return (mainImage?.path || fallbackImage?.path || '').trim();
+};
+
+export const getProjectImagePath = (projectItem: ProjectItem) => {
+    const images = projectItem.project_images || [];
     const mainImage = images.find((image) => Number(image.main_image) === 1);
     const fallbackImage = images[0];
     return (mainImage?.path || fallbackImage?.path || '').trim();
