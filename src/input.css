@@ -176,7 +176,7 @@
   }
 
   .boss-word-grid {
-    @apply grid gap-3 lg:grid-cols-[560px_minmax(0, 1fr)] lg:items-center lg:gap-7;
+    @apply grid gap-3 lg:grid-cols-[560px_minmax(0,_1fr)] lg:items-center lg:gap-7;
   }
 
   .boss-word-content {
@@ -258,7 +258,8 @@
   }
 
   .boss-word-media {
-    @apply border border-slate-400/40 shadow-[0_26px_50px_rgba(15, 23, 42, 0.32), 0_8px_18px_rgba(15, 23, 42, 0.2)];
+    @apply border border-slate-400/40;
+    box-shadow: 0 26px 50px rgba(15, 23, 42, 0.32), 0 8px 18px rgba(15, 23, 42, 0.2);
     border-radius: 1.6rem;
     min-height: 420px;
   }
@@ -328,7 +329,8 @@
   }
 
   .hero-title {
-    @apply mx-auto max-w-5xl text-2xl font-extrabold leading-tight text-white drop-shadow-[0_4px_12px_rgba(0, 0, 0, 0.5)] sm:text-3xl lg:text-4xl;
+    @apply mx-auto max-w-5xl text-2xl font-extrabold leading-tight text-white sm:text-3xl lg:text-4xl;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
   }
 
   .animate-on-scroll {
