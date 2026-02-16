@@ -6,10 +6,60 @@ type AdminInfoResponse = {
   boss_image?: string;
   has_boss_image?: boolean;
 };
+
+type NewsImage = {
+  id?: number;
+  path?: string;
+  main_image?: number;
+};
+
+type NewsItem = {
+  id?: number;
+  title?: string;
+  slug?: string;
+  active?: number;
+  description?: string;
+  created_at?: string;
+  updated_at?: string;
+  news_images?: NewsImage[];
+};
+
 const API_BASE_ENDPOINT = import.meta.env.VITE_API_BASE_URL || '/api';
 const ADMIN_INFO_ENDPOINT = `${API_BASE_ENDPOINT}/admin-info`;
 const ADMIN_IMAGE_ENDPOINT = `${API_BASE_ENDPOINT}/image`;
+const NEWS_ENDPOINT = `${API_BASE_ENDPOINT}/news`;
+const NEWS_ARCHIVE_PATH = '/news-company';
 const BOSS_SINGLE_LINE_PHRASE = 'تحية تقدير وإعزاز لكل مواطن يساعد ويساهم في تحقيق هذا الهدف المنشود';
+
+const extractPlainTextFromHtml = (html?: string) => {
+  if (!html) return '';
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  return (doc.body.textContent || '').replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
+};
+
+const truncateText = (text: string, maxLength: number) => {
+  if (text.length <= maxLength) return text;
+  return `${text.slice(0, maxLength).trim()}...`;
+};
+
+const formatArabicDate = (value?: string) => {
+  if (!value) return '';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '';
+  return new Intl.DateTimeFormat('ar-EG', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }).format(date);
+};
+
+const getLatestNewsImagePath = (newsItem: NewsItem) => {
+  const images = newsItem.news_images || [];
+  const mainImage = images.find((image) => Number(image.main_image) === 1);
+  const fallbackImage = images[0];
+  return (mainImage?.path || fallbackImage?.path || '').trim();
+};
 
 const sanitizeBossSpeechHtml = (html: string) => {
   const parser = new DOMParser();
@@ -58,6 +108,10 @@ function App() {
   const [adminInfo, setAdminInfo] = useState<AdminInfoResponse | null>(null);
   const [adminInfoLoading, setAdminInfoLoading] = useState(true);
   const [adminInfoError, setAdminInfoError] = useState<string | null>(null);
+  const [latestNews, setLatestNews] = useState<NewsItem[]>([]);
+  const [newsLoading, setNewsLoading] = useState(true);
+  const [newsError, setNewsError] = useState<string | null>(null);
+
   useEffect(() => {
     const controller = new AbortController();
     let active = true;
@@ -83,6 +137,68 @@ function App() {
       controller.abort();
     };
   }, []);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    let active = true;
+
+    const loadLatestNews = async () => {
+      try {
+        const response = await fetch(NEWS_ENDPOINT, { signal: controller.signal });
+        if (!response.ok) {
+          throw new Error(`News request failed with status ${response.status}`);
+        }
+
+        const payload = (await response.json()) as unknown;
+        const payloadObject = (payload && typeof payload === 'object' ? payload : {}) as {
+          data?: unknown;
+          value?: unknown;
+          items?: unknown;
+        };
+
+        const rawNewsItems = Array.isArray(payload)
+          ? payload
+          : Array.isArray(payloadObject.data)
+            ? payloadObject.data
+            : Array.isArray(payloadObject.value)
+              ? payloadObject.value
+              : Array.isArray(payloadObject.items)
+                ? payloadObject.items
+                : [];
+
+        const validNewsItems = rawNewsItems
+          .filter((item): item is NewsItem => typeof item === 'object' && item !== null)
+          .filter((item) => Number(item.active ?? 1) !== 0)
+          .sort((first, second) => {
+            const firstDate = new Date(first.created_at || first.updated_at || '').getTime();
+            const secondDate = new Date(second.created_at || second.updated_at || '').getTime();
+
+            if (!Number.isNaN(secondDate - firstDate) && secondDate !== firstDate) {
+              return secondDate - firstDate;
+            }
+
+            return Number(second.id ?? 0) - Number(first.id ?? 0);
+          })
+          .slice(0, 4);
+
+        if (!active) return;
+        setLatestNews(validNewsItems);
+      } catch {
+        if (!active) return;
+        setNewsError('تعذر تحميل أحدث الأخبار حاليًا.');
+      } finally {
+        if (active) setNewsLoading(false);
+      }
+    };
+
+    loadLatestNews();
+
+    return () => {
+      active = false;
+      controller.abort();
+    };
+  }, []);
+
   useEffect(() => {
     const yearEl = document.getElementById('current-year');
     if (yearEl) yearEl.textContent = String(new Date().getFullYear());
@@ -706,6 +822,90 @@ function App() {
               }}
             />
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="latest-news" className="bg-white py-16">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="text-sm font-bold text-brand-700">المركز الإعلامي</p>
+            <h2 className="mt-1 text-2xl font-extrabold text-slate-900 sm:text-3xl">أحدث الأخبار</h2>
+          </div>
+          <a
+            href={NEWS_ARCHIVE_PATH}
+            className="inline-flex rounded-full border border-[#0a3555]/25 bg-[#0a3555] px-5 py-2 text-sm font-bold text-white transition hover:bg-[#082b47]"
+          >
+            الذهاب إلى أرشيف الأخبار
+          </a>
+        </div>
+
+        <div className="mt-8">
+          {newsLoading ? (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {Array.from({ length: 4 }).map((_, index) => (
+                <article key={`news-loading-${index}`} className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
+                  <div className="h-44 w-full animate-pulse bg-slate-200"></div>
+                  <div className="space-y-3 p-4">
+                    <div className="h-3 w-1/3 animate-pulse rounded bg-slate-200"></div>
+                    <div className="h-4 w-full animate-pulse rounded bg-slate-200"></div>
+                    <div className="h-4 w-5/6 animate-pulse rounded bg-slate-200"></div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : newsError ? (
+            <div className="rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm font-semibold text-amber-800">
+              {newsError}
+            </div>
+          ) : latestNews.length === 0 ? (
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm font-semibold text-slate-600">
+              لا توجد أخبار متاحة حاليًا.
+            </div>
+          ) : (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {latestNews.map((newsItem, index) => {
+                const imagePath = getLatestNewsImagePath(newsItem);
+                const imageUrl = imagePath ? `${ADMIN_IMAGE_ENDPOINT}/${encodeURIComponent(imagePath)}` : '';
+                const articleTitle = truncateText((newsItem.title || 'بدون عنوان').trim(), 95);
+                const articleExcerpt = truncateText(extractPlainTextFromHtml(newsItem.description), 135) || 'للاطلاع على كامل الخبر يمكن زيارة أرشيف الأخبار.';
+                const articleDate = formatArabicDate(newsItem.created_at || newsItem.updated_at);
+
+                return (
+                  <article
+                    key={newsItem.id ?? `${newsItem.slug || 'news'}-${index}`}
+                    className="animate-on-scroll overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-soft"
+                    data-delay={60 + index * 60}
+                  >
+                    <a href={NEWS_ARCHIVE_PATH} className="block h-full">
+                      <div className="relative h-44 overflow-hidden bg-slate-200">
+                        {imageUrl ? (
+                          <img
+                            src={imageUrl}
+                            alt={newsItem.title || 'صورة الخبر'}
+                            className="h-full w-full object-cover transition duration-300 hover:scale-105"
+                            loading="lazy"
+                            onError={(event) => {
+                              event.currentTarget.style.display = 'none';
+                            }}
+                          />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center text-sm font-bold text-slate-500">لا توجد صورة</div>
+                        )}
+                      </div>
+
+                      <div className="p-4">
+                        {articleDate ? <p className="text-xs font-semibold text-[#0a3555]/70">{articleDate}</p> : null}
+                        <h3 className="mt-2 text-sm font-bold leading-6 text-slate-900">{articleTitle}</h3>
+                        <p className="mt-2 text-sm leading-6 text-slate-600">{articleExcerpt}</p>
+                      </div>
+                    </a>
+                  </article>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
     </section>
