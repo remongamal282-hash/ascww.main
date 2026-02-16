@@ -176,7 +176,7 @@
   }
 
   .boss-word-grid {
-    @apply grid gap-3 lg:grid-cols-[560px_minmax(0,1fr)] lg:items-center lg:gap-7;
+    @apply grid gap-3 lg:grid-cols-[560px_minmax(0, 1fr)] lg:items-center lg:gap-7;
   }
 
   .boss-word-content {
@@ -208,7 +208,7 @@
     margin: 0;
   }
 
-  .boss-speech-content p + p {
+  .boss-speech-content p+p {
     margin-top: 0.5rem;
   }
 
@@ -258,7 +258,7 @@
   }
 
   .boss-word-media {
-    @apply border border-slate-400/40 shadow-[0_26px_50px_rgba(15,23,42,0.32),0_8px_18px_rgba(15,23,42,0.2)];
+    @apply border border-slate-400/40 shadow-[0_26px_50px_rgba(15, 23, 42, 0.32), 0_8px_18px_rgba(15, 23, 42, 0.2)];
     border-radius: 1.6rem;
     min-height: 420px;
   }
@@ -320,6 +320,7 @@
       opacity: 0;
       transform: translateY(18px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
@@ -327,18 +328,16 @@
   }
 
   .hero-title {
-    @apply mx-auto max-w-5xl text-2xl font-extrabold leading-tight text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)] sm:text-3xl lg:text-4xl;
+    @apply mx-auto max-w-5xl text-2xl font-extrabold leading-tight text-white drop-shadow-[0_4px_12px_rgba(0, 0, 0, 0.5)] sm:text-3xl lg:text-4xl;
   }
 
   .animate-on-scroll {
     opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 700ms ease, transform 700ms ease;
+    transition: opacity 700ms ease;
   }
 
   .animate-on-scroll.in-view {
     opacity: 1;
-    transform: translateY(0);
   }
 
   .social-icon {
@@ -365,7 +364,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
