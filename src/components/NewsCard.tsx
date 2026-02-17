@@ -18,10 +18,11 @@ function NewsCard({ article }: NewsCardProps) {
         if (!html) return '';
         const tmp = document.createElement('div');
         tmp.innerHTML = html;
-        return tmp.textContent || tmp.innerText || '';
+        return (tmp.textContent || tmp.innerText || '').trim();
     };
 
     const contentText = stripHtml(article.description);
+    const shareDescription = contentText.slice(0, 140);
     const date = new Date(article.created_at || article.updated_at || '').toLocaleDateString('ar-EG', {
         year: 'numeric',
         month: 'long',
@@ -88,7 +89,11 @@ function NewsCard({ article }: NewsCardProps) {
                             onClick={(event) => {
                                 event.preventDefault();
                                 event.stopPropagation();
-                                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(articleUrl)}`, '_blank');
+                                const quote = `${article.title || ''}\n${shareDescription}`;
+                                window.open(
+                                    `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(articleUrl)}&quote=${encodeURIComponent(quote)}`,
+                                    '_blank'
+                                );
                             }}
                             className="rounded-full bg-blue-50 p-1.5 text-blue-600 transition-colors hover:bg-blue-100"
                             title="مشاركة على فيسبوك"
@@ -102,7 +107,7 @@ function NewsCard({ article }: NewsCardProps) {
                             onClick={(event) => {
                                 event.preventDefault();
                                 event.stopPropagation();
-                                const text = `${article.title || ''} ${articleUrl}`;
+                                const text = `${article.title || ''}\n${shareDescription}\n${articleUrl}`;
                                 window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
                             }}
                             className="rounded-full bg-green-50 p-1.5 text-green-600 transition-colors hover:bg-green-100"

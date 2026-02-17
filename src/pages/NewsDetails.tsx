@@ -4,7 +4,28 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useSpeech } from '../hooks/useSpeech';
 import type { NewsItem } from '../types';
-import { NEWS_ARCHIVE_PATH, NEWS_ENDPOINT, NEWS_IMAGE_ENDPOINT } from '../utils/helpers';
+import {
+    NEWS_ARCHIVE_PATH,
+    NEWS_ENDPOINT,
+    NEWS_IMAGE_ENDPOINT,
+    extractPlainTextFromHtml,
+    getLatestNewsImagePath,
+} from '../utils/helpers';
+
+function setMetaTag(
+    selector: string,
+    attrName: 'name' | 'property',
+    attrValue: string,
+    content: string
+) {
+    let element = document.head.querySelector(selector) as HTMLMetaElement | null;
+    if (!element) {
+        element = document.createElement('meta');
+        element.setAttribute(attrName, attrValue);
+        document.head.appendChild(element);
+    }
+    element.setAttribute('content', content);
+}
 
 function NewsDetails() {
     const { id } = useParams<{ id: string }>();
@@ -54,6 +75,7 @@ function NewsDetails() {
                     const entrySlug = String(entry.slug ?? '').trim();
                     return routeId === entryId || routeId === entrySlug;
                 }) || null;
+
                 if (!active) return;
                 setNews(item);
                 setCurrentIndex(0);
@@ -79,6 +101,35 @@ function NewsDetails() {
         if (!images[currentIndex]?.path) return '';
         return `${NEWS_IMAGE_ENDPOINT}/${encodeURIComponent(images[currentIndex].path || '')}`;
     }, [images, currentIndex]);
+
+    const shareDescription = useMemo(() => {
+        if (!news) return '';
+        return extractPlainTextFromHtml(news.description || '').slice(0, 180);
+    }, [news]);
+
+    useEffect(() => {
+        if (!news) return;
+
+        const title = news.title || 'خبر';
+        const pageUrl = window.location.href;
+        const imagePath = getLatestNewsImagePath(news);
+        const imageUrl = imagePath ? `${NEWS_IMAGE_ENDPOINT}/${encodeURIComponent(imagePath)}` : '';
+
+        document.title = `${title} | أرشيف الأخبار`;
+        setMetaTag('meta[property="og:title"]', 'property', 'og:title', title);
+        setMetaTag('meta[property="og:description"]', 'property', 'og:description', shareDescription);
+        setMetaTag('meta[property="og:type"]', 'property', 'og:type', 'article');
+        setMetaTag('meta[property="og:url"]', 'property', 'og:url', pageUrl);
+        if (imageUrl) {
+            setMetaTag('meta[property="og:image"]', 'property', 'og:image', imageUrl);
+        }
+        setMetaTag('meta[name="twitter:card"]', 'name', 'twitter:card', 'summary_large_image');
+        setMetaTag('meta[name="twitter:title"]', 'name', 'twitter:title', title);
+        setMetaTag('meta[name="twitter:description"]', 'name', 'twitter:description', shareDescription);
+        if (imageUrl) {
+            setMetaTag('meta[name="twitter:image"]', 'name', 'twitter:image', imageUrl);
+        }
+    }, [news, shareDescription]);
 
     const nextImage = () => {
         if (images.length < 2) return;
@@ -214,7 +265,8 @@ function NewsDetails() {
                                     type="button"
                                     onClick={() => {
                                         const url = window.location.href;
-                                        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+                                        const quote = `${news.title}\n${shareDescription}`;
+                                        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(quote)}`, '_blank');
                                     }}
                                     className="rounded-full bg-blue-50 p-2 text-blue-600 transition-colors hover:bg-blue-100"
                                     title="مشاركة على فيسبوك"
@@ -227,7 +279,8 @@ function NewsDetails() {
                                     type="button"
                                     onClick={() => {
                                         const url = window.location.href;
-                                        window.open(`https://wa.me/?text=${encodeURIComponent(`${news.title} ${url}`)}`, '_blank');
+                                        const text = `${news.title}\n${shareDescription}\n${url}`;
+                                        window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
                                     }}
                                     className="rounded-full bg-green-50 p-2 text-green-600 transition-colors hover:bg-green-100"
                                     title="مشاركة على واتساب"
@@ -240,7 +293,7 @@ function NewsDetails() {
                                     <button
                                         type="button"
                                         onClick={() => {
-                                            const stripped = (cleanContent || '').replace(/<[^>]*>/g, '');
+                                            const stripped = cleanContent.replace(/<[^>]*>/g, '');
                                             speak(`${news.title}. ${stripped}`, 'ar-SA');
                                         }}
                                         className="rounded-full bg-purple-50 p-2 text-purple-600 transition-colors hover:bg-purple-100"

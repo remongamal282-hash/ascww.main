@@ -23,8 +23,18 @@
   ],
   "rewrites": [
     {
+      "source": "/news/:id",
+      "destination": "/api/ssr?id=:id"
+    },
+    {
       "source": "/api/:path*",
       "destination": "https://backend.ascww.org/api/:path*"
     }
-  ]
+  ],
+  "functions": {
+    "api/ssr.js": {
+      "memory": 1024,
+      "maxDuration": 30
+    }
+  }
 }
