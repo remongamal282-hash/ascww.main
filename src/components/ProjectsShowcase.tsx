@@ -9,6 +9,8 @@ import {
     truncateText,
 } from '../utils/helpers';
 
+const PROJECT_AUTOPLAY_MS = 24000;
+
 function ProjectsShowcase() {
     const [projects, setProjects] = useState<ProjectItem[]>([]);
     const [projectsLoading, setProjectsLoading] = useState(true);
@@ -65,6 +67,17 @@ function ProjectsShowcase() {
             controller.abort();
         };
     }, []);
+
+    useEffect(() => {
+        if (projects.length <= 1) return;
+        const timerId = window.setTimeout(() => {
+            setActiveIndex((prev) => (prev + 1) % projects.length);
+        }, PROJECT_AUTOPLAY_MS);
+
+        return () => {
+            window.clearTimeout(timerId);
+        };
+    }, [activeIndex, projects.length]);
 
     const currentProject = useMemo(() => {
         if (projects.length === 0) return null;
@@ -136,18 +149,46 @@ function ProjectsShowcase() {
                         </div>
 
                         <div className="order-1 lg:order-2">
-                            <div className="relative h-full min-h-[240px] overflow-hidden bg-slate-200 sm:min-h-[360px] lg:min-h-[520px]">
-                                {projectImageUrl ? (
-                                    <img
-                                        src={projectImageUrl}
-                                        alt={currentProject.title || 'صورة مشروع'}
-                                        className="h-full w-full object-cover"
-                                        loading="lazy"
-                                        onError={(event) => {
-                                            event.currentTarget.style.display = 'none';
-                                        }}
-                                    />
-                                ) : null}
+                            <div className="relative flex items-center justify-center px-10 py-4 sm:px-14 lg:px-16 lg:py-6">
+                                <div className="relative h-[260px] w-full max-w-[640px] sm:h-[340px] lg:h-[420px]">
+                                    {projects.length > 1 && (
+                                        <div className="home-project-progress-top" aria-hidden="true">
+                                            <span
+                                                key={`project-progress-${activeIndex}`}
+                                                className="home-project-progress-top-fill"
+                                                style={{ animationDuration: `${PROJECT_AUTOPLAY_MS}ms` }}
+                                            ></span>
+                                        </div>
+                                    )}
+
+                                    <div className="home-project-image-frame relative h-full w-full overflow-hidden bg-slate-200">
+                                        {projectImageUrl ? (
+                                            <img
+                                                src={projectImageUrl}
+                                                alt={currentProject.title || 'صورة مشروع'}
+                                                className="h-full w-full object-cover"
+                                                loading="lazy"
+                                                onError={(event) => {
+                                                    event.currentTarget.style.display = 'none';
+                                                }}
+                                            />
+                                        ) : null}
+
+                                        {projects.length > 1 && (
+                                            <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full bg-black/35 px-3 py-1">
+                                                {projects.map((project, index) => (
+                                                    <button
+                                                        key={project.id ?? `project-dot-${index}`}
+                                                        type="button"
+                                                        aria-label={`عرض مشروع ${index + 1}`}
+                                                        onClick={() => setActiveIndex(index)}
+                                                        className={`h-2.5 w-2.5 rounded-full transition ${index === activeIndex ? 'bg-white' : 'bg-white/45 hover:bg-white/70'}`}
+                                                    ></button>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
 
                                 {projects.length > 1 && (
                                     <>
@@ -155,7 +196,7 @@ function ProjectsShowcase() {
                                             type="button"
                                             aria-label="المشروع السابق"
                                             onClick={goToPrev}
-                                            className="absolute left-2 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/55 text-white shadow-md transition hover:bg-black/75 sm:left-3 sm:h-11 sm:w-11"
+                                            className="absolute left-2 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/70 text-white shadow-md transition hover:bg-black/85 sm:left-4 sm:h-11 sm:w-11"
                                         >
                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 18l-6-6 6-6" />
@@ -165,24 +206,12 @@ function ProjectsShowcase() {
                                             type="button"
                                             aria-label="المشروع التالي"
                                             onClick={goToNext}
-                                            className="absolute right-2 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/55 text-white shadow-md transition hover:bg-black/75 sm:right-3 sm:h-11 sm:w-11"
+                                            className="absolute right-2 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/70 text-white shadow-md transition hover:bg-black/85 sm:right-4 sm:h-11 sm:w-11"
                                         >
                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 18l6-6-6-6" />
                                             </svg>
                                         </button>
-
-                                        <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full bg-black/35 px-3 py-1">
-                                            {projects.map((project, index) => (
-                                                <button
-                                                    key={project.id ?? `project-dot-${index}`}
-                                                    type="button"
-                                                    aria-label={`عرض مشروع ${index + 1}`}
-                                                    onClick={() => setActiveIndex(index)}
-                                                    className={`h-2.5 w-2.5 rounded-full transition ${index === activeIndex ? 'bg-white' : 'bg-white/45 hover:bg-white/70'}`}
-                                                ></button>
-                                            ))}
-                                        </div>
                                     </>
                                 )}
                             </div>

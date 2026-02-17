@@ -1,4 +1,5 @@
-﻿import ProjectsShowcase from './ProjectsShowcase';
+import ProjectsShowcase from './ProjectsShowcase';
+import CompanyStats from './CompanyStats';
 
 function MainContent() {
     return (
@@ -55,26 +56,10 @@ function MainContent() {
             </section>
 
             <ProjectsShowcase />
+            <CompanyStats />
 
-            {/* تواصل معنا */}
-            <section id="contact" className="bg-brand-900 py-12 text-white sm:py-16">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <h2 className="text-center text-2xl font-extrabold sm:text-3xl">تواصل معنا</h2>
-                    <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                        <div className="animate-on-scroll rounded-2xl bg-white/10 p-4 text-center sm:p-5" data-delay="50">العنوان: أسيوط، جمهورية مصر العربية</div>
-                        <div className="animate-on-scroll rounded-2xl bg-white/10 p-4 text-center sm:p-5" data-delay="100">الخط الساخن: 2331604</div>
-                        <div className="animate-on-scroll break-words rounded-2xl bg-white/10 p-4 text-center sm:p-5" data-delay="150">البريد: media-water@ascww.com.eg</div>
-                        <div className="animate-on-scroll rounded-2xl bg-white/10 p-4 text-center sm:p-5" data-delay="200">ساعات العمل: 24/7</div>
-                    </div>
-                </div>
-            </section>
         </>
     );
 }
 
 export default MainContent;
-
-
-
-
-
