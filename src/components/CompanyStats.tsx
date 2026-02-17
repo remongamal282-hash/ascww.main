@@ -153,7 +153,7 @@ function CompanyStats() {
                             <div className={`mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl ${stat.iconWrapClass}`}>
                                 {stat.icon}
                             </div>
-                            <p className="mt-4 text-4xl font-extrabold tracking-tight text-slate-900">
+                            <p className="mt-4 text-3xl font-normal tracking-tight text-slate-900">
                                 {numberFormatter.format(displayValues[index] ?? 0)}
                             </p>
                             <p className="mt-2 text-lg font-bold text-slate-700">{stat.label}</p>
