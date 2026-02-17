@@ -9,8 +9,8 @@
     "build": "npm run typecheck && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
-    "build:css": "tailwindcss -i ./src/input.css -o ./css/main.css --minify",
-    "watch:css": "tailwindcss -i ./src/input.css -o ./css/main.css --watch"
+    "build:css": "tailwindcss -i ./src/input.css -o ./css/tailwind.generated.css --minify",
+    "watch:css": "tailwindcss -i ./src/input.css -o ./css/tailwind.generated.css --watch"
   },
   "dependencies": {
     "react": "^18.3.1",
