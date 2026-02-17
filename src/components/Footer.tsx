@@ -21,7 +21,7 @@ function Footer() {
                                 href="https://www.google.com/maps/search/?api=1&query=%D8%B4%D8%B1%D9%83%D8%A9+%D9%85%D9%8A%D8%A7%D9%87+%D8%A7%D9%84%D8%B4%D8%B1%D8%A8+%D9%88%D8%A7%D9%84%D8%B5%D8%B1%D9%81+%D8%A7%D9%84%D8%B5%D8%AD%D9%8A+%D8%A8%D8%A3%D8%B3%D9%8A%D9%88%D8%B7+%D9%88%D8%A7%D9%84%D9%88%D8%A7%D8%AF%D9%8A+%D8%A7%D9%84%D8%AC%D8%AF%D9%8A%D8%AF"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="mt-3 inline-flex items-center gap-1.5 text-sm font-bold text-slate-700 transition hover:text-slate-900"
+                                className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#0a3555] to-[#1170b0] px-5 py-2 text-sm font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:from-[#082b47] hover:to-[#0a3555]"
                             >
                                 فتح في خرائط جوجل
                             </a>
