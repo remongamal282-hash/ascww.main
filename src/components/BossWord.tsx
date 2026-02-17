@@ -17,14 +17,14 @@ function BossWord({ adminInfo, adminInfoLoading, adminInfoError }: BossWordProps
     const bossImageUrl = `${ADMIN_IMAGE_ENDPOINT}/${encodeURIComponent(bossImageName)}`;
 
     return (
-        <section id="boss-word" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <section id="boss-word" className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
             <div className="boss-word-card animate-on-scroll" data-delay="70">
                 <div className="boss-word-grid">
-                    <div className="boss-word-content order-2 p-6 sm:p-8 lg:order-2">
+                    <div className="boss-word-content order-2 p-5 sm:p-8 lg:order-2">
                         <p className="boss-word-kicker">كلمة السيد رئيس مجلس الإداره والعضو المنتدب</p>
                         <div className="boss-word-body" aria-live="polite">
                             {adminInfoLoading ? (
-                                <p className="leading-8 text-slate-600">جاري تحميل كلمة السيد رئيس مجلس الإداره والعضو المنتدب...</p>
+                                <p className="text-sm leading-7 text-slate-600 sm:text-base sm:leading-8">جاري تحميل كلمة السيد رئيس مجلس الإداره والعضو المنتدب...</p>
                             ) : adminInfoError ? (
                                 <p className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-800">{adminInfoError}</p>
                             ) : (

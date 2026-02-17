@@ -16,7 +16,7 @@ type LatestNewsProps = {
 
 function LatestNews({ latestNews, newsLoading, newsError }: LatestNewsProps) {
     return (
-        <section id="latest-news" className="bg-white py-16">
+        <section id="latest-news" className="bg-white py-12 sm:py-16">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="mb-8 sm:mb-12">
                     <h2 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">أحدث الأخبار</h2>
@@ -56,7 +56,7 @@ function LatestNews({ latestNews, newsLoading, newsError }: LatestNewsProps) {
                                 return (
                                     <article
                                         key={newsItem.id ?? `${newsItem.slug || 'news'}-${index}`}
-                                        className="flex flex-col animate-on-scroll overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm transition hover:shadow-md"
+                                        className="flex h-full flex-col animate-on-scroll overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm transition hover:shadow-md"
                                         data-delay={60 + index * 60}
                                     >
                                         {/* Image Section */}
@@ -81,9 +81,9 @@ function LatestNews({ latestNews, newsLoading, newsError }: LatestNewsProps) {
                                         </a>
 
                                         {/* Content Section */}
-                                        <div className="flex flex-1 flex-col p-5">
+                                        <div className="flex flex-1 flex-col p-4 sm:p-5">
                                             {/* Meta Data */}
-                                            <div className="mb-3 flex items-center gap-2 text-xs font-medium text-slate-500">
+                                            <div className="mb-3 flex flex-wrap items-center gap-2 text-xs font-medium text-slate-500">
                                                 {articleDate && (
                                                     <div className="flex items-center gap-1">
                                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

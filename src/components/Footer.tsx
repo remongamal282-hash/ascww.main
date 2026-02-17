@@ -2,8 +2,8 @@ function Footer() {
     return (
         <footer className="relative overflow-hidden bg-slate-950 text-slate-300">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(17,112,176,0.22),_transparent_55%)]"></div>
-            <div className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-                <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+            <div className="relative mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-8">
+                <div className="grid gap-8 sm:gap-10 md:grid-cols-2 lg:grid-cols-4">
                     <div className="animate-on-scroll">
                         <div className="mb-4 flex items-center gap-3">
                             <img src="/images/ascww-logo.png" alt="شعار الشركة" className="h-12 w-auto rounded bg-white p-1" />
@@ -27,7 +27,7 @@ function Footer() {
 
                     <div className="animate-on-scroll" data-delay="120">
                         <h3 className="mb-4 text-base font-bold text-white">بيانات التواصل</h3>
-                        <div className="space-y-2 text-sm leading-7">
+                        <div className="space-y-2 break-words text-sm leading-7">
                             <p>العنوان: أسيوط، جمهورية مصر العربية</p>
                             <p>الخط الساخن: 2331604</p>
                             <p>البريد الإلكتروني: media-water@ascww.com.eg</p>
@@ -37,7 +37,7 @@ function Footer() {
 
                     <div className="animate-on-scroll" data-delay="160">
                         <h3 className="mb-4 text-base font-bold text-white">تابعنا</h3>
-                        <div className="mb-4 flex items-center gap-2">
+                        <div className="mb-4 flex flex-wrap items-center gap-2">
                             <a href="https://www.facebook.com/ASCWWeg" target="_blank" rel="noopener noreferrer" aria-label="فيسبوك" className="social-icon social-icon--facebook">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 2h-3a6 6 0 0 0-6 6v4H7v4h2v6h4v-6h3l1-4h-4V8a2 2 0 0 1 2-2h1z" /></svg>
                             </a>
@@ -52,7 +52,7 @@ function Footer() {
                     </div>
                 </div>
 
-                <div className="mt-10 border-t border-white/10 pt-5 text-center text-sm text-slate-400">
+                <div className="mt-10 border-t border-white/10 pt-5 text-center text-xs text-slate-400 sm:text-sm">
                     © <span id="current-year"></span> شركة مياه الشرب والصرف الصحى بأسيوط والوادى الجديد. جميع الحقوق محفوظة.
                 </div>
             </div>

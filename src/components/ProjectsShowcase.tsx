@@ -74,7 +74,7 @@ function ProjectsShowcase() {
 
     if (projectsLoading) {
         return (
-            <section id="home-projects" className="bg-white py-14">
+            <section id="home-projects" className="bg-white py-12 sm:py-14">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 text-center text-slate-600">
                         جاري تحميل المشاريع...
@@ -86,7 +86,7 @@ function ProjectsShowcase() {
 
     if (projectsError) {
         return (
-            <section id="home-projects" className="bg-white py-14">
+            <section id="home-projects" className="bg-white py-12 sm:py-14">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6 text-center font-semibold text-amber-800">
                         {projectsError}
@@ -111,23 +111,23 @@ function ProjectsShowcase() {
     };
 
     return (
-        <section id="home-projects" className="bg-white py-14">
+        <section id="home-projects" className="bg-white py-12 sm:py-14">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="mb-8 text-center">
-                    <h2 className="text-3xl font-extrabold text-slate-900 sm:text-4xl">مشـروعاتنا</h2>
+                    <h2 className="text-2xl font-extrabold text-slate-900 sm:text-3xl lg:text-4xl">مشـروعاتنا</h2>
                 </div>
                 <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-lg">
                     <div className="grid lg:grid-cols-2">
-                        <div className="order-2 p-6 sm:p-8 lg:order-1 lg:p-10">
-                            <h3 className="text-3xl font-extrabold text-slate-900">{currentProject.title || 'مشروع'}</h3>
+                        <div className="order-2 p-5 sm:p-8 lg:order-1 lg:p-10">
+                            <h3 className="break-words text-2xl font-extrabold text-slate-900 sm:text-3xl">{currentProject.title || 'مشروع'}</h3>
                             <div className="mt-3 h-[3px] w-36 bg-[#d7b05a]"></div>
-                            <p className="mt-6 text-lg leading-9 text-slate-700">
+                            <p className="mt-5 text-base leading-8 text-slate-700 sm:mt-6 sm:text-lg sm:leading-9">
                                 {projectDescription || 'لا يوجد وصف متاح لهذا المشروع.'}
                             </p>
-                            <div className="mt-8">
+                            <div className="mt-6 sm:mt-8">
                                 <a
                                     href={PROJECTS_ARCHIVE_PATH}
-                                    className="inline-flex items-center gap-2 text-xl font-bold text-[#c79d41] transition hover:text-[#0a3555]"
+                                    className="inline-flex items-center gap-2 text-lg font-bold text-[#c79d41] transition hover:text-[#0a3555] sm:text-xl"
                                 >
                                     <span>اقرأ المزيد</span>
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 18l6-6-6-6" /></svg>
@@ -136,7 +136,7 @@ function ProjectsShowcase() {
                         </div>
 
                         <div className="order-1 lg:order-2">
-                            <div className="relative h-full min-h-[300px] overflow-hidden bg-slate-200 sm:min-h-[360px] lg:min-h-[520px]">
+                            <div className="relative h-full min-h-[240px] overflow-hidden bg-slate-200 sm:min-h-[360px] lg:min-h-[520px]">
                                 {projectImageUrl ? (
                                     <img
                                         src={projectImageUrl}
@@ -155,7 +155,7 @@ function ProjectsShowcase() {
                                             type="button"
                                             aria-label="المشروع السابق"
                                             onClick={goToPrev}
-                                            className="absolute left-3 top-1/2 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/55 text-white shadow-md transition hover:bg-black/75"
+                                            className="absolute left-2 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/55 text-white shadow-md transition hover:bg-black/75 sm:left-3 sm:h-11 sm:w-11"
                                         >
                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 18l-6-6 6-6" />
@@ -165,7 +165,7 @@ function ProjectsShowcase() {
                                             type="button"
                                             aria-label="المشروع التالي"
                                             onClick={goToNext}
-                                            className="absolute right-3 top-1/2 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/55 text-white shadow-md transition hover:bg-black/75"
+                                            className="absolute right-2 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/55 text-white shadow-md transition hover:bg-black/75 sm:right-3 sm:h-11 sm:w-11"
                                         >
                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 18l6-6-6-6" />

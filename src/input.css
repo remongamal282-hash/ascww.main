@@ -15,7 +15,12 @@
   }
 
   body {
-    @apply font-cairo bg-slate-50 text-slate-800;
+    @apply overflow-x-hidden font-cairo bg-slate-50 text-slate-800;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
   }
 }
 
@@ -169,6 +174,7 @@
   .boss-word-card {
     @apply rounded-3xl bg-slate-200/80 px-2 py-3 sm:px-4 sm:py-5;
     position: relative;
+    overflow: hidden;
   }
 
   .boss-word-card::before {
@@ -176,11 +182,11 @@
   }
 
   .boss-word-grid {
-    @apply grid gap-3 lg:grid-cols-[560px_minmax(0,_1fr)] lg:items-center lg:gap-7;
+    @apply grid grid-cols-1 gap-3 lg:grid-cols-[minmax(300px,_480px)_minmax(0,_1fr)] lg:items-center lg:gap-7;
   }
 
   .boss-word-content {
-    @apply text-center lg:px-3;
+    @apply min-w-0 text-center lg:px-3;
   }
 
   .boss-word-kicker {
@@ -196,12 +202,24 @@
     display: flex;
     flex-direction: column;
     gap: 0.9rem;
+    min-width: 0;
   }
 
   .boss-speech-content {
     @apply text-[15px] text-slate-800 sm:text-base;
     line-height: 1.6;
     text-wrap: pretty;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .boss-speech-content * {
+    max-width: 100%;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    white-space: normal;
   }
 
   .boss-speech-content p {
@@ -227,8 +245,9 @@
   }
 
   .boss-speech-content .boss-speech-single-line {
-    display: inline-block;
-    white-space: nowrap;
+    display: inline;
+    white-space: normal;
+    overflow-wrap: anywhere;
     font-weight: 700;
     font-size: 0.94em;
     color: #0a3555;
@@ -261,7 +280,7 @@
     @apply border border-slate-400/40;
     box-shadow: 0 26px 50px rgba(15, 23, 42, 0.32), 0 8px 18px rgba(15, 23, 42, 0.2);
     border-radius: 1.6rem;
-    min-height: 420px;
+    min-height: 360px;
   }
 
   .boss-word-photo {
@@ -276,7 +295,7 @@
     }
 
     .boss-word-media {
-      min-height: 300px;
+      min-height: 260px;
     }
 
     .boss-word-photo {
