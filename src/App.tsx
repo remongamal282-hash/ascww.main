@@ -15,6 +15,7 @@ function App() {
   const [latestNews, setLatestNews] = useState<NewsItem[]>([]);
   const [newsLoading, setNewsLoading] = useState(true);
   const [newsError, setNewsError] = useState<string | null>(null);
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
   // تحميل بيانات رئيس مجلس الإدارة
   useEffect(() => {
@@ -291,6 +292,20 @@ function App() {
     return () => observer.disconnect();
   }, [latestNews, newsLoading]);
 
+  useEffect(() => {
+    const onScroll = () => {
+      setShowScrollTop(window.scrollY > 420);
+    };
+
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <>
       <Header />
@@ -309,6 +324,18 @@ function App() {
         <MainContent />
       </main>
       <Footer />
+      <button
+        type="button"
+        aria-label="العودة إلى أعلى الصفحة"
+        onClick={scrollToTop}
+        className={`fixed bottom-5 left-5 z-50 inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#0a3555] text-white shadow-lg transition-all duration-300 hover:bg-[#082b47] ${
+          showScrollTop ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-3 opacity-0'
+        }`}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+        </svg>
+      </button>
     </>
   );
 }
