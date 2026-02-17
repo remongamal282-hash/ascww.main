@@ -1,10 +1,12 @@
+import { Link } from 'react-router-dom';
+
 function Footer() {
     return (
         <footer className="relative overflow-hidden bg-slate-950 text-slate-300">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(17,112,176,0.22),_transparent_55%)]"></div>
             <div className="relative mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-8">
                 <div className="grid gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
-                    <div className="animate-on-scroll h-full" data-delay="40">
+                    <div className="h-full">
                         <div className="overflow-hidden rounded-2xl border border-slate-200 bg-[#f1f5f9d9] p-3 shadow-[0_14px_35px_rgba(2,6,23,0.35)]">
                             <div className="mb-3 flex items-center justify-between">
                                 <h3 className="text-base font-bold text-slate-900">مقر الشركة</h3>
@@ -28,7 +30,7 @@ function Footer() {
                         </div>
                     </div>
 
-                    <div className="animate-on-scroll h-full px-1 py-1" data-delay="70">
+                    <div className="h-full px-1 py-1">
                         <h3 className="mb-4 text-base font-bold text-white">بيانات الشركة</h3>
                         <div className="space-y-3 text-sm leading-7 text-slate-300">
                             <p>عنوان الفرع الرئيسى : محطه مياه المرشحه بنزله عباللاه- اسيوط</p>
@@ -49,12 +51,12 @@ function Footer() {
                         </div>
                     </div>
 
-                    <div className="animate-on-scroll h-full px-1 py-1" data-delay="80">
+                    <div className="h-full px-1 py-1">
                         <h3 className="mb-4 text-base font-bold text-white">روابط تهمك</h3>
                         <div className="space-y-2 text-sm">
                             <a className="block transition hover:text-white" href="https://ascww.org/inquire-your-bill">استعلم عن فاتورتك</a>
                             <a className="block transition hover:text-white" href="https://ascww.org/call-center">خدمة العملاء</a>
-                            <a className="block transition hover:text-white" href="https://ascww.org/news-company">أرشيف الأخبار</a>
+                            <Link className="block transition hover:text-white" to="/news-company">أرشيف الأخبار</Link>
                             <a className="block transition hover:text-white" href="https://ascww.org/allTenders">المناقصات</a>
                             <a className="block transition hover:text-white" href="https://ascww.org/general-admin-training">الإدارة العامة للتدريب</a>
                             <a className="block transition hover:text-white" href="https://ascww.org/school-new-assuit">المدرسة الفنية</a>

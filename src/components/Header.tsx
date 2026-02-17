@@ -1,3 +1,5 @@
+﻿import { Link } from 'react-router-dom';
+
 function Header() {
     return (
         <header id="site-header" className="relative w-full bg-white">
@@ -30,12 +32,12 @@ function Header() {
 
             <div id="site-mainbar" className="site-mainbar border-b border-[#d7b05a]/35 bg-white transition-shadow duration-300">
                 <div className="mx-auto grid w-full max-w-[1600px] grid-cols-[auto_auto] justify-start items-center gap-2 px-4 py-3 sm:gap-4 sm:px-6 sm:py-4 lg:px-8 xl:grid-cols-[auto_minmax(0,1fr)_auto] xl:justify-normal">
-                    <a href="#home" className="order-2 flex items-center justify-self-start gap-3 xl:order-1 xl:justify-self-end">
+                    <Link to="/" className="order-2 flex items-center justify-self-start gap-3 xl:order-1 xl:justify-self-end">
                         <img src="/images/ascww-logo.png" alt="شعار الشركة" className="h-10 w-auto sm:h-12 lg:h-14" />
-                    </a>
+                    </Link>
 
                     <nav className="main-menu-wrap order-3 hidden min-w-0 items-center justify-center gap-1 text-sm font-bold text-slate-800 xl:order-2 xl:flex">
-                        <a className="nav-link-classic nav-link-classic--active" href="/">الرئيسية</a>
+                        <Link className="nav-link-classic nav-link-classic--active" to="/">الرئيسية</Link>
 
                         <div className="nav-dropdown group">
                             <a className="nav-dropdown-trigger" href="/an-elsherka">عن الشركة</a>
@@ -44,7 +46,7 @@ function Header() {
                                 <a className="nav-dropdown-item" href="/birth-of-company">قرار إنشاء الشركة</a>
                                 <a className="nav-dropdown-item" href="/branch-of-company">فروع الشركه</a>
                                 <a className="nav-dropdown-item" href="/projects-company">مشروعات الشركة</a>
-                                <a className="nav-dropdown-item" href="/news-company">أرشيف الأخبار</a>
+                                <Link className="nav-dropdown-item" to="/news-company">أرشيف الأخبار</Link>
                                 <a className="nav-dropdown-item" href="/vision-and-message">الرؤيه والرساله</a>
                                 <a className="nav-dropdown-item" href="/organization-structure">الهيكل التنظيمي</a>
                                 <a className="nav-dropdown-item" href="/company-achivement">إنجازات الشركة</a>
@@ -168,8 +170,8 @@ function Header() {
 
             <nav id="mobile-menu" className="hidden max-h-[calc(100vh-4.75rem)] overflow-y-auto border-b border-[#d7b05a]/35 bg-white px-4 py-3 text-base font-semibold text-slate-800 xl:hidden">
                 <div className="grid grid-cols-1 gap-2">
-                    <a className="rounded-lg bg-slate-100 px-3 py-2" href="/">الرئيسية</a>
-                    <details className="mobile-nav-group"><summary>عن الشركة</summary><div className="mobile-nav-submenu"><a href="/an-elsherka">نبذة عن الشركة</a><a href="/birth-of-company">قرار إنشاء الشركة</a><a href="/branch-of-company">فروع الشركه</a><a href="/projects-company">مشروعات الشركة</a><a href="/news-company">أرشيف الأخبار</a><a href="/vision-and-message">الرؤيه والرساله</a><a href="/organization-structure">الهيكل التنظيمي</a><a href="/company-achivement">إنجازات الشركة</a><a href="/contract-and-sell">اللائحه الموحده للعقود والمشتريات</a></div></details>
+                    <Link className="rounded-lg bg-slate-100 px-3 py-2" to="/">الرئيسية</Link>
+                    <details className="mobile-nav-group"><summary>عن الشركة</summary><div className="mobile-nav-submenu"><a href="/an-elsherka">نبذة عن الشركة</a><a href="/birth-of-company">قرار إنشاء الشركة</a><a href="/branch-of-company">فروع الشركه</a><a href="/projects-company">مشروعات الشركة</a><Link to="/news-company">أرشيف الأخبار</Link><a href="/vision-and-message">الرؤيه والرساله</a><a href="/organization-structure">الهيكل التنظيمي</a><a href="/company-achivement">إنجازات الشركة</a><a href="/contract-and-sell">اللائحه الموحده للعقود والمشتريات</a></div></details>
                     <details className="mobile-nav-group"><summary>التوعية والاتصال</summary><div className="mobile-nav-submenu"><a href="/adviceAndContact">التوعية والأتصال</a><a href="/forKids">ركن الأطفال</a><a href="/toWomen">لك سيدتي</a></div></details>
                     <details className="mobile-nav-group"><summary>جودة المياه</summary><div className="mobile-nav-submenu"><a href="/water-quality">جودة المياه</a><a href="/refining-water">تنقية مياه الشرب</a><a href="/lab-of-company-water">المعمل المركزي لمياه الشرب</a></div></details>
                     <details className="mobile-nav-group"><summary>المناقصات</summary><div className="mobile-nav-submenu"><a href="/allTenders">جميع المناقصات الموجوده بالشركة</a></div></details>
@@ -192,3 +194,5 @@ function Header() {
 }
 
 export default Header;
+
+

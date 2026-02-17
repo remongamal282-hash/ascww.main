@@ -41,6 +41,12 @@ export const getLatestNewsImagePath = (newsItem: NewsItem) => {
     return (mainImage?.path || fallbackImage?.path || '').trim();
 };
 
+export const getNewsDetailsPath = (newsItem: NewsItem) => {
+    const id = newsItem.id ?? newsItem.slug;
+    if (id === undefined || id === null || `${id}`.trim() === '') return NEWS_ARCHIVE_PATH;
+    return `/news/${encodeURIComponent(String(id))}`;
+};
+
 export const getProjectImagePath = (projectItem: ProjectItem) => {
     const images = projectItem.project_images || [];
     const mainImage = images.find((image) => Number(image.main_image) === 1);

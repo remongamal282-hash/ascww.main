@@ -1,8 +1,10 @@
-﻿import type { NewsItem } from '../types';
+import { Link } from 'react-router-dom';
+import type { NewsItem } from '../types';
 import {
     NEWS_ARCHIVE_PATH,
     NEWS_IMAGE_ENDPOINT,
     getLatestNewsImagePath,
+    getNewsDetailsPath,
     truncateText,
     extractPlainTextFromHtml,
     formatArabicDate,
@@ -49,6 +51,7 @@ function LatestNews({ latestNews, newsLoading, newsError }: LatestNewsProps) {
                             {latestNews.map((newsItem, index) => {
                                 const imagePath = getLatestNewsImagePath(newsItem);
                                 const imageUrl = imagePath ? `${NEWS_IMAGE_ENDPOINT}/${encodeURIComponent(imagePath)}` : '';
+                                const detailsPath = getNewsDetailsPath(newsItem);
                                 const articleTitle = truncateText((newsItem.title || 'بدون عنوان').trim(), 80);
                                 const articleExcerpt = truncateText(extractPlainTextFromHtml(newsItem.description), 100) || 'للاطلاع على كامل الخبر يمكن زيارة أرشيف الأخبار.';
                                 const articleDate = formatArabicDate(newsItem.created_at || newsItem.updated_at);
@@ -59,8 +62,7 @@ function LatestNews({ latestNews, newsLoading, newsError }: LatestNewsProps) {
                                         className="flex h-full flex-col animate-on-scroll overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm transition hover:shadow-md"
                                         data-delay={60 + index * 60}
                                     >
-                                        {/* Image Section */}
-                                        <a href={NEWS_ARCHIVE_PATH} className="relative block aspect-[4/3] w-full overflow-hidden bg-slate-100">
+                                        <Link to={detailsPath} className="relative block aspect-[4/3] w-full overflow-hidden bg-slate-100">
                                             {imageUrl ? (
                                                 <img
                                                     src={imageUrl}
@@ -78,11 +80,9 @@ function LatestNews({ latestNews, newsLoading, newsError }: LatestNewsProps) {
                                                     </svg>
                                                 </div>
                                             )}
-                                        </a>
+                                        </Link>
 
-                                        {/* Content Section */}
                                         <div className="flex flex-1 flex-col p-4 sm:p-5">
-                                            {/* Meta Data */}
                                             <div className="mb-3 flex flex-wrap items-center gap-2 text-xs font-medium text-slate-500">
                                                 {articleDate && (
                                                     <div className="flex items-center gap-1">
@@ -99,12 +99,10 @@ function LatestNews({ latestNews, newsLoading, newsError }: LatestNewsProps) {
                                                 <span>المركز الإعلامي</span>
                                             </div>
 
-                                            {/* Title */}
                                             <h3 className="mb-2 text-base font-bold leading-snug text-slate-900 transition hover:text-[#0a3555] line-clamp-2">
-                                                <a href={NEWS_ARCHIVE_PATH} title={newsItem.title}>{articleTitle}</a>
+                                                <Link to={detailsPath} title={newsItem.title}>{articleTitle}</Link>
                                             </h3>
 
-                                            {/* Excerpt */}
                                             <p className="mb-4 text-sm leading-relaxed text-slate-600 line-clamp-3">
                                                 {articleExcerpt}
                                             </p>
@@ -115,18 +113,17 @@ function LatestNews({ latestNews, newsLoading, newsError }: LatestNewsProps) {
                         </div>
                     )}
 
-                    {/* Archive Button */}
                     {!newsLoading && !newsError && latestNews.length > 0 && (
                         <div className="mt-8 text-center">
-                            <a
-                                href={NEWS_ARCHIVE_PATH}
+                            <Link
+                                to={NEWS_ARCHIVE_PATH}
                                 className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#0a3555] to-[#1170b0] px-8 py-3 text-base font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:from-[#082b47] hover:to-[#0a3555]"
                             >
                                 <span>اذهب الى ارشيف الاخبار</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                 </svg>
-                            </a>
+                            </Link>
                         </div>
                     )}
                 </div>
@@ -136,4 +133,3 @@ function LatestNews({ latestNews, newsLoading, newsError }: LatestNewsProps) {
 }
 
 export default LatestNews;
-
