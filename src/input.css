@@ -384,6 +384,29 @@
   }
 }
 
+@media (max-width: 639px) {
+  .hero-nav-btn {
+    top: auto;
+    bottom: 1rem;
+    transform: none;
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .hero-nav-btn--left {
+    left: 0.75rem;
+  }
+
+  .hero-nav-btn--right {
+    right: 0.75rem;
+  }
+
+  #hero-content {
+    padding-right: 2.75rem;
+    padding-left: 2.75rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
 
   *,

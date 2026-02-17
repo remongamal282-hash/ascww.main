@@ -29,12 +29,12 @@ function Header() {
             </div>
 
             <div id="site-mainbar" className="site-mainbar border-b border-[#d7b05a]/35 bg-white transition-shadow duration-300">
-                <div className="mx-auto grid w-full max-w-[1600px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 px-4 py-3 sm:gap-4 sm:px-6 sm:py-4 lg:px-8">
-                    <a href="#home" className="flex items-center justify-self-end gap-3">
+                <div className="mx-auto grid w-full max-w-[1600px] grid-cols-[auto_auto] justify-start items-center gap-2 px-4 py-3 sm:gap-4 sm:px-6 sm:py-4 lg:px-8 xl:grid-cols-[auto_minmax(0,1fr)_auto] xl:justify-normal">
+                    <a href="#home" className="order-2 flex items-center justify-self-start gap-3 xl:order-1 xl:justify-self-end">
                         <img src="/images/ascww-logo.png" alt="شعار الشركة" className="h-10 w-auto sm:h-12 lg:h-14" />
                     </a>
 
-                    <nav className="main-menu-wrap hidden min-w-0 items-center justify-center gap-1 text-sm font-bold text-slate-800 xl:flex">
+                    <nav className="main-menu-wrap order-3 hidden min-w-0 items-center justify-center gap-1 text-sm font-bold text-slate-800 xl:order-2 xl:flex">
                         <a className="nav-link-classic nav-link-classic--active" href="/">الرئيسية</a>
 
                         <div className="nav-dropdown group">
@@ -141,7 +141,7 @@ function Header() {
                         </div>
                     </nav>
 
-                    <div className="flex items-center justify-self-start gap-3">
+                    <div className="order-1 flex items-center justify-self-start gap-3 xl:order-3 xl:justify-self-start">
                         <form className="relative hidden xl:flex xl:w-52 2xl:w-64" role="search" aria-label="بحث في الموقع">
                             <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-[#0a3555]/70">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
