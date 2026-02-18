@@ -119,7 +119,7 @@ function LatestNews({ latestNews, newsLoading, newsError }: LatestNewsProps) {
                                 to={NEWS_ARCHIVE_PATH}
                                 className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#0a3555] to-[#1170b0] px-8 py-3 text-base font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:from-[#082b47] hover:to-[#0a3555]"
                             >
-                                <span>اذهب الى ارشيف الاخبار</span>
+                                <span>أرشيف الاخبار</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                 </svg>

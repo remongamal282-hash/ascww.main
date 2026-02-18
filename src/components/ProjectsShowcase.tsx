@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import type { ProjectItem } from '../types';
 import {
     PROJECTS_ENDPOINT,
+    PROJECTS_ARCHIVE_PATH,
     PROJECT_IMAGE_ENDPOINT,
     extractPlainTextFromHtml,
-    getProjectDetailsPath,
     getProjectImagePath,
     truncateText,
 } from '../utils/helpers';
@@ -115,7 +115,6 @@ function ProjectsShowcase() {
     const projectImagePath = getProjectImagePath(currentProject);
     const projectImageUrl = projectImagePath ? `${PROJECT_IMAGE_ENDPOINT}/${encodeURIComponent(projectImagePath)}` : '';
     const projectDescription = truncateText(extractPlainTextFromHtml(currentProject.description), 680);
-    const detailsPath = getProjectDetailsPath(currentProject);
 
     const goToNext = () => {
         setActiveIndex((prev) => (prev + 1) % projects.length);
@@ -139,13 +138,15 @@ function ProjectsShowcase() {
                             <p className="mt-5 text-base leading-8 text-slate-700 sm:mt-6 sm:text-lg sm:leading-9">
                                 {projectDescription || 'لا يوجد وصف متاح لهذا المشروع.'}
                             </p>
-                            <div className="mt-6 sm:mt-8">
+                            <div className="mt-6 text-center sm:mt-8">
                                 <Link
-                                    to={detailsPath}
-                                    className="inline-flex items-center gap-2 text-lg font-bold text-[#c79d41] transition hover:text-[#0a3555] sm:text-xl"
+                                    to={PROJECTS_ARCHIVE_PATH}
+                                    className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#0a3555] to-[#1170b0] px-8 py-3 text-base font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:from-[#082b47] hover:to-[#0a3555]"
                                 >
-                                    <span>اقرأ المزيد</span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 18l6-6-6-6" /></svg>
+                                    <span>أرشيف المشروعات</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                    </svg>
                                 </Link>
                             </div>
                         </div>
