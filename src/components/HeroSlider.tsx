@@ -7,7 +7,7 @@ function HeroSlider() {
                 <div className="hero-slide" style={{ backgroundImage: "url('/images/slider/3.jpg')" }} data-title="شركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد" data-subtitle="ترحب بكم و نفخر بأننا احدي الشركات الرائده في جمهوريه مصر العربيه" data-link="https://ascww.org/an-elsherka" data-cta="تعرف عل المزيد"></div>
                 <div className="hero-slide" style={{ backgroundImage: "url('/images/slider/4.jpg')" }} data-title="الإداره العامه للتدريب" data-subtitle="متاح حجز قاعات التدريب من داخل و خارج الشركة" data-link="https://ascww.org/general-admin-training" data-cta="تعرف عل المزيد"></div>
                 <div className="hero-slide" style={{ backgroundImage: "url('/images/slider/5.jpg')" }} data-title="مركز خدمة العملاء" data-subtitle="مراكز خدمه العملاء وطرق التواصل وعنوان أقرب فرع" data-link="https://ascww.org/call-center" data-cta="تعرف عل المزيد"></div>
-                <div className="hero-slide" style={{ backgroundImage: "url('/images/slider/6.png')" }} data-title="لتنزيل برنامج الخط الساخن أضغط هنا" data-subtitle="" data-link="https://ascww.org/hotline125" data-cta="فتح الخدمة"></div>
+                <div className="hero-slide" style={{ backgroundImage: "url('/images/slider/6.jpg')" }} data-title="لتنزيل برنامج الخط الساخن أضغط هنا" data-subtitle="" data-link="https://ascww.org/hotline125" data-cta="فتح الخدمة"></div>
             </div>
             <div className="hero-overlay"></div>
             <button id="hero-prev" type="button" aria-label="السلايد السابق" className="hero-nav-btn hero-nav-btn--left">
