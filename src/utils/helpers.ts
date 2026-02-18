@@ -8,7 +8,7 @@ export const NEWS_IMAGE_ENDPOINT = `${API_BASE_ENDPOINT}/news/image`;
 export const NEWS_ARCHIVE_PATH = '/news-company';
 export const PROJECTS_ENDPOINT = `${API_BASE_ENDPOINT}/projects/home`;
 export const PROJECT_IMAGE_ENDPOINT = `${API_BASE_ENDPOINT}/projects/image`;
-export const PROJECTS_ARCHIVE_PATH = '/projects';
+export const PROJECTS_ARCHIVE_PATH = '/projects-company';
 export const BOSS_SINGLE_LINE_PHRASE = 'تحية تقدير وإعزاز لكل مواطن يساعد ويساهم في تحقيق هذا الهدف المنشود';
 
 export const extractPlainTextFromHtml = (html?: string) => {
@@ -52,6 +52,25 @@ export const getProjectImagePath = (projectItem: ProjectItem) => {
     const mainImage = images.find((image) => Number(image.main_image) === 1);
     const fallbackImage = images[0];
     return (mainImage?.path || fallbackImage?.path || '').trim();
+};
+
+export const getProjectRouteId = (projectItem: ProjectItem) => {
+    const directId = projectItem.id ?? projectItem.slug;
+    if (directId !== undefined && directId !== null && `${directId}`.trim() !== '') {
+        return String(directId).trim();
+    }
+
+    const title = String(projectItem.title || '').trim();
+    const createdAt = String(projectItem.created_at || '').trim();
+    const updatedAt = String(projectItem.updated_at || '').trim();
+    const fallbackId = [title, createdAt, updatedAt].filter(Boolean).join('|').trim();
+    return fallbackId || null;
+};
+
+export const getProjectDetailsPath = (projectItem: ProjectItem) => {
+    const routeId = getProjectRouteId(projectItem);
+    if (!routeId) return PROJECTS_ARCHIVE_PATH;
+    return `${PROJECTS_ARCHIVE_PATH}/${encodeURIComponent(routeId)}`;
 };
 
 export const sanitizeBossSpeechHtml = (html: string) => {

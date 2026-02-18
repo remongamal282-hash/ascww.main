@@ -1,10 +1,11 @@
-﻿import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import type { ProjectItem } from '../types';
 import {
     PROJECTS_ENDPOINT,
     PROJECT_IMAGE_ENDPOINT,
-    PROJECTS_ARCHIVE_PATH,
     extractPlainTextFromHtml,
+    getProjectDetailsPath,
     getProjectImagePath,
     truncateText,
 } from '../utils/helpers';
@@ -114,6 +115,7 @@ function ProjectsShowcase() {
     const projectImagePath = getProjectImagePath(currentProject);
     const projectImageUrl = projectImagePath ? `${PROJECT_IMAGE_ENDPOINT}/${encodeURIComponent(projectImagePath)}` : '';
     const projectDescription = truncateText(extractPlainTextFromHtml(currentProject.description), 680);
+    const detailsPath = getProjectDetailsPath(currentProject);
 
     const goToNext = () => {
         setActiveIndex((prev) => (prev + 1) % projects.length);
@@ -138,13 +140,13 @@ function ProjectsShowcase() {
                                 {projectDescription || 'لا يوجد وصف متاح لهذا المشروع.'}
                             </p>
                             <div className="mt-6 sm:mt-8">
-                                <a
-                                    href={PROJECTS_ARCHIVE_PATH}
+                                <Link
+                                    to={detailsPath}
                                     className="inline-flex items-center gap-2 text-lg font-bold text-[#c79d41] transition hover:text-[#0a3555] sm:text-xl"
                                 >
                                     <span>اقرأ المزيد</span>
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 18l6-6-6-6" /></svg>
-                                </a>
+                                </Link>
                             </div>
                         </div>
 
@@ -224,4 +226,3 @@ function ProjectsShowcase() {
 }
 
 export default ProjectsShowcase;
-

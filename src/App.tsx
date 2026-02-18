@@ -2,6 +2,8 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import NewsArchive from './pages/NewsArchive';
 import NewsDetails from './pages/NewsDetails';
+import ProjectsArchive from './pages/ProjectsArchive';
+import ProjectDetails from './pages/ProjectDetails';
 
 function App() {
   return (
@@ -10,6 +12,10 @@ function App() {
       <Route path="/news-company" element={<NewsArchive />} />
       <Route path="/news/:id" element={<NewsDetails />} />
       <Route path="/news-company/:id" element={<NewsDetails />} />
+      <Route path="/projects" element={<ProjectsArchive />} />
+      <Route path="/projects-company" element={<ProjectsArchive />} />
+      <Route path="/projects/:id" element={<ProjectDetails />} />
+      <Route path="/projects-company/:id" element={<ProjectDetails />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

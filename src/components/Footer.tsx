@@ -56,6 +56,7 @@ function Footer() {
                         <div className="space-y-2 text-sm">
                             <a className="block transition hover:text-white" href="https://ascww.org/inquire-your-bill">استعلم عن فاتورتك</a>
                             <a className="block transition hover:text-white" href="https://ascww.org/call-center">خدمة العملاء</a>
+                            <Link className="block transition hover:text-white" to="/projects-company">أرشيف المشروعات</Link>
                             <Link className="block transition hover:text-white" to="/news-company">أرشيف الأخبار</Link>
                             <a className="block transition hover:text-white" href="https://ascww.org/allTenders">المناقصات</a>
                             <a className="block transition hover:text-white" href="https://ascww.org/general-admin-training">الإدارة العامة للتدريب</a>
