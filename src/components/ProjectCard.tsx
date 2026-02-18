@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+﻿import { Link } from 'react-router-dom';
 import type { ProjectItem } from '../types';
 import { useSpeech } from '../hooks/useSpeech';
 import {
@@ -56,11 +56,11 @@ function ProjectCard({ project }: ProjectCardProps) {
                     </span>
                 </div>
 
-                <h3 className="mb-2 line-clamp-2 text-lg font-bold leading-tight text-gray-900 transition-colors hover:text-blue-600">
+                <h3 className="mb-2 line-clamp-2 text-justify text-lg font-bold leading-tight text-gray-900 transition-colors hover:text-blue-600">
                     <Link to={projectPath}>{project.title || 'بدون عنوان'}</Link>
                 </h3>
 
-                <p className="mb-4 line-clamp-3 flex-1 text-sm text-gray-600">{contentText}</p>
+                <p className="mb-4 line-clamp-3 flex-1 text-justify text-sm text-gray-600">{contentText}</p>
 
                 <div className="mt-auto flex flex-row-reverse items-center justify-between border-t border-gray-100 pt-4">
                     <Link
@@ -149,3 +149,4 @@ function ProjectCard({ project }: ProjectCardProps) {
 }
 
 export default ProjectCard;
+

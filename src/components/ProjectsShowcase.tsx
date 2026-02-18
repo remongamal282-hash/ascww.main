@@ -133,9 +133,9 @@ function ProjectsShowcase() {
                 <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-lg">
                     <div className="grid lg:grid-cols-2">
                         <div className="order-2 p-5 sm:p-8 lg:order-1 lg:p-10">
-                            <h3 className="break-words text-2xl font-extrabold text-slate-900 sm:text-3xl">{currentProject.title || 'مشروع'}</h3>
+                            <h3 className="break-words text-justify text-2xl font-extrabold text-slate-900 sm:text-3xl">{currentProject.title || 'مشروع'}</h3>
                             <div className="mt-3 h-[3px] w-36 bg-[#d7b05a]"></div>
-                            <p className="mt-5 text-base leading-8 text-slate-700 sm:mt-6 sm:text-lg sm:leading-9">
+                            <p className="mt-5 text-justify text-base leading-8 text-slate-700 sm:mt-6 sm:text-lg sm:leading-9">
                                 {projectDescription || 'لا يوجد وصف متاح لهذا المشروع.'}
                             </p>
                             <div className="mt-6 text-center sm:mt-8">

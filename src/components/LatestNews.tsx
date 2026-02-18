@@ -103,7 +103,7 @@ function LatestNews({ latestNews, newsLoading, newsError }: LatestNewsProps) {
                                                 <Link to={detailsPath} title={newsItem.title}>{articleTitle}</Link>
                                             </h3>
 
-                                            <p className="mb-4 text-sm leading-relaxed text-slate-600 line-clamp-3">
+                                            <p className="mb-4 text-sm text-justify leading-relaxed text-slate-600 line-clamp-3">
                                                 {articleExcerpt}
                                             </p>
                                         </div>

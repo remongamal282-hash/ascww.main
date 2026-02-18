@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+﻿import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -228,12 +228,12 @@ function ProjectDetails() {
                             </div>
                         </div>
 
-                        <h1 className="mb-6 text-2xl font-bold leading-tight text-gray-900 md:text-3xl">
+                        <h1 className="mb-6 text-justify text-2xl font-bold leading-tight text-gray-900 md:text-3xl">
                             {project.title}
                         </h1>
 
                         <div
-                            className="prose prose-lg mb-8 max-w-none leading-relaxed text-gray-700"
+                            className="prose prose-lg mb-8 max-w-none text-justify leading-relaxed text-gray-700"
                             dangerouslySetInnerHTML={{ __html: cleanContent }}
                         />
 
@@ -348,3 +348,4 @@ function ProjectDetails() {
 }
 
 export default ProjectDetails;
+

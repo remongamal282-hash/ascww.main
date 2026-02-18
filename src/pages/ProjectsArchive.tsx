@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+﻿import { useCallback, useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ProjectCard from '../components/ProjectCard';
@@ -69,7 +69,7 @@ function ProjectsArchive() {
                 appendPage(1, validProjects);
             } catch {
                 if (!active) return;
-                setError('فشل تحميل المشاريع. يرجى المحاولة مرة أخرى.');
+                setError('فشل تحميل المشروعات. يرجى المحاولة مرة أخرى.');
             } finally {
                 if (active) setLoading(false);
             }
@@ -126,7 +126,7 @@ function ProjectsArchive() {
                 {loading ? (
                     <div className="flex h-64 flex-col items-center justify-center">
                         <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-blue-100 border-t-blue-600" />
-                        <p className="font-medium text-gray-500">جاري تحميل المشاريع...</p>
+                        <p className="font-medium text-gray-500">جاري تحميل المشروعات...</p>
                     </div>
                 ) : error ? (
                     <div className="flex h-64 flex-col items-center justify-center rounded-2xl border border-red-100 bg-red-50 p-8 text-red-500">
@@ -167,3 +167,4 @@ function ProjectsArchive() {
 }
 
 export default ProjectsArchive;
+

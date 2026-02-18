@@ -243,12 +243,12 @@ function NewsDetails() {
                             </div>
                         </div>
 
-                        <h1 className="mb-6 text-2xl font-bold leading-tight text-gray-900 md:text-3xl">
+                        <h1 className="mb-6 text-justify text-2xl font-bold leading-tight text-gray-900 md:text-3xl">
                             {news.title}
                         </h1>
 
                         <div
-                            className="prose prose-lg mb-8 max-w-none leading-relaxed text-gray-700"
+                            className="prose prose-lg mb-8 max-w-none text-justify leading-relaxed text-gray-700"
                             dangerouslySetInnerHTML={{ __html: cleanContent }}
                         />
 
