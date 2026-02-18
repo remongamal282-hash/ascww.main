@@ -108,8 +108,6 @@ function HomePage() {
     const yearEl = document.getElementById('current-year');
     if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
-    const toggle = document.getElementById('mobile-toggle') as HTMLButtonElement | null;
-    const mobileMenu = document.getElementById('mobile-menu');
     const topBar = document.getElementById('site-topbar');
     const mainBar = document.getElementById('site-mainbar');
     const mainBarOffset = document.getElementById('mainbar-offset') as HTMLDivElement | null;
@@ -122,38 +120,6 @@ function HomePage() {
     const heroNext = document.getElementById('hero-next') as HTMLButtonElement | null;
 
     const cleanups: Array<() => void> = [];
-
-    if (toggle && mobileMenu) {
-      const closeMenu = () => {
-        mobileMenu.classList.add('hidden');
-        toggle.setAttribute('aria-expanded', 'false');
-      };
-
-      const onToggleClick = (event: MouseEvent) => {
-        event.stopPropagation();
-        const isHidden = mobileMenu.classList.contains('hidden');
-        mobileMenu.classList.toggle('hidden');
-        toggle.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
-      };
-
-      toggle.addEventListener('click', onToggleClick);
-
-      const mobileLinks = Array.from(mobileMenu.querySelectorAll('a'));
-      mobileLinks.forEach((link) => link.addEventListener('click', closeMenu));
-
-      const onDocumentClick = (event: MouseEvent) => {
-        const target = event.target as Node;
-        const clickedInsideMenu = mobileMenu.contains(target);
-        const clickedToggle = toggle.contains(target);
-        if (!clickedInsideMenu && !clickedToggle) closeMenu();
-      };
-
-      document.addEventListener('click', onDocumentClick);
-
-      cleanups.push(() => toggle.removeEventListener('click', onToggleClick));
-      cleanups.push(() => mobileLinks.forEach((link) => link.removeEventListener('click', closeMenu)));
-      cleanups.push(() => document.removeEventListener('click', onDocumentClick));
-    }
 
     const getTopBarHeight = () => {
       if (!topBar) return 0;

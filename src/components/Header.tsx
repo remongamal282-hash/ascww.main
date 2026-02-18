@@ -1,6 +1,42 @@
-﻿import { Link } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 function Header() {
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const toggleRef = useRef<HTMLButtonElement | null>(null);
+    const menuRef = useRef<HTMLElement | null>(null);
+    const location = useLocation();
+
+    useEffect(() => {
+        setIsMobileMenuOpen(false);
+    }, [location.pathname]);
+
+    useEffect(() => {
+        if (!isMobileMenuOpen) return;
+
+        const onMouseDown = (event: MouseEvent) => {
+            const target = event.target as Node | null;
+            if (!target) return;
+            if (toggleRef.current?.contains(target)) return;
+            if (menuRef.current?.contains(target)) return;
+            setIsMobileMenuOpen(false);
+        };
+
+        const onKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                setIsMobileMenuOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', onMouseDown);
+        document.addEventListener('keydown', onKeyDown);
+
+        return () => {
+            document.removeEventListener('mousedown', onMouseDown);
+            document.removeEventListener('keydown', onKeyDown);
+        };
+    }, [isMobileMenuOpen]);
+
     return (
         <header id="site-header" className="relative w-full bg-white">
             <div id="site-topbar" className="hidden border-b border-[#d7b05a]/35 bg-[#0a3555] text-white lg:block">
@@ -158,7 +194,16 @@ function Header() {
                                 className="h-10 w-full rounded-full border border-[#d7b05a]/55 bg-white pr-9 pl-4 text-sm text-slate-700 outline-none transition focus:border-[#0a3555] focus:ring-2 focus:ring-[#0a3555]/15"
                             />
                         </form>
-                        <button id="mobile-toggle" className="inline-flex rounded-lg border border-slate-300 p-1.5 text-slate-700 xl:hidden sm:p-2" aria-expanded="false" aria-controls="mobile-menu" aria-label="فتح القائمة">
+                        <button
+                            id="mobile-toggle"
+                            ref={toggleRef}
+                            type="button"
+                            onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+                            className="inline-flex rounded-lg border border-slate-300 p-1.5 text-slate-700 xl:hidden sm:p-2"
+                            aria-expanded={isMobileMenuOpen}
+                            aria-controls="mobile-menu"
+                            aria-label="فتح القائمة"
+                        >
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
@@ -168,7 +213,17 @@ function Header() {
             </div>
             <div id="mainbar-offset" className="h-0"></div>
 
-            <nav id="mobile-menu" className="hidden max-h-[calc(100vh-4.75rem)] overflow-y-auto border-b border-[#d7b05a]/35 bg-white px-4 py-3 text-base font-semibold text-slate-800 xl:hidden">
+            <nav
+                id="mobile-menu"
+                ref={menuRef}
+                onClickCapture={(event) => {
+                    const target = event.target as HTMLElement | null;
+                    if (target?.closest('a')) {
+                        setIsMobileMenuOpen(false);
+                    }
+                }}
+                className={`${isMobileMenuOpen ? 'block' : 'hidden'} max-h-[calc(100vh-4.75rem)] overflow-y-auto border-b border-[#d7b05a]/35 bg-white px-4 py-3 text-base font-semibold text-slate-800 xl:hidden`}
+            >
                 <div className="grid grid-cols-1 gap-2">
                     <Link className="rounded-lg bg-slate-100 px-3 py-2" to="/">الرئيسية</Link>
                     <details className="mobile-nav-group"><summary>عن الشركة</summary><div className="mobile-nav-submenu"><a href="/an-elsherka">نبذة عن الشركة</a><a href="/birth-of-company">قرار إنشاء الشركة</a><a href="/branch-of-company">فروع الشركه</a><a href="/projects-company">مشروعات الشركة</a><Link to="/news-company">أرشيف الأخبار</Link><a href="/vision-and-message">الرؤيه والرساله</a><a href="/organization-structure">الهيكل التنظيمي</a><a href="/company-achivement">إنجازات الشركة</a><a href="/contract-and-sell">اللائحه الموحده للعقود والمشتريات</a></div></details>
@@ -194,5 +249,3 @@ function Header() {
 }
 
 export default Header;
-
-
