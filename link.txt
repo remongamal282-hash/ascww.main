@@ -9,6 +9,7 @@ https://backend.ascww.org/api/tenders المناقصات
 https://backend.ascww.org/api/projects/home اهم خمس مشاريع 
 https://backend.ascww.org/api/careers الوظائف
 
+
 https://backend.ascww.org/api/admin-board-members مجلس الاداره
 https://backend.ascww.org/api/news/image/7ac6c4cb-7df3-4fa1-bafa-65b1ebd7099e.jpg   صورة خبر
 https://backend.ascww.org/api/projects/image/e6adfaf7-c0b7-454c-8115-d65720153863.jpg صورة مشروع
