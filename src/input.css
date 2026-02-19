@@ -155,16 +155,62 @@
     background-position: center;
     background-repeat: no-repeat;
     opacity: 0;
-    filter: grayscale(35%) brightness(0.85);
-    transform: scale(1.03);
-    transition: opacity 900ms ease, transform 6s linear;
-    will-change: opacity, transform;
+    filter: grayscale(30%) brightness(0.78) saturate(0.9) blur(10px);
+    transform: scale(1.16) translateX(0);
+    clip-path: inset(0 0 0 0 round 0);
+    transition: transform 7200ms cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform, filter, clip-path;
+  }
+
+  .hero-slide::before {
+    content: "";
+    position: absolute;
+    inset: -18%;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateX(18%) rotate(2deg);
+    background: linear-gradient(112deg,
+        rgba(255, 255, 255, 0) 18%,
+        rgba(255, 255, 255, 0.22) 45%,
+        rgba(255, 255, 255, 0) 72%);
+    mix-blend-mode: screen;
   }
 
   .hero-slide.is-active {
     opacity: 1;
-    transform: scale(1.08);
-    filter: grayscale(0) brightness(1);
+    transform: scale(1.03);
+    filter: grayscale(0) brightness(1) saturate(1.1) blur(0);
+    clip-path: inset(0 0 0 0 round 0);
+    z-index: 1;
+  }
+
+  .hero-slide.is-active::before {
+    opacity: 1;
+    animation: heroLightSweep 1450ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .hero-slide.is-entering {
+    z-index: 3;
+  }
+
+  .hero-slide.is-leaving {
+    z-index: 2;
+  }
+
+  .hero-slide.is-entering.dir-forward {
+    animation: heroSlideInForward 950ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .hero-slide.is-leaving.dir-forward {
+    animation: heroSlideOutForward 950ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .hero-slide.is-entering.dir-backward {
+    animation: heroSlideInBackward 950ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .hero-slide.is-leaving.dir-backward {
+    animation: heroSlideOutBackward 950ms cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
   .hero-overlay {
@@ -396,6 +442,86 @@
     }
   }
 
+  @keyframes heroLightSweep {
+    0% {
+      opacity: 0;
+      transform: translateX(26%) rotate(2deg);
+    }
+
+    22% {
+      opacity: 0.55;
+    }
+
+    100% {
+      opacity: 0;
+      transform: translateX(-24%) rotate(2deg);
+    }
+  }
+
+  @keyframes heroSlideInForward {
+    from {
+      opacity: 0;
+      transform: scale(1.2) translateX(14%);
+      filter: grayscale(30%) brightness(0.75) saturate(0.9) blur(14px);
+      clip-path: inset(0 0 0 100%);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1.03) translateX(0);
+      filter: grayscale(0) brightness(1) saturate(1.1) blur(0);
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  @keyframes heroSlideOutForward {
+    from {
+      opacity: 1;
+      transform: scale(1.03) translateX(0);
+      filter: grayscale(0) brightness(1) saturate(1.1) blur(0);
+      clip-path: inset(0 0 0 0);
+    }
+
+    to {
+      opacity: 0;
+      transform: scale(0.98) translateX(-11%);
+      filter: grayscale(20%) brightness(0.8) saturate(0.9) blur(12px);
+      clip-path: inset(0 100% 0 0);
+    }
+  }
+
+  @keyframes heroSlideInBackward {
+    from {
+      opacity: 0;
+      transform: scale(1.2) translateX(-14%);
+      filter: grayscale(30%) brightness(0.75) saturate(0.9) blur(14px);
+      clip-path: inset(0 100% 0 0);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1.03) translateX(0);
+      filter: grayscale(0) brightness(1) saturate(1.1) blur(0);
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  @keyframes heroSlideOutBackward {
+    from {
+      opacity: 1;
+      transform: scale(1.03) translateX(0);
+      filter: grayscale(0) brightness(1) saturate(1.1) blur(0);
+      clip-path: inset(0 0 0 0);
+    }
+
+    to {
+      opacity: 0;
+      transform: scale(0.98) translateX(11%);
+      filter: grayscale(20%) brightness(0.8) saturate(0.9) blur(12px);
+      clip-path: inset(0 0 0 100%);
+    }
+  }
+
   .hero-title {
     @apply mx-auto max-w-5xl text-2xl font-extrabold leading-tight text-white sm:text-3xl lg:text-4xl;
     filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
@@ -456,7 +582,7 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
+  @media (prefers-reduced-motion: reduce) {
 
   *,
   *::before,
@@ -465,5 +591,11 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+@supports not (clip-path: inset(0 0 0 0)) {
+  .hero-slide {
+    clip-path: none;
   }
 }
