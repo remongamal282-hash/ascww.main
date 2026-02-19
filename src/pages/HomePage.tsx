@@ -118,6 +118,7 @@ function HomePage() {
     const heroContent = document.getElementById('hero-content');
     const heroPrev = document.getElementById('hero-prev') as HTMLButtonElement | null;
     const heroNext = document.getElementById('hero-next') as HTMLButtonElement | null;
+    const heroDots = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-hero-dot]'));
 
     const cleanups: Array<() => void> = [];
 
@@ -205,6 +206,14 @@ function HomePage() {
         });
       };
 
+      const updateActiveDot = (activeIndex: number) => {
+        heroDots.forEach((dot, dotIndex) => {
+          const isActive = dotIndex === activeIndex;
+          dot.classList.toggle('hero-dot--active', isActive);
+          dot.setAttribute('aria-current', isActive ? 'true' : 'false');
+        });
+      };
+
       const moveToSlide = (nextIndex: number, direction: 1 | -1 = 1) => {
         if (nextIndex === currentSlide) return;
         const current = heroSlides[currentSlide];
@@ -229,10 +238,12 @@ function HomePage() {
         }, transitionDurationMs);
 
         currentSlide = nextIndex;
+        updateActiveDot(currentSlide);
         updateHeroContent(currentSlide);
         triggerHeroTextAnimation();
       };
 
+      updateActiveDot(currentSlide);
       updateHeroContent(currentSlide);
       triggerHeroTextAnimation();
 
@@ -276,6 +287,18 @@ function HomePage() {
         heroNext.addEventListener('click', onNextClick);
         cleanups.push(() => heroNext.removeEventListener('click', onNextClick));
       }
+
+      heroDots.forEach((dot, dotIndex) => {
+        const onDotClick = () => {
+          if (dotIndex === currentSlide) return;
+          stopAutoplay();
+          const direction: 1 | -1 = dotIndex > currentSlide ? 1 : -1;
+          moveToSlide(dotIndex, direction);
+          startAutoplay();
+        };
+        dot.addEventListener('click', onDotClick);
+        cleanups.push(() => dot.removeEventListener('click', onDotClick));
+      });
 
       cleanups.push(() => {
         stopAutoplay();
