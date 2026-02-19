@@ -16,7 +16,7 @@ function HeroSlider() {
             <button id="hero-next" type="button" aria-label="السلايد التالي" className="hero-nav-btn hero-nav-btn--right">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="m9 18 6-6-6-6" /></svg>
             </button>
-            <div className="relative z-20 mx-auto grid min-h-[420px] max-w-7xl items-center px-4 py-14 sm:min-h-[500px] sm:px-6 lg:px-8">
+            <div className="relative z-20 mx-auto grid min-h-[85vh] max-w-7xl items-center px-4 py-14 sm:px-6 lg:min-h-[82vh] lg:px-8">
                 <div id="hero-content" className="hero-content-animate text-center text-white">
                     <h1 id="hero-title" className="hero-title hero-anim-item">شركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد</h1>
                     <p id="hero-subtitle" className="hero-anim-item mx-auto mt-4 max-w-4xl text-base leading-8 text-slate-100 sm:text-lg">ترحب بكم و نفخر بأننا احدي الشركات الرائده في جمهوريه مصر العربيه</p>
