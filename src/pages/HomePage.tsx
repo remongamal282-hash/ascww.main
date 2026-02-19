@@ -295,7 +295,7 @@ function HomePage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const messengerUrl = 'https://www.facebook.com/messages/t/364679160333044/';
+  const messengerUrl = 'https://m.me/ASCWWeg';
 
   return (
     <>

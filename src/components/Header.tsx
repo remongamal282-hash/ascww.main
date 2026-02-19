@@ -199,10 +199,6 @@ function Header() {
                             ref={toggleRef}
                             type="button"
                             onClick={() => setIsMobileMenuOpen((prev) => !prev)}
-                            onTouchStart={(event) => {
-                                event.preventDefault();
-                                setIsMobileMenuOpen((prev) => !prev);
-                            }}
                             className="relative z-[90] inline-flex touch-manipulation rounded-lg border border-slate-300 p-1.5 text-slate-700 xl:hidden sm:p-2"
                             aria-expanded={isMobileMenuOpen}
                             aria-controls="mobile-menu"
