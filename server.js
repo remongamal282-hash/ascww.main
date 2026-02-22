@@ -180,10 +180,19 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  const homeMetaPaths = new Set(['/', '/index.html', '/news-company', '/projects-company', '/projects']);
+  if (homeMetaPaths.has(pathname)) {
+    const routeBase = pathname === '/index.html' ? '/' : pathname;
+    const ssrReq = { query: { type: 'home', routeBase }, headers: req.headers };
+    const ssrRes = createSsrResponseAdapter(res);
+    await ssrHandler(ssrReq, ssrRes);
+    return;
+  }
+
   const newsMatch = pathname.match(/^\/news\/([^/]+)$/);
   if (newsMatch) {
     const id = newsMatch[1];
-    const ssrReq = { query: { id, type: 'news', routeBase: '/news' } };
+    const ssrReq = { query: { id, type: 'news', routeBase: '/news' }, headers: req.headers };
     const ssrRes = createSsrResponseAdapter(res);
     await ssrHandler(ssrReq, ssrRes);
     return;
@@ -193,7 +202,7 @@ const server = http.createServer(async (req, res) => {
   if (projectMatch) {
     const routeBase = `/${projectMatch[1]}`;
     const id = projectMatch[2];
-    const ssrReq = { query: { id, type: 'project', routeBase } };
+    const ssrReq = { query: { id, type: 'project', routeBase }, headers: req.headers };
     const ssrRes = createSsrResponseAdapter(res);
     await ssrHandler(ssrReq, ssrRes);
     return;
@@ -219,6 +228,6 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, () => {
   console.log(`Server started on http://localhost:${PORT}`);
-  console.log('SSR enabled for /news/:id, /projects/:id and /projects-company/:id');
+  console.log('SSR enabled for /, archives, /news/:id, /projects/:id and /projects-company/:id');
   console.log(`API proxy enabled for /api/* -> ${BACKEND_BASE}/api/*`);
 });

@@ -1,6 +1,30 @@
 import fs from 'fs';
 import path from 'path';
 
+const SITE_TITLE = 'شركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد';
+const HOME_DESCRIPTION = 'البوابة الإلكترونية لشركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد: خدمات المياه، الصرف الصحي، التوعية، المناقصات، والتواصل مع المواطنين.';
+const NEWS_DESCRIPTION = 'أرشيف الأخبار الرسمي لشركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد.';
+const PROJECTS_DESCRIPTION = 'أرشيف المشروعات الرسمي لشركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد.';
+const LOGO_PATH = '/images/ascww-logo.png';
+
+const ORG_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'GovernmentOrganization',
+  name: SITE_TITLE,
+  email: 'media-water@ascww.com.eg',
+  telephone: '2331604',
+  sameAs: [
+    'https://www.facebook.com/ASCWWeg',
+    'https://api.whatsapp.com/send?phone=01280733990',
+    'https://youtube.com/channel/UC73LZeR5Yr5TE7fsTzvZSVw',
+  ],
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'أسيوط',
+    addressCountry: 'EG',
+  },
+};
+
 const stripHtml = (html = '') =>
   html
     .replace(/<[^>]*>/g, ' ')
@@ -28,7 +52,61 @@ const normalizeRouteBase = (value, fallback) => {
   const raw = String(value || '').trim();
   if (!raw) return fallback;
   const withSlash = raw.startsWith('/') ? raw : `/${raw}`;
-  return withSlash.replace(/\/+$/, '') || fallback;
+  const normalized = withSlash.replace(/\/+$/, '');
+  return normalized || '/';
+};
+
+const normalizeSiteUrl = (value) => {
+  try {
+    const parsed = new URL(String(value));
+    return `${parsed.protocol}//${parsed.host}`;
+  } catch {
+    return null;
+  }
+};
+
+const readHeaderValue = (headers, name) => {
+  if (!headers || typeof headers !== 'object') return '';
+  const direct = headers[name] ?? headers[name.toLowerCase()] ?? headers[name.toUpperCase()];
+  const value = Array.isArray(direct) ? direct[0] : direct;
+  return String(value || '')
+    .split(',')[0]
+    .trim();
+};
+
+const resolveSiteUrl = (request) => {
+  const headers = request?.headers;
+  const forwardedHost = readHeaderValue(headers, 'x-forwarded-host');
+  const host = readHeaderValue(headers, 'host');
+  const hostValue = forwardedHost || host;
+  if (hostValue) {
+    const forwardedProto = readHeaderValue(headers, 'x-forwarded-proto').toLowerCase();
+    const isLocal = hostValue.includes('localhost') || hostValue.startsWith('127.0.0.1');
+    const proto = forwardedProto === 'http' || forwardedProto === 'https'
+      ? forwardedProto
+      : isLocal
+        ? 'http'
+        : 'https';
+    const dynamicUrl = normalizeSiteUrl(`${proto}://${hostValue}`);
+    if (dynamicUrl) return dynamicUrl;
+  }
+
+  const envSiteUrl = normalizeSiteUrl(process.env.VITE_SITE_URL || '');
+  if (envSiteUrl) return envSiteUrl;
+  if (process.env.VERCEL_URL) {
+    const vercelUrl = normalizeSiteUrl(`https://${process.env.VERCEL_URL}`);
+    if (vercelUrl) return vercelUrl;
+  }
+  return 'http://localhost:5173';
+};
+
+const buildPageUrl = (siteUrl, routeBase, id = '') => {
+  const normalizedBase = normalizeRouteBase(routeBase, '/');
+  const trimmedId = String(id || '').trim();
+  if (!trimmedId) {
+    return normalizedBase === '/' ? `${siteUrl}/` : `${siteUrl}${normalizedBase}`;
+  }
+  return `${siteUrl}${normalizedBase}/${encodeURIComponent(trimmedId)}`;
 };
 
 const getImagePath = (item, type) => {
@@ -54,16 +132,38 @@ const getRouteId = (item, type) => {
 };
 
 const getEntityConfig = (type, apiBase, siteUrl, id, routeBaseInput) => {
+  if (type === 'home') {
+    const routeBase = normalizeRouteBase(routeBaseInput, '/');
+    return {
+      listUrls: [],
+      imageBase: '',
+      ogType: 'website',
+      twitterCard: 'summary',
+      imageWidth: '400',
+      imageHeight: '328',
+      meta: {
+        title: SITE_TITLE,
+        description: HOME_DESCRIPTION,
+        image: `${siteUrl}${LOGO_PATH}`,
+        url: buildPageUrl(siteUrl, routeBase, ''),
+      },
+    };
+  }
+
   if (type === 'project') {
     const routeBase = normalizeRouteBase(routeBaseInput, '/projects-company');
     return {
       listUrls: [`${apiBase}/projects`, `${apiBase}/projects/home`],
       imageBase: `${apiBase}/projects/image/`,
+      ogType: 'article',
+      twitterCard: 'summary_large_image',
+      imageWidth: '1200',
+      imageHeight: '630',
       meta: {
-        title: 'شركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد',
-        description: 'أرشيف المشروعات الرسمي لشركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد.',
-        image: `${siteUrl}/images/ascww-logo.png`,
-        url: `${siteUrl}${routeBase}/${encodeURIComponent(id)}`,
+        title: SITE_TITLE,
+        description: PROJECTS_DESCRIPTION,
+        image: `${siteUrl}${LOGO_PATH}`,
+        url: buildPageUrl(siteUrl, routeBase, id),
       },
     };
   }
@@ -72,32 +172,50 @@ const getEntityConfig = (type, apiBase, siteUrl, id, routeBaseInput) => {
   return {
     listUrls: [`${apiBase}/news`, `${apiBase}/news/home`],
     imageBase: `${apiBase}/news/image/`,
+    ogType: 'article',
+    twitterCard: 'summary_large_image',
+    imageWidth: '1200',
+    imageHeight: '630',
     meta: {
-      title: 'شركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد',
-      description: 'أرشيف الأخبار الرسمي لشركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد.',
-      image: `${siteUrl}/images/ascww-logo.png`,
-      url: `${siteUrl}${routeBase}/${encodeURIComponent(id)}`,
+      title: SITE_TITLE,
+      description: NEWS_DESCRIPTION,
+      image: `${siteUrl}${LOGO_PATH}`,
+      url: buildPageUrl(siteUrl, routeBase, id),
     },
   };
+};
+
+const loadHtmlTemplate = () => {
+  const possiblePaths = [
+    path.join(process.cwd(), 'dist', 'index.html'),
+    path.join(process.cwd(), 'index.html'),
+    path.join(process.cwd(), 'public', 'index.html'),
+  ];
+
+  for (const p of possiblePaths) {
+    if (fs.existsSync(p)) {
+      return fs.readFileSync(p, 'utf-8');
+    }
+  }
+
+  return '<!doctype html><html><head></head><body><div id="root"></div></body></html>';
 };
 
 export default async function handler(request, response) {
   const rawId = request?.query?.id ?? '';
   const id = decodeURIComponent(String(rawId)).trim();
   const rawType = String(request?.query?.type ?? 'news').trim().toLowerCase();
-  const type = rawType === 'project' ? 'project' : 'news';
+  const type = rawType === 'project' || rawType === 'home' ? rawType : 'news';
   const routeBase = request?.query?.routeBase ?? request?.query?.routebase ?? '';
 
   const API_BASE_URL = process.env.VITE_API_BASE_URL || 'https://backend.ascww.org/api';
-  const SITE_URL =
-    process.env.VITE_SITE_URL ||
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:5173');
+  const siteUrl = resolveSiteUrl(request);
 
-  const entityConfig = getEntityConfig(type, API_BASE_URL, SITE_URL, id, routeBase);
+  const entityConfig = getEntityConfig(type, API_BASE_URL, siteUrl, id, routeBase);
   const defaultMeta = entityConfig.meta;
   let meta = { ...defaultMeta };
 
-  if (id) {
+  if (id && entityConfig.listUrls.length > 0) {
     try {
       for (const url of entityConfig.listUrls) {
         const res = await fetch(url, {
@@ -135,27 +253,13 @@ export default async function handler(request, response) {
     }
   }
 
-  let html = null;
-  const possiblePaths = [
-    path.join(process.cwd(), 'dist', 'index.html'),
-    path.join(process.cwd(), 'index.html'),
-    path.join(process.cwd(), 'public', 'index.html'),
-  ];
-
-  for (const p of possiblePaths) {
-    if (fs.existsSync(p)) {
-      html = fs.readFileSync(p, 'utf-8');
-      break;
-    }
-  }
-
-  if (!html) {
-    html = '<!doctype html><html><head></head><body><div id="root"></div></body></html>';
-  }
-
+  let html = loadHtmlTemplate();
   html = html.replace(/<title>.*?<\/title>/is, '');
-  html = html.replace(/<meta[^>]+property="og:[^"]*"[^>]*>/g, '');
-  html = html.replace(/<meta[^>]+name="twitter:[^"]*"[^>]*>/g, '');
+  html = html.replace(/<link[^>]+rel=["']canonical["'][^>]*>/gi, '');
+  html = html.replace(/<meta[^>]+name=["']description["'][^>]*>/gi, '');
+  html = html.replace(/<meta[^>]+property=["']og:[^"']*["'][^>]*>/gi, '');
+  html = html.replace(/<meta[^>]+name=["']twitter:[^"']*["'][^>]*>/gi, '');
+  html = html.replace(/<script[^>]+type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi, '');
 
   const safeTitle = escapeHtmlAttr(meta.title);
   const safeDescription = escapeHtmlAttr(meta.description);
@@ -163,22 +267,37 @@ export default async function handler(request, response) {
   const safeUrl = escapeHtmlAttr(meta.url);
   const safeImageAlt = escapeHtmlAttr(`صورة ${meta.title}`);
 
+  const orgJsonLd = {
+    ...ORG_SCHEMA,
+    url: `${siteUrl}/`,
+    logo: `${siteUrl}${LOGO_PATH}`,
+  };
+  const safeOrgJsonLd = JSON.stringify(orgJsonLd).replace(/</g, '\\u003c');
+
   const metaTags = `
     <title>${safeTitle}</title>
+    <meta name="description" content="${safeDescription}" />
+    <link rel="canonical" href="${safeUrl}" />
+    <meta property="og:type" content="${entityConfig.ogType}" />
+    <meta property="og:locale" content="ar_EG" />
+    <meta property="og:site_name" content="${escapeHtmlAttr(SITE_TITLE)}" />
     <meta property="og:title" content="${safeTitle}" />
     <meta property="og:description" content="${safeDescription}" />
-    <meta property="og:image" content="${safeImage}" />
-    <meta property="og:image:secure_url" content="${safeImage}" />
-    <meta property="og:image:alt" content="${safeImageAlt}" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
     <meta property="og:url" content="${safeUrl}" />
-    <meta property="og:type" content="article" />
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:image" content="${safeImage}" />
+    <meta property="og:image:url" content="${safeImage}" />
+    <meta property="og:image:secure_url" content="${safeImage}" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="${entityConfig.imageWidth}" />
+    <meta property="og:image:height" content="${entityConfig.imageHeight}" />
+    <meta property="og:image:alt" content="${safeImageAlt}" />
+    <meta name="twitter:card" content="${entityConfig.twitterCard}" />
     <meta name="twitter:title" content="${safeTitle}" />
     <meta name="twitter:description" content="${safeDescription}" />
     <meta name="twitter:image" content="${safeImage}" />
+    <meta name="twitter:image:src" content="${safeImage}" />
     <meta name="twitter:image:alt" content="${safeImageAlt}" />
+    <script type="application/ld+json">${safeOrgJsonLd}</script>
   `;
 
   html = html.replace('</head>', `${metaTags}</head>`);

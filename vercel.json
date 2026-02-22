@@ -23,6 +23,22 @@
   ],
   "rewrites": [
     {
+      "source": "/",
+      "destination": "/api/ssr?type=home&routeBase=/"
+    },
+    {
+      "source": "/news-company",
+      "destination": "/api/ssr?type=home&routeBase=/news-company"
+    },
+    {
+      "source": "/projects-company",
+      "destination": "/api/ssr?type=home&routeBase=/projects-company"
+    },
+    {
+      "source": "/projects",
+      "destination": "/api/ssr?type=home&routeBase=/projects"
+    },
+    {
       "source": "/news/:id",
       "destination": "/api/ssr?type=news&routeBase=/news&id=:id"
     },
