@@ -197,12 +197,15 @@ function HomePage() {
         heroContent.classList.add('hero-content-animate');
       };
 
-      const transitionDurationMs = 950;
+      const transitionDurationMs = 1200;
+      type HeroDirectionClass = 'dir-right' | 'dir-left' | 'dir-up' | 'dir-down';
+      const autoplayDirections: HeroDirectionClass[] = ['dir-right', 'dir-left', 'dir-up', 'dir-down'];
+      let autoplayDirectionIndex = 0;
       let transitionTimeoutId: number | undefined;
 
       const clearTransientSlideClasses = () => {
         heroSlides.forEach((slide) => {
-          slide.classList.remove('is-entering', 'is-leaving', 'dir-forward', 'dir-backward');
+          slide.classList.remove('is-entering', 'is-leaving', 'dir-forward', 'dir-backward', 'dir-right', 'dir-left', 'dir-up', 'dir-down');
         });
       };
 
@@ -214,7 +217,7 @@ function HomePage() {
         });
       };
 
-      const moveToSlide = (nextIndex: number, direction: 1 | -1 = 1) => {
+      const moveToSlide = (nextIndex: number, directionClass: HeroDirectionClass = 'dir-right') => {
         if (nextIndex === currentSlide) return;
         const current = heroSlides[currentSlide];
         const next = heroSlides[nextIndex];
@@ -227,13 +230,12 @@ function HomePage() {
 
         clearTransientSlideClasses();
 
-        const directionClass = direction > 0 ? 'dir-forward' : 'dir-backward';
         next.classList.add('is-active', 'is-entering', directionClass);
         current.classList.add('is-leaving', directionClass);
 
         transitionTimeoutId = window.setTimeout(() => {
-          current.classList.remove('is-active', 'is-leaving', 'dir-forward', 'dir-backward');
-          next.classList.remove('is-entering', 'dir-forward', 'dir-backward');
+          current.classList.remove('is-active', 'is-leaving', 'dir-forward', 'dir-backward', 'dir-right', 'dir-left', 'dir-up', 'dir-down');
+          next.classList.remove('is-entering', 'dir-forward', 'dir-backward', 'dir-right', 'dir-left', 'dir-up', 'dir-down');
           transitionTimeoutId = undefined;
         }, transitionDurationMs);
 
@@ -253,7 +255,9 @@ function HomePage() {
         stopAutoplay();
         intervalId = window.setInterval(() => {
           const nextIndex = (currentSlide + 1) % heroSlides.length;
-          moveToSlide(nextIndex, 1);
+          const directionClass = autoplayDirections[autoplayDirectionIndex % autoplayDirections.length];
+          autoplayDirectionIndex += 1;
+          moveToSlide(nextIndex, directionClass);
         }, 6000);
       };
 
@@ -270,7 +274,7 @@ function HomePage() {
         const onPrevClick = () => {
           stopAutoplay();
           const nextIndex = (currentSlide - 1 + heroSlides.length) % heroSlides.length;
-          moveToSlide(nextIndex, -1);
+          moveToSlide(nextIndex, 'dir-left');
           startAutoplay();
         };
         heroPrev.addEventListener('click', onPrevClick);
@@ -281,7 +285,7 @@ function HomePage() {
         const onNextClick = () => {
           stopAutoplay();
           const nextIndex = (currentSlide + 1) % heroSlides.length;
-          moveToSlide(nextIndex, 1);
+          moveToSlide(nextIndex, 'dir-right');
           startAutoplay();
         };
         heroNext.addEventListener('click', onNextClick);
@@ -292,8 +296,8 @@ function HomePage() {
         const onDotClick = () => {
           if (dotIndex === currentSlide) return;
           stopAutoplay();
-          const direction: 1 | -1 = dotIndex > currentSlide ? 1 : -1;
-          moveToSlide(dotIndex, direction);
+          const directionClass: HeroDirectionClass = dotIndex > currentSlide ? 'dir-right' : 'dir-left';
+          moveToSlide(dotIndex, directionClass);
           startAutoplay();
         };
         dot.addEventListener('click', onDotClick);

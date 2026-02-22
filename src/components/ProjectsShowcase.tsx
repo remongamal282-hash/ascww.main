@@ -10,7 +10,7 @@ import {
     truncateText,
 } from '../utils/helpers';
 
-const PROJECT_AUTOPLAY_MS = 24000;
+const PROJECT_AUTOPLAY_MS = 18000;
 
 function ProjectsShowcase() {
     const [projects, setProjects] = useState<ProjectItem[]>([]);
