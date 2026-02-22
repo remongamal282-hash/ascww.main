@@ -30,6 +30,29 @@ const MIME_TYPES = {
   '.txt': 'text/plain; charset=utf-8',
 };
 
+const IMAGE_PROXY_PATH_PATTERN = /^\/api\/(?:news|projects)\/image\/|^\/api\/image\//;
+const NON_WEBP_IMAGE_TYPES = ['image/svg+xml', 'image/gif', 'image/webp'];
+const SKIPPED_UPSTREAM_HEADERS = new Set([
+  'content-encoding',
+  'transfer-encoding',
+  'connection',
+  'keep-alive',
+  'proxy-authenticate',
+  'proxy-authorization',
+  'te',
+  'trailer',
+  'upgrade',
+]);
+
+let sharpLoadPromise;
+const getSharp = async () => {
+  if (sharpLoadPromise) return sharpLoadPromise;
+  sharpLoadPromise = import('sharp')
+    .then((module) => module.default)
+    .catch(() => null);
+  return sharpLoadPromise;
+};
+
 const send = (res, statusCode, body, contentType = 'text/plain; charset=utf-8') => {
   res.statusCode = statusCode;
   res.setHeader('Content-Type', contentType);
@@ -70,11 +93,39 @@ const createSsrResponseAdapter = (res) => {
   return adapter;
 };
 
+const copyUpstreamHeaders = (upstreamHeaders, res, { transformed = false } = {}) => {
+  upstreamHeaders.forEach((value, key) => {
+    const normalizedKey = key.toLowerCase();
+    if (SKIPPED_UPSTREAM_HEADERS.has(normalizedKey)) return;
+    if (transformed && (normalizedKey === 'content-length' || normalizedKey === 'content-type' || normalizedKey === 'etag' || normalizedKey === 'content-md5')) return;
+    res.setHeader(key, value);
+  });
+};
+
+const shouldTryWebpConversion = (req, pathname, method) => {
+  if (method !== 'GET') return false;
+  if (!IMAGE_PROXY_PATH_PATTERN.test(pathname)) return false;
+  const acceptHeader = String(req.headers.accept || '').toLowerCase();
+  return acceptHeader.includes('image/webp');
+};
+
+const streamUpstreamBody = async (upstream, res) => {
+  if (!upstream.body) {
+    res.end();
+    return;
+  }
+  for await (const chunk of upstream.body) {
+    res.write(chunk);
+  }
+  res.end();
+};
+
 const proxyApiRequest = async (req, res, requestUrl) => {
   const targetUrl = `${BACKEND_BASE}${requestUrl.pathname}${requestUrl.search}`;
   const method = req.method || 'GET';
   const headers = { ...req.headers };
   delete headers.host;
+  const tryWebp = shouldTryWebpConversion(req, requestUrl.pathname, method);
 
   try {
     const upstream = await fetch(targetUrl, {
@@ -85,19 +136,35 @@ const proxyApiRequest = async (req, res, requestUrl) => {
     });
 
     res.statusCode = upstream.status;
-    upstream.headers.forEach((value, key) => {
-      if (key.toLowerCase() === 'content-encoding') return;
-      res.setHeader(key, value);
-    });
+    const upstreamContentType = String(upstream.headers.get('content-type') || '').toLowerCase();
+    const canTranscode =
+      tryWebp
+      && upstream.ok
+      && upstreamContentType.startsWith('image/')
+      && !NON_WEBP_IMAGE_TYPES.some((type) => upstreamContentType.includes(type));
 
-    if (!upstream.body) {
-      res.end();
+    if (!canTranscode) {
+      copyUpstreamHeaders(upstream.headers, res);
+      await streamUpstreamBody(upstream, res);
       return;
     }
-    for await (const chunk of upstream.body) {
-      res.write(chunk);
+
+    const sharp = await getSharp();
+    if (!sharp) {
+      copyUpstreamHeaders(upstream.headers, res);
+      await streamUpstreamBody(upstream, res);
+      return;
     }
-    res.end();
+
+    const sourceBuffer = Buffer.from(await upstream.arrayBuffer());
+    const webpBuffer = await sharp(sourceBuffer).webp({ quality: 75, effort: 4 }).toBuffer();
+
+    copyUpstreamHeaders(upstream.headers, res, { transformed: true });
+    res.setHeader('Content-Type', 'image/webp');
+    res.setHeader('Content-Length', String(webpBuffer.length));
+    res.setHeader('Vary', 'Accept');
+    res.setHeader('X-Image-Format', 'webp');
+    res.end(webpBuffer);
   } catch (error) {
     send(res, 502, `API proxy failed: ${String(error)}`);
   }

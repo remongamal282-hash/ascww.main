@@ -38,7 +38,7 @@ function Header() {
     }, [isMobileMenuOpen]);
 
     return (
-        <header id="site-header" className="relative w-full bg-white">
+        <header id="site-header" className="relative z-[80] w-full bg-white">
             <div id="site-topbar" className="hidden border-b border-[#d7b05a]/35 bg-[#0a3555] text-white lg:block">
                 <div className="mx-auto flex max-w-[1600px] items-center justify-between px-8 py-2 text-sm">
                     <div className="flex items-center gap-6">
@@ -69,7 +69,7 @@ function Header() {
             <div id="site-mainbar" className="site-mainbar border-b border-[#d7b05a]/35 bg-white transition-shadow duration-300">
                 <div className="mx-auto grid w-full max-w-[1600px] grid-cols-[auto_auto] justify-start items-center gap-2 px-4 py-3 sm:gap-4 sm:px-6 sm:py-4 lg:px-8 xl:grid-cols-[auto_minmax(0,1fr)_auto] xl:justify-normal">
                     <Link to="/" className="order-2 flex items-center justify-self-start gap-3 xl:order-1 xl:justify-self-end">
-                        <img src="/images/ascww-logo.png" alt="شعار الشركة" className="h-10 w-auto sm:h-12 lg:h-14" />
+                        <img src="/images/ascww-logo.png" alt="شعار الشركة" width={250} height={205} className="h-10 w-auto sm:h-12 lg:h-14" />
                     </Link>
 
                     <nav className="main-menu-wrap order-3 hidden min-w-0 items-center justify-center gap-1 text-sm font-bold text-slate-800 xl:order-2 xl:flex">
@@ -199,7 +199,7 @@ function Header() {
                             ref={toggleRef}
                             type="button"
                             onClick={() => setIsMobileMenuOpen((prev) => !prev)}
-                            className="inline-flex rounded-lg border border-slate-300 p-1.5 text-slate-700 xl:hidden sm:p-2"
+                            className="relative z-[90] inline-flex touch-manipulation rounded-lg border border-slate-300 p-1.5 text-slate-700 xl:hidden sm:p-2"
                             aria-expanded={isMobileMenuOpen}
                             aria-controls="mobile-menu"
                             aria-label="فتح القائمة"
@@ -222,7 +222,7 @@ function Header() {
                         setIsMobileMenuOpen(false);
                     }
                 }}
-                className={`${isMobileMenuOpen ? 'block' : 'hidden'} max-h-[calc(100vh-4.75rem)] overflow-y-auto border-b border-[#d7b05a]/35 bg-white px-4 py-3 text-base font-semibold text-slate-800 xl:hidden`}
+                className={`${isMobileMenuOpen ? 'block' : 'hidden'} fixed inset-x-0 top-[4.75rem] z-[85] max-h-[calc(100vh-4.75rem)] overflow-y-auto border-b border-[#d7b05a]/35 bg-white px-4 py-3 text-base font-semibold text-slate-800 xl:hidden`}
             >
                 <div className="grid grid-cols-1 gap-2">
                     <Link className="rounded-lg bg-slate-100 px-3 py-2" to="/">الرئيسية</Link>

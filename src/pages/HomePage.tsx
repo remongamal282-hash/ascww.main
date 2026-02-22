@@ -118,6 +118,7 @@ function HomePage() {
     const heroContent = document.getElementById('hero-content');
     const heroPrev = document.getElementById('hero-prev') as HTMLButtonElement | null;
     const heroNext = document.getElementById('hero-next') as HTMLButtonElement | null;
+    const heroDots = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-hero-dot]'));
 
     const cleanups: Array<() => void> = [];
 
@@ -196,14 +197,53 @@ function HomePage() {
         heroContent.classList.add('hero-content-animate');
       };
 
-      const moveToSlide = (nextIndex: number) => {
-        heroSlides[currentSlide]?.classList.remove('is-active');
-        heroSlides[nextIndex]?.classList.add('is-active');
+      const transitionDurationMs = 950;
+      let transitionTimeoutId: number | undefined;
+
+      const clearTransientSlideClasses = () => {
+        heroSlides.forEach((slide) => {
+          slide.classList.remove('is-entering', 'is-leaving', 'dir-forward', 'dir-backward');
+        });
+      };
+
+      const updateActiveDot = (activeIndex: number) => {
+        heroDots.forEach((dot, dotIndex) => {
+          const isActive = dotIndex === activeIndex;
+          dot.classList.toggle('hero-dot--active', isActive);
+          dot.setAttribute('aria-current', isActive ? 'true' : 'false');
+        });
+      };
+
+      const moveToSlide = (nextIndex: number, direction: 1 | -1 = 1) => {
+        if (nextIndex === currentSlide) return;
+        const current = heroSlides[currentSlide];
+        const next = heroSlides[nextIndex];
+        if (!current || !next) return;
+
+        if (transitionTimeoutId) {
+          clearTimeout(transitionTimeoutId);
+          transitionTimeoutId = undefined;
+        }
+
+        clearTransientSlideClasses();
+
+        const directionClass = direction > 0 ? 'dir-forward' : 'dir-backward';
+        next.classList.add('is-active', 'is-entering', directionClass);
+        current.classList.add('is-leaving', directionClass);
+
+        transitionTimeoutId = window.setTimeout(() => {
+          current.classList.remove('is-active', 'is-leaving', 'dir-forward', 'dir-backward');
+          next.classList.remove('is-entering', 'dir-forward', 'dir-backward');
+          transitionTimeoutId = undefined;
+        }, transitionDurationMs);
+
         currentSlide = nextIndex;
+        updateActiveDot(currentSlide);
         updateHeroContent(currentSlide);
         triggerHeroTextAnimation();
       };
 
+      updateActiveDot(currentSlide);
       updateHeroContent(currentSlide);
       triggerHeroTextAnimation();
 
@@ -213,7 +253,7 @@ function HomePage() {
         stopAutoplay();
         intervalId = window.setInterval(() => {
           const nextIndex = (currentSlide + 1) % heroSlides.length;
-          moveToSlide(nextIndex);
+          moveToSlide(nextIndex, 1);
         }, 6000);
       };
 
@@ -230,7 +270,7 @@ function HomePage() {
         const onPrevClick = () => {
           stopAutoplay();
           const nextIndex = (currentSlide - 1 + heroSlides.length) % heroSlides.length;
-          moveToSlide(nextIndex);
+          moveToSlide(nextIndex, -1);
           startAutoplay();
         };
         heroPrev.addEventListener('click', onPrevClick);
@@ -241,14 +281,31 @@ function HomePage() {
         const onNextClick = () => {
           stopAutoplay();
           const nextIndex = (currentSlide + 1) % heroSlides.length;
-          moveToSlide(nextIndex);
+          moveToSlide(nextIndex, 1);
           startAutoplay();
         };
         heroNext.addEventListener('click', onNextClick);
         cleanups.push(() => heroNext.removeEventListener('click', onNextClick));
       }
 
-      cleanups.push(stopAutoplay);
+      heroDots.forEach((dot, dotIndex) => {
+        const onDotClick = () => {
+          if (dotIndex === currentSlide) return;
+          stopAutoplay();
+          const direction: 1 | -1 = dotIndex > currentSlide ? 1 : -1;
+          moveToSlide(dotIndex, direction);
+          startAutoplay();
+        };
+        dot.addEventListener('click', onDotClick);
+        cleanups.push(() => dot.removeEventListener('click', onDotClick));
+      });
+
+      cleanups.push(() => {
+        stopAutoplay();
+        if (transitionTimeoutId) {
+          clearTimeout(transitionTimeoutId);
+        }
+      });
     }
 
     return () => cleanups.forEach((fn) => fn());
@@ -295,7 +352,7 @@ function HomePage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const messengerUrl = 'https://www.facebook.com/messages/t/364679160333044/';
+  const messengerUrl = 'https://m.me/ASCWWeg';
 
   return (
     <>
