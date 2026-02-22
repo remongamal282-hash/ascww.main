@@ -15,77 +15,124 @@ const escapeHtmlAttr = (value = '') =>
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
 
-const getImagePath = (newsItem) => {
-  const images = Array.isArray(newsItem?.news_images) ? newsItem.news_images : [];
+const extractItems = (payload) => {
+  const payloadObject = payload && typeof payload === 'object' ? payload : {};
+  if (Array.isArray(payload)) return payload;
+  if (Array.isArray(payloadObject.data)) return payloadObject.data;
+  if (Array.isArray(payloadObject.value)) return payloadObject.value;
+  if (Array.isArray(payloadObject.items)) return payloadObject.items;
+  return [];
+};
+
+const normalizeRouteBase = (value, fallback) => {
+  const raw = String(value || '').trim();
+  if (!raw) return fallback;
+  const withSlash = raw.startsWith('/') ? raw : `/${raw}`;
+  return withSlash.replace(/\/+$/, '') || fallback;
+};
+
+const getImagePath = (item, type) => {
+  const imageKey = type === 'project' ? 'project_images' : 'news_images';
+  const images = Array.isArray(item?.[imageKey]) ? item[imageKey] : [];
   const mainImage = images.find((image) => Number(image?.main_image) === 1);
   const fallback = images[0];
   return String(mainImage?.path || fallback?.path || '').trim();
 };
 
+const getRouteId = (item, type) => {
+  const directId = item?.id ?? item?.slug;
+  if (directId !== undefined && directId !== null && String(directId).trim() !== '') {
+    return String(directId).trim();
+  }
+
+  if (type !== 'project') return null;
+  const title = String(item?.title || '').trim();
+  const createdAt = String(item?.created_at || '').trim();
+  const updatedAt = String(item?.updated_at || '').trim();
+  const fallbackId = [title, createdAt, updatedAt].filter(Boolean).join('|').trim();
+  return fallbackId || null;
+};
+
+const getEntityConfig = (type, apiBase, siteUrl, id, routeBaseInput) => {
+  if (type === 'project') {
+    const routeBase = normalizeRouteBase(routeBaseInput, '/projects-company');
+    return {
+      listUrls: [`${apiBase}/projects`, `${apiBase}/projects/home`],
+      imageBase: `${apiBase}/projects/image/`,
+      meta: {
+        title: 'شركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد',
+        description: 'أرشيف المشروعات الرسمي لشركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد.',
+        image: `${siteUrl}/images/ascww-logo.png`,
+        url: `${siteUrl}${routeBase}/${encodeURIComponent(id)}`,
+      },
+    };
+  }
+
+  const routeBase = normalizeRouteBase(routeBaseInput, '/news');
+  return {
+    listUrls: [`${apiBase}/news`, `${apiBase}/news/home`],
+    imageBase: `${apiBase}/news/image/`,
+    meta: {
+      title: 'شركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد',
+      description: 'أرشيف الأخبار الرسمي لشركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد.',
+      image: `${siteUrl}/images/ascww-logo.png`,
+      url: `${siteUrl}${routeBase}/${encodeURIComponent(id)}`,
+    },
+  };
+};
+
 export default async function handler(request, response) {
   const rawId = request?.query?.id ?? '';
   const id = decodeURIComponent(String(rawId)).trim();
+  const rawType = String(request?.query?.type ?? 'news').trim().toLowerCase();
+  const type = rawType === 'project' ? 'project' : 'news';
+  const routeBase = request?.query?.routeBase ?? request?.query?.routebase ?? '';
 
   const API_BASE_URL = process.env.VITE_API_BASE_URL || 'https://backend.ascww.org/api';
-  const NEWS_URL = `${API_BASE_URL}/news/home`;
-  const NEWS_IMAGE_BASE = `${API_BASE_URL}/news/image/`;
   const SITE_URL =
     process.env.VITE_SITE_URL ||
     (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:5173');
 
-  const defaultMeta = {
-    title: 'شركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد',
-    description: 'أرشيف الأخبار الرسمي لشركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد.',
-    image: `${SITE_URL}/logo.png`,
-    url: `${SITE_URL}/news/${encodeURIComponent(id)}`,
-  };
-
+  const entityConfig = getEntityConfig(type, API_BASE_URL, SITE_URL, id, routeBase);
+  const defaultMeta = entityConfig.meta;
   let meta = { ...defaultMeta };
 
-  try {
-    const res = await fetch(NEWS_URL, {
-      headers: {
-        'User-Agent': 'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)',
-        Accept: 'application/json',
-      },
-    });
+  if (id) {
+    try {
+      for (const url of entityConfig.listUrls) {
+        const res = await fetch(url, {
+          headers: {
+            'User-Agent': 'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)',
+            Accept: 'application/json',
+          },
+        });
 
-    if (res.ok) {
-      const payload = await res.json();
-      const payloadObject = payload && typeof payload === 'object' ? payload : {};
-      const rawNewsItems = Array.isArray(payload)
-        ? payload
-        : Array.isArray(payloadObject.data)
-          ? payloadObject.data
-          : Array.isArray(payloadObject.value)
-            ? payloadObject.value
-            : Array.isArray(payloadObject.items)
-              ? payloadObject.items
-              : [];
+        if (!res.ok) continue;
+        const payload = await res.json();
+        const items = extractItems(payload);
+        const item = items.find((entry) => {
+          if (!entry || typeof entry !== 'object') return false;
+          const entryRouteId = getRouteId(entry, type);
+          return Boolean(entryRouteId && id === entryRouteId);
+        });
 
-      const item = rawNewsItems.find((entry) => {
-        if (!entry || typeof entry !== 'object') return false;
-        const entryId = String(entry.id ?? '').trim();
-        const entrySlug = String(entry.slug ?? '').trim();
-        return id === entryId || id === entrySlug;
-      });
-
-      if (item) {
-        const imagePath = getImagePath(item);
+        if (!item) continue;
+        const imagePath = getImagePath(item, type);
         const image = imagePath
-          ? `${NEWS_IMAGE_BASE}${encodeURIComponent(imagePath)}`
+          ? `${entityConfig.imageBase}${encodeURIComponent(imagePath)}`
           : defaultMeta.image;
 
         meta = {
           title: String(item.title || defaultMeta.title),
           description: stripHtml(String(item.description || defaultMeta.description)).slice(0, 200),
           image,
-          url: `${SITE_URL}/news/${encodeURIComponent(id)}`,
+          url: defaultMeta.url,
         };
+        break;
       }
+    } catch {
+      // keep default metadata
     }
-  } catch {
-    // keep default metadata
   }
 
   let html = null;
@@ -103,7 +150,7 @@ export default async function handler(request, response) {
   }
 
   if (!html) {
-    html = `<!doctype html><html><head></head><body><div id="root"></div></body></html>`;
+    html = '<!doctype html><html><head></head><body><div id="root"></div></body></html>';
   }
 
   html = html.replace(/<title>.*?<\/title>/is, '');
@@ -114,6 +161,7 @@ export default async function handler(request, response) {
   const safeDescription = escapeHtmlAttr(meta.description);
   const safeImage = escapeHtmlAttr(meta.image);
   const safeUrl = escapeHtmlAttr(meta.url);
+  const safeImageAlt = escapeHtmlAttr(`صورة ${meta.title}`);
 
   const metaTags = `
     <title>${safeTitle}</title>
@@ -121,6 +169,7 @@ export default async function handler(request, response) {
     <meta property="og:description" content="${safeDescription}" />
     <meta property="og:image" content="${safeImage}" />
     <meta property="og:image:secure_url" content="${safeImage}" />
+    <meta property="og:image:alt" content="${safeImageAlt}" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:url" content="${safeUrl}" />
@@ -129,6 +178,7 @@ export default async function handler(request, response) {
     <meta name="twitter:title" content="${safeTitle}" />
     <meta name="twitter:description" content="${safeDescription}" />
     <meta name="twitter:image" content="${safeImage}" />
+    <meta name="twitter:image:alt" content="${safeImageAlt}" />
   `;
 
   html = html.replace('</head>', `${metaTags}</head>`);

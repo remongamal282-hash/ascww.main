@@ -24,7 +24,15 @@
   "rewrites": [
     {
       "source": "/news/:id",
-      "destination": "/api/ssr?id=:id"
+      "destination": "/api/ssr?type=news&routeBase=/news&id=:id"
+    },
+    {
+      "source": "/projects/:id",
+      "destination": "/api/ssr?type=project&routeBase=/projects&id=:id"
+    },
+    {
+      "source": "/projects-company/:id",
+      "destination": "/api/ssr?type=project&routeBase=/projects-company&id=:id"
     },
     {
       "source": "/api/:path*",
