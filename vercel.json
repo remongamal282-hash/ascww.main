@@ -27,8 +27,16 @@
       "destination": "/api/ssr?type=home&routeBase=/"
     },
     {
+      "source": "/an-elsherka",
+      "destination": "/api/ssr?type=home&routeBase=/an-elsherka"
+    },
+    {
       "source": "/news-company",
       "destination": "/api/ssr?type=home&routeBase=/news-company"
+    },
+    {
+      "source": "/branch-of-company",
+      "destination": "/api/ssr?type=home&routeBase=/branch-of-company"
     },
     {
       "source": "/projects-company",
