@@ -5,10 +5,25 @@ function Header() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const toggleRef = useRef<HTMLButtonElement | null>(null);
     const menuRef = useRef<HTMLElement | null>(null);
+    const desktopMenuRef = useRef<HTMLElement | null>(null);
     const location = useLocation();
 
     useEffect(() => {
         setIsMobileMenuOpen(false);
+
+        const nav = desktopMenuRef.current;
+        if (!nav) return;
+
+        nav.querySelectorAll<HTMLElement>('.nav-dropdown').forEach((dropdown) => {
+            dropdown.classList.remove('is-open');
+            const menu = dropdown.querySelector<HTMLElement>('.nav-dropdown-menu');
+            if (!menu) return;
+            menu.style.display = 'none';
+            menu.style.visibility = 'hidden';
+            menu.style.pointerEvents = 'none';
+            menu.style.overflow = 'hidden';
+            menu.style.height = '0px';
+        });
     }, [location.pathname]);
 
     useEffect(() => {
@@ -36,6 +51,212 @@ function Header() {
             document.removeEventListener('keydown', onKeyDown);
         };
     }, [isMobileMenuOpen]);
+
+    useEffect(() => {
+        const nav = desktopMenuRef.current;
+        if (!nav) return;
+
+        const dropdowns = Array.from(nav.querySelectorAll<HTMLElement>('.nav-dropdown'));
+        if (!dropdowns.length) return;
+
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const hoverDelay = prefersReducedMotion ? 0 : 200;
+        const slideDuration = prefersReducedMotion ? 1 : 400;
+        const openTimers = new WeakMap<HTMLElement, number>();
+        const closeTimers = new WeakMap<HTMLElement, number>();
+        const animationFrames = new WeakMap<HTMLElement, number>();
+        const handlers = new Map<
+            HTMLElement,
+            {
+                onMouseEnter: () => void;
+                onMouseLeave: () => void;
+                onFocusIn: () => void;
+                onFocusOut: (event: FocusEvent) => void;
+            }
+        >();
+
+        const easeSwing = (progress: number) => 0.5 - Math.cos(progress * Math.PI) / 2;
+
+        const clearTimer = (timerMap: WeakMap<HTMLElement, number>, dropdown: HTMLElement) => {
+            const timerId = timerMap.get(dropdown);
+            if (timerId === undefined) return;
+            window.clearTimeout(timerId);
+            timerMap.delete(dropdown);
+        };
+
+        const getMenu = (dropdown: HTMLElement) => dropdown.querySelector<HTMLElement>('.nav-dropdown-menu');
+
+        const setClosedStyles = (dropdown: HTMLElement, menu: HTMLElement) => {
+            dropdown.classList.remove('is-open');
+            menu.style.display = 'none';
+            menu.style.visibility = 'hidden';
+            menu.style.pointerEvents = 'none';
+            menu.style.overflow = 'hidden';
+            menu.style.height = '0px';
+        };
+
+        const stopAnimation = (menu: HTMLElement) => {
+            const frameId = animationFrames.get(menu);
+            if (frameId === undefined) return;
+            cancelAnimationFrame(frameId);
+            animationFrames.delete(menu);
+        };
+
+        const animateHeight = (
+            menu: HTMLElement,
+            from: number,
+            to: number,
+            duration: number,
+            onComplete: () => void,
+        ) => {
+            stopAnimation(menu);
+
+            if (duration <= 1 || from === to) {
+                menu.style.height = `${to}px`;
+                onComplete();
+                return;
+            }
+
+            const startTime = performance.now();
+            const step = (now: number) => {
+                const progress = Math.min((now - startTime) / duration, 1);
+                const eased = easeSwing(progress);
+                const current = from + (to - from) * eased;
+                menu.style.height = `${current}px`;
+
+                if (progress < 1) {
+                    animationFrames.set(menu, requestAnimationFrame(step));
+                    return;
+                }
+
+                animationFrames.delete(menu);
+                onComplete();
+            };
+
+            animationFrames.set(menu, requestAnimationFrame(step));
+        };
+
+        const closeDropdown = (dropdown: HTMLElement, immediate = false) => {
+            const menu = getMenu(dropdown);
+            if (!menu) return;
+
+            clearTimer(openTimers, dropdown);
+            clearTimer(closeTimers, dropdown);
+            stopAnimation(menu);
+
+            const startHeight = menu.getBoundingClientRect().height || menu.scrollHeight;
+            if (immediate || startHeight <= 0) {
+                setClosedStyles(dropdown, menu);
+                return;
+            }
+
+            menu.style.display = 'block';
+            menu.style.visibility = 'visible';
+            menu.style.pointerEvents = 'none';
+            menu.style.overflow = 'hidden';
+            menu.style.height = `${startHeight}px`;
+
+            animateHeight(menu, startHeight, 0, slideDuration, () => {
+                setClosedStyles(dropdown, menu);
+            });
+        };
+
+        const openDropdown = (dropdown: HTMLElement) => {
+            const menu = getMenu(dropdown);
+            if (!menu) return;
+
+            clearTimer(openTimers, dropdown);
+            clearTimer(closeTimers, dropdown);
+            stopAnimation(menu);
+
+            dropdowns.forEach((otherDropdown) => {
+                if (otherDropdown !== dropdown) {
+                    closeDropdown(otherDropdown, true);
+                }
+            });
+
+            dropdown.classList.add('is-open');
+            menu.style.display = 'block';
+            menu.style.visibility = 'visible';
+            menu.style.pointerEvents = 'auto';
+            menu.style.overflow = 'hidden';
+
+            const startHeight = menu.getBoundingClientRect().height;
+            const targetHeight = menu.scrollHeight;
+
+            if (targetHeight <= 0) {
+                menu.style.height = 'auto';
+                menu.style.overflow = '';
+                return;
+            }
+
+            menu.style.height = `${startHeight > 0 ? startHeight : 0}px`;
+            animateHeight(menu, startHeight > 0 ? startHeight : 0, targetHeight, slideDuration, () => {
+                menu.style.height = 'auto';
+                menu.style.overflow = '';
+            });
+        };
+
+        const scheduleOpen = (dropdown: HTMLElement) => {
+            clearTimer(closeTimers, dropdown);
+            clearTimer(openTimers, dropdown);
+            const timerId = window.setTimeout(() => {
+                openDropdown(dropdown);
+            }, hoverDelay);
+            openTimers.set(dropdown, timerId);
+        };
+
+        const scheduleClose = (dropdown: HTMLElement) => {
+            clearTimer(openTimers, dropdown);
+            clearTimer(closeTimers, dropdown);
+            const timerId = window.setTimeout(() => {
+                closeDropdown(dropdown);
+            }, hoverDelay);
+            closeTimers.set(dropdown, timerId);
+        };
+
+        dropdowns.forEach((dropdown) => {
+            const menu = getMenu(dropdown);
+            if (menu) {
+                setClosedStyles(dropdown, menu);
+            }
+
+            const onMouseEnter = () => scheduleOpen(dropdown);
+            const onMouseLeave = () => scheduleClose(dropdown);
+            const onFocusIn = () => openDropdown(dropdown);
+            const onFocusOut = (event: FocusEvent) => {
+                const nextTarget = event.relatedTarget as Node | null;
+                if (nextTarget && dropdown.contains(nextTarget)) return;
+                scheduleClose(dropdown);
+            };
+
+            dropdown.addEventListener('mouseenter', onMouseEnter);
+            dropdown.addEventListener('mouseleave', onMouseLeave);
+            dropdown.addEventListener('focusin', onFocusIn);
+            dropdown.addEventListener('focusout', onFocusOut);
+
+            handlers.set(dropdown, { onMouseEnter, onMouseLeave, onFocusIn, onFocusOut });
+        });
+
+        return () => {
+            dropdowns.forEach((dropdown) => {
+                clearTimer(openTimers, dropdown);
+                clearTimer(closeTimers, dropdown);
+                const menu = getMenu(dropdown);
+                if (menu) {
+                    stopAnimation(menu);
+                    setClosedStyles(dropdown, menu);
+                }
+
+                const dropdownHandlers = handlers.get(dropdown);
+                if (!dropdownHandlers) return;
+                dropdown.removeEventListener('mouseenter', dropdownHandlers.onMouseEnter);
+                dropdown.removeEventListener('mouseleave', dropdownHandlers.onMouseLeave);
+                dropdown.removeEventListener('focusin', dropdownHandlers.onFocusIn);
+                dropdown.removeEventListener('focusout', dropdownHandlers.onFocusOut);
+            });
+        };
+    }, []);
 
     return (
         <header id="site-header" className="relative z-[80] w-full bg-white">
@@ -72,7 +293,7 @@ function Header() {
                         <img src="/images/ascww-logo.png" alt="شعار الشركة" width={250} height={205} className="h-10 w-auto sm:h-12 lg:h-14" />
                     </Link>
 
-                    <nav className="main-menu-wrap order-3 hidden min-w-0 items-center justify-center gap-1 text-sm font-bold text-slate-800 xl:order-2 xl:flex">
+                    <nav ref={desktopMenuRef} className="main-menu-wrap order-3 hidden min-w-0 items-center justify-center gap-1 text-sm font-bold text-slate-800 xl:order-2 xl:flex">
                         <Link className="nav-link-classic nav-link-classic--active" to="/">الرئيسية</Link>
 
                         <div className="nav-dropdown group">
@@ -222,13 +443,18 @@ function Header() {
             <nav
                 id="mobile-menu"
                 ref={menuRef}
+                aria-hidden={!isMobileMenuOpen}
                 onClickCapture={(event) => {
                     const target = event.target as HTMLElement | null;
                     if (target?.closest('a')) {
                         setIsMobileMenuOpen(false);
                     }
                 }}
-                className={`${isMobileMenuOpen ? 'block' : 'hidden'} fixed inset-x-0 top-[4.75rem] z-[85] max-h-[calc(100vh-4.75rem)] overflow-y-auto border-b border-[#d7b05a]/35 bg-white px-4 py-3 text-base font-semibold text-slate-800 xl:hidden`}
+                className={`fixed inset-x-0 top-[4.75rem] z-[85] max-h-[calc(100vh-4.75rem)] overflow-y-auto border-b border-[#d7b05a]/35 bg-white px-4 py-3 text-base font-semibold text-slate-800 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] xl:hidden ${
+                    isMobileMenuOpen
+                        ? 'visible translate-y-0 opacity-100 pointer-events-auto'
+                        : 'invisible -translate-y-3 opacity-0 pointer-events-none'
+                }`}
             >
                 <div className="grid grid-cols-1 gap-2">
                     <Link className="rounded-lg bg-slate-100 px-3 py-2" to="/">الرئيسية</Link>

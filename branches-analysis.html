@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <title>تقرير تحليل بيانات فروع الشركة</title>
+  <style>
+    body { font-family: "Tahoma", "Arial", sans-serif; margin: 24px; color: #0f172a; }
+    h1 { margin: 0 0 8px; color: #0a3555; }
+    h2 { margin: 24px 0 8px; color: #0a3555; font-size: 20px; }
+    p { margin: 6px 0; line-height: 1.7; }
+    .meta { color: #475569; font-size: 13px; }
+    .box { border: 1px solid #cbd5e1; border-radius: 10px; padding: 12px 14px; margin-top: 12px; background: #f8fafc; }
+    ul { margin: 8px 0 0; }
+    li { margin: 4px 0; }
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+    th, td { border: 1px solid #cbd5e1; padding: 8px 10px; text-align: right; vertical-align: top; font-size: 13px; }
+    th { background: #e2e8f0; }
+    tr:nth-child(even) td { background: #f8fafc; }
+    .small { font-size: 12px; color: #334155; }
+  </style>
+</head>
+<body>
+  <h1>تقرير تحليل بيانات فروع الشركة</h1>
+  <p class="meta">المصدر: <a href="https://ascww.org/js/app.0cb34e9e.js">https://ascww.org/js/app.0cb34e9e.js</a></p>
+  <p class="meta">تاريخ إنشاء التقرير: الاثنين، ٢٣ فبراير ٢٠٢٦ في ١٣:٠٠</p>
+
+  <div class="box">
+    <p><strong>ملخص سريع</strong></p>
+    <ul>
+      <li>عدد السجلات في <code>branchServices</code>: <strong>11</strong></li>
+      <li>عدد السجلات في <code>locations</code>: <strong>13</strong></li>
+      <li>عدد الفروع بعد الدمج وإزالة التكرار (اسم + عنوان): <strong>22</strong></li>
+      <li>عدد الفروع بدون هاتف: <strong>0</strong></li>
+      <li>عدد الفروع بدون إحداثيات: <strong>0</strong></li>
+    </ul>
+  </div>
+
+  <div class="box">
+    <p><strong>ملاحظات جودة البيانات</strong></p>
+    <ul>
+      <li>تكرار المعرّف في <code>branchServices</code>: ID 12 (2 مرات)</li>
+      <li>تكرار المعرّف في <code>locations</code>: ID 12 (2 مرات)</li>
+      <li class="small">مهم: هذا التحليل يعكس ما هو منشور داخل ملف JavaScript وقت إنشاء التقرير، وليس تحققًا ميدانيًا من أرقام الهواتف.</li>
+    </ul>
+  </div>
+
+  <h2>قائمة الفروع (بعد الدمج)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>اسم الفرع</th>
+        <th>العنوان</th>
+        <th>الهاتف</th>
+        <th>الفاكس</th>
+        <th>الخريطة</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+    <td>1</td>
+    <td>فرع ديروط</td>
+    <td>شارع البحر الاعظم</td>
+    <td>088/2131662 - 2131654- 2131655</td>
+    <td>088-2131662</td>
+    <td><a href="https://www.google.com/maps?q=27.445213637942377,30.821815489409442" target="_blank" rel="noopener noreferrer">فتح</a></td>
+  </tr>
+<tr>
+    <td>2</td>
+    <td>فرع منفلوط</td>
+    <td>شارع جسر ابومنديل - بجوار المعهد الديني</td>
+    <td>088/2131662 - 2131654- 2131655</td>
+    <td>088-2131662</td>
+    <td><a href="https://www.google.com/maps?q=27.311585834234137,30.971398428679304" target="_blank" rel="noopener noreferrer">فتح</a></td>
+  </tr>
+<tr>
+    <td>3</td>
+    <td>فرع القوصيه</td>
+    <td>منطقة حسيب - امام المرور القديم</td>
+    <td>088/2131662 - 2131654- 2131655</td>
+    <td>088-2131662</td>
+    <td><a href="https://www.google.com/maps?q=27.43971362706084,30.82680233566733" target="_blank" rel="noopener noreferrer">فتح</a></td>
+  </tr>
+<tr>
+    <td>4</td>
+    <td>الفرع الرئيسي</td>
+    <td>محطه مياه المرشحه بنزله عباللاه- اسيوط</td>
+    <td>088/2131662 - 2131654- 2131655</td>
+    <td>088-2131662</td>
+    <td><a href="https://www.google.com/maps?q=27.173048030143857,31.203093855181375" target="_blank" rel="noopener noreferrer">فتح</a></td>
+  </tr>
+<tr>
+    <td>5</td>
+    <td>فرع شرق اسيوط</td>
+    <td>شارع الهلالي امام مديرية الاسكان</td>
+    <td>088/2131662 - 2131654- 2131655</td>
+    <td>088-2131662</td>
+    <td><a href="https://www.google.com/maps?q=27.18512873828474,31.194855097768585" target="_blank" rel="noopener noreferrer">فتح</a></td>
+  </tr>
+<tr>
+    <td>6</td>
+    <td>فرع غرب أسيوط</td>
+    <td>شارع 23 يوليو خلف بنك ناصر</td>
+    <td>088/2131662 - 2131654- 2131655</td>
+    <td>088-2131662</td>
+    <td><a href="https://www.google.com/maps?q=27.17557501593394,31.17646148223588" target="_blank" rel="noopener noreferrer">فتح</a></td>
+  </tr>
+<tr>
+    <td>7</td>
+    <td>فرع أبنوب</td>
+    <td>شارع الصيانة بجوار المخبز الالى</td>
+    <td>088/2131662 - 2131654- 2131655</td>
+    <td>088-2131662</td>
+    <td><a href="https://www.google.com/maps?q=27.26748453868315,31.151932937089843" target="_blank" rel="noopener noreferrer">فتح</a></td>
+  </tr>
+<tr>
+    <td>8</td>
+    <td>فرع مركز الفتح</td>
+    <td>الناصريه أمام مركز الشرطة</td>
+    <td>088/2131662 - 2131654- 2131655</td>
+    <td>088-2131662</td>
+    <td><a href="https://www.google.com/maps?q=27.175626839427586,31.183935995653986" target="_blank" rel="noopener noreferrer">فتح</a></td>
+  </tr>
+<tr>
+    <td>9</td>
+    <td>فرع مركز البداري</td>
+    <td>شارع جمال عبدالناصر امام السجل المدنى</td>
+    <td>088/2131662 - 2131654- 2131655</td>
+    <td>088-2131662</td>
+    <td><a href="https://www.google.com/maps?q=26.9924993574445,31.410070861364876" target="_blank" rel="noopener noreferrer">فتح</a></td>
+  </tr>
+<tr>
+    <td>10</td>
+    <td>فرع الغنايم</td>
+    <td>محطه مياه شرق السوهاجيه</td>
+    <td>088/2131662 - 2131654- 2131655</td>
+    <td>088-2131662</td>
+    <td><a href="https://www.google.com/maps?q=26.995696801098525,31.254902339832437" target="_blank" rel="noopener noreferrer">فتح</a></td>
+  </tr>
+<tr>
+    <td>11</td>
+    <td>فرع أبوتيج</td>
+    <td>شارع المحطه البحريه امام المحكمة</td>
+    <td>088/2131662 - 2131654- 2131655</td>
+    <td>088-2131662</td>
+    <td><a href="https://www.google.com/maps?q=27.051081544529556,31.319819026342646" target="_blank" rel="noopener noreferrer">فتح</a></td>
+  </tr>
+<tr>
+    <td>12</td>
+    <td>فرع صدفه</td>
+    <td>شارع المحطه البحريه امام الصيانة</td>
+    <td>088/2131662 - 2131654- 2131655</td>
+    <td>088-2131662</td>
+    <td><a href="https://www.google.com/maps?q=26.949598924427598,31.365471048103668" target="_blank" rel="noopener noreferrer">فتح</a></td>
+  </tr>
+<tr>
+    <td>13</td>
+    <td>فرع مركزأسيوط</td>
+    <td>شارع الجمهوريه خلف فندق الوطنيه</td>
+    <td>088/2131662 - 2131654- 2131655</td>
+    <td>088-2131662</td>
+    <td><a href="https://www.google.com/maps?q=26.949598924427598,31.365471048103668" target="_blank" rel="noopener noreferrer">فتح</a></td>
+  </tr>
+<tr>
+    <td>14</td>
+    <td>فرع منفلوط</td>
+    <td>شارع جسر ابومنديل - بجوار المعهد الأزهري</td>
+    <td>01210487749</td>
+    <td>088-2131662</td>
+    <td><a href="https://www.google.com/maps?q=27.311585834234137,30.971398428679304" target="_blank" rel="noopener noreferrer">فتح</a></td>
+  </tr>
+<tr>
+    <td>15</td>
+    <td>فرع القوصيه</td>
+    <td>امام المرور القديم</td>
+    <td>01210487678</td>
+    <td>088-2131662</td>
+    <td><a href="https://www.google.com/maps?q=27.43971362706084,30.82680233566733" target="_blank" rel="noopener noreferrer">فتح</a></td>
+  </tr>
+<tr>
+    <td>16</td>
+    <td>خدمة العملاء الرئيسي</td>
+    <td>أسيوط-امتداد شارع الجيش امام مول النصر</td>
+    <td>01278648276</td>
+    <td>088-2131662</td>
+    <td><a href="https://www.google.com/maps?q=27.173048030143857,31.203093855181375" target="_blank" rel="noopener noreferrer">فتح</a></td>
+  </tr>
+<tr>
+    <td>17</td>
+    <td>فرع أبنوب</td>
+    <td>شارع عثمان الغزالي بجوار المخبز الاَلي</td>
+    <td>01210487737</td>
+    <td>088-2131662</td>
+    <td><a href="https://www.google.com/maps?q=27.26748453868315,31.151932937089843" target="_blank" rel="noopener noreferrer">فتح</a></td>
+  </tr>
+<tr>
+    <td>18</td>
+    <td>فرع مركز البداري</td>
+    <td>شارع مجلس النيابه القديم</td>
+    <td>01284447689</td>
+    <td>088-2131662</td>
+    <td><a href="https://www.google.com/maps?q=26.9924993574445,31.410070861364876" target="_blank" rel="noopener noreferrer">فتح</a></td>
+  </tr>
+<tr>
+    <td>19</td>
+    <td>فرع الغنايم</td>
+    <td>الغنايم بحري خلف مركز الشرطة</td>
+    <td>01210487696</td>
+    <td>088-2131662</td>
+    <td><a href="https://www.google.com/maps?q=26.995696801098525,31.254902339832437" target="_blank" rel="noopener noreferrer">فتح</a></td>
+  </tr>
+<tr>
+    <td>20</td>
+    <td>فرع أبوتيج</td>
+    <td>بجوار رعاية الطفل</td>
+    <td>01210487708</td>
+    <td>088-2131662</td>
+    <td><a href="https://www.google.com/maps?q=27.051081544529556,31.319819026342646" target="_blank" rel="noopener noreferrer">فتح</a></td>
+  </tr>
+<tr>
+    <td>21</td>
+    <td>فرع صدفه</td>
+    <td>شارع الصيانة</td>
+    <td>01210487698</td>
+    <td>088-2131662</td>
+    <td><a href="https://www.google.com/maps?q=26.949598924427598,31.365471048103668" target="_blank" rel="noopener noreferrer">فتح</a></td>
+  </tr>
+<tr>
+    <td>22</td>
+    <td>فرع ساحل سليم</td>
+    <td>شارع الجمهوريه خلف فندق الوطنيه</td>
+    <td>01210487718</td>
+    <td>088-2131662</td>
+    <td><a href="https://www.google.com/maps?q=26.949598924427598,31.365471048103668" target="_blank" rel="noopener noreferrer">فتح</a></td>
+  </tr>
+    </tbody>
+  </table>
+</body>
+</html>

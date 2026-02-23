@@ -1,4 +1,5 @@
 
+https://ascww.org/branch-of-company صفحة فروع الشركة (الرابط الأصلي)
 https://backend.ascww.org/api/admin-info كلمة الرئيس
 https://backend.ascww.org/api/image/boss.jpg صورة الرئيس
 https://backend.ascww.org/api/news الاخبار

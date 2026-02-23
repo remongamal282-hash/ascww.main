@@ -5,6 +5,7 @@ import NewsDetails from './pages/NewsDetails';
 import ProjectsArchive from './pages/ProjectsArchive';
 import ProjectDetails from './pages/ProjectDetails';
 import AboutCompanyPage from './pages/AboutCompanyPage';
+import BranchesPage from './pages/BranchesPage';
 import ScrollToTop from './components/ScrollToTop';
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/an-elsherka" element={<AboutCompanyPage />} />
+        <Route path="/branch-of-company" element={<BranchesPage />} />
         <Route path="/news-company" element={<NewsArchive />} />
         <Route path="/news/:id" element={<NewsDetails />} />
         <Route path="/news-company/:id" element={<NewsDetails />} />
