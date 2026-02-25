@@ -1,6 +1,8 @@
 type AboutSidebarWidgetProps = {
     videoUrl?: string;
     variant?: 'formal' | 'modern';
+    showFacebookSection?: boolean;
+    showImportantSitesSection?: boolean;
 };
 
 const FACEBOOK_PAGE_URL = 'https://ar-ar.facebook.com/ASCWWeg/';
@@ -13,7 +15,12 @@ const IMPORTANT_SITES = [
     { label: 'بوابة رئاسة الجمهوريه', href: 'https://www.presidency.eg/ar' }
 ];
 
-function AboutSidebarWidget({ videoUrl, variant = 'modern' }: AboutSidebarWidgetProps) {
+function AboutSidebarWidget({
+    videoUrl,
+    variant = 'modern',
+    showFacebookSection = true,
+    showImportantSitesSection = true
+}: AboutSidebarWidgetProps) {
     const isFormal = variant === 'formal';
 
     return (
@@ -57,59 +64,63 @@ function AboutSidebarWidget({ videoUrl, variant = 'modern' }: AboutSidebarWidget
                         </div>
                     </details>
 
-                    <details className={`group overflow-hidden rounded-xl border ${isFormal ? 'border-slate-200 bg-slate-50' : 'border-[#d7cfc3] bg-[#e3ddd3]'}`} open>
-                        <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-sm font-bold text-slate-700">
-                            <span>صفحتنا علي الفيسبوك</span>
-                            <span className="transition-transform duration-200 group-open:rotate-180">▾</span>
-                        </summary>
-                        <div className={`border-t px-3 py-3 ${isFormal ? 'border-slate-200' : 'border-[#d7cfc3]'}`}>
-                            <iframe
-                                src={FACEBOOK_PLUGIN_URL}
-                                title="صفحة الشركة على فيسبوك"
-                                className="w-full overflow-hidden rounded-lg border border-slate-300 bg-white"
-                                style={{ height: '350px', border: 'none' }}
-                                scrolling="no"
-                                loading="lazy"
-                                allowTransparency
-                            ></iframe>
-                            <a
-                                href={FACEBOOK_PAGE_URL}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className={`mt-3 inline-flex items-center rounded-full px-3 py-1.5 text-xs font-extrabold transition ${
-                                    isFormal
-                                        ? 'bg-slate-200 text-slate-700 hover:bg-slate-300'
-                                        : 'bg-[#1f8b3c]/10 text-[#1f8b3c] hover:bg-[#1f8b3c]/15'
-                                }`}
-                            >
-                                زيارة الصفحة الرسمية
-                            </a>
-                        </div>
-                    </details>
+                    {showFacebookSection && (
+                        <details className={`group overflow-hidden rounded-xl border ${isFormal ? 'border-slate-200 bg-slate-50' : 'border-[#d7cfc3] bg-[#e3ddd3]'}`} open>
+                            <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-sm font-bold text-slate-700">
+                                <span>صفحتنا علي الفيسبوك</span>
+                                <span className="transition-transform duration-200 group-open:rotate-180">▾</span>
+                            </summary>
+                            <div className={`border-t px-3 py-3 ${isFormal ? 'border-slate-200' : 'border-[#d7cfc3]'}`}>
+                                <iframe
+                                    src={FACEBOOK_PLUGIN_URL}
+                                    title="صفحة الشركة على فيسبوك"
+                                    className="w-full overflow-hidden rounded-lg border border-slate-300 bg-white"
+                                    style={{ height: '350px', border: 'none' }}
+                                    scrolling="no"
+                                    loading="lazy"
+                                    allowTransparency
+                                ></iframe>
+                                <a
+                                    href={FACEBOOK_PAGE_URL}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={`mt-3 inline-flex items-center rounded-full px-3 py-1.5 text-xs font-extrabold transition ${
+                                        isFormal
+                                            ? 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                                            : 'bg-[#1f8b3c]/10 text-[#1f8b3c] hover:bg-[#1f8b3c]/15'
+                                    }`}
+                                >
+                                    زيارة الصفحة الرسمية
+                                </a>
+                            </div>
+                        </details>
+                    )}
 
-                    <details className={`group overflow-hidden rounded-xl border ${isFormal ? 'border-slate-200 bg-slate-50' : 'border-[#d7cfc3] bg-[#e3ddd3]'}`} open>
-                        <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-sm font-bold text-slate-700">
-                            <span>مواقع هامة</span>
-                            <span className="transition-transform duration-200 group-open:rotate-180">▾</span>
-                        </summary>
-                        <ul className={`space-y-2 border-t px-4 py-3 ${isFormal ? 'border-slate-200' : 'border-[#d7cfc3]'}`}>
-                            {IMPORTANT_SITES.map((site) => (
-                                <li key={site.href}>
-                                    <a
-                                        href={site.href}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className={`inline-flex items-center text-sm font-semibold ${
-                                            isFormal ? 'text-slate-700 hover:text-slate-900' : 'text-[#1f8b3c] hover:text-[#156c2d]'
-                                        }`}
-                                    >
-                                        <span className="ml-2">‹</span>
-                                        {site.label}
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
-                    </details>
+                    {showImportantSitesSection && (
+                        <details className={`group overflow-hidden rounded-xl border ${isFormal ? 'border-slate-200 bg-slate-50' : 'border-[#d7cfc3] bg-[#e3ddd3]'}`} open>
+                            <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-sm font-bold text-slate-700">
+                                <span>مواقع هامة</span>
+                                <span className="transition-transform duration-200 group-open:rotate-180">▾</span>
+                            </summary>
+                            <ul className={`space-y-2 border-t px-4 py-3 ${isFormal ? 'border-slate-200' : 'border-[#d7cfc3]'}`}>
+                                {IMPORTANT_SITES.map((site) => (
+                                    <li key={site.href}>
+                                        <a
+                                            href={site.href}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className={`inline-flex items-center text-sm font-semibold ${
+                                                isFormal ? 'text-slate-700 hover:text-slate-900' : 'text-[#1f8b3c] hover:text-[#156c2d]'
+                                            }`}
+                                        >
+                                            <span className="ml-2">‹</span>
+                                            {site.label}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </details>
+                    )}
                 </div>
             </section>
         </aside>

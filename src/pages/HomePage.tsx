@@ -381,9 +381,9 @@ function HomePage() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Open Messenger chat"
-        className="fixed bottom-5 right-5 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#0084ff] text-white shadow-lg transition-transform duration-200 hover:scale-105"
+        className="fixed bottom-5 right-3 z-50 inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#0084ff] text-white shadow-lg transition-transform duration-200 hover:scale-105"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="h-8 w-8" fill="currentColor" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="h-6 w-6" fill="currentColor" aria-hidden="true">
           <path d="M12 2C6.48 2 2 6.14 2 11.25c0 2.92 1.46 5.53 3.75 7.23V22l3.23-1.77c.98.27 2 .41 3.02.41 5.52 0 10-4.14 10-9.25S17.52 2 12 2zm1.16 12.32-2.54-2.7-4.95 2.7 5.45-5.79 2.59 2.7 4.89-2.7-5.44 5.79z" />
         </svg>
       </a>

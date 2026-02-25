@@ -272,9 +272,6 @@ function BranchesPage() {
                                 بيانات الفروع
                             </div>
                             <h1 className="mt-3 text-2xl font-extrabold sm:text-3xl">فروع الشركة</h1>
-                            <p className="mt-2 text-sm text-white/90 sm:text-base">
-                                تم جلب البيانات من صفحة الفروع الرسمية وترتيبها بصيغة أوضح وأسهل في البحث.
-                            </p>
                         </div>
 
                         <div className="px-6 py-6 sm:px-8">
