@@ -43,6 +43,7 @@ function VisionAndMessagePage() {
         };
     }, []);
 
+
     return (
         <>
             <Header />
