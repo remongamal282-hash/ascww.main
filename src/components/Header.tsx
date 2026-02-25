@@ -311,8 +311,8 @@ function Header() {
                                 <a className="nav-dropdown-item" href="/branch-of-company">فروع الشركه</a>
                                 <a className="nav-dropdown-item" href="/projects-company">مشروعات الشركة</a>
                                 <Link className="nav-dropdown-item" to="/news-company">أرشيف الأخبار</Link>
-                                <a className="nav-dropdown-item" href="/vision-and-message">الرؤيه والرساله</a>
-                                <a className="nav-dropdown-item" href="/organization-structure">الهيكل التنظيمي</a>
+                                <Link className="nav-dropdown-item" to="/vision-and-message">الرؤيه والرساله</Link>
+                                <Link className="nav-dropdown-item" to="/organization-structure">الهيكل التنظيمي</Link>
                                 <a className="nav-dropdown-item" href="/company-achivement">إنجازات الشركة</a>
                                 <a className="nav-dropdown-item" href="/contract-and-sell">اللائحه الموحده للعقود والمشتريات</a>
                             </div>
@@ -458,7 +458,7 @@ function Header() {
             >
                 <div className="grid grid-cols-1 gap-2">
                     <Link className="rounded-lg bg-slate-100 px-3 py-2" to="/">الرئيسية</Link>
-                    <details className="mobile-nav-group"><summary>عن الشركة</summary><div className="mobile-nav-submenu"><Link to="/an-elsherka">عن الشركة</Link><a href="/branch-of-company">فروع الشركه</a><a href="/projects-company">مشروعات الشركة</a><Link to="/news-company">أرشيف الأخبار</Link><a href="/vision-and-message">الرؤيه والرساله</a><a href="/organization-structure">الهيكل التنظيمي</a><a href="/company-achivement">إنجازات الشركة</a><a href="/contract-and-sell">اللائحه الموحده للعقود والمشتريات</a></div></details>
+                    <details className="mobile-nav-group"><summary>عن الشركة</summary><div className="mobile-nav-submenu"><Link to="/an-elsherka">عن الشركة</Link><a href="/branch-of-company">فروع الشركه</a><a href="/projects-company">مشروعات الشركة</a><Link to="/news-company">أرشيف الأخبار</Link><Link to="/vision-and-message">الرؤيه والرساله</Link><Link to="/organization-structure">الهيكل التنظيمي</Link><a href="/company-achivement">إنجازات الشركة</a><a href="/contract-and-sell">اللائحه الموحده للعقود والمشتريات</a></div></details>
                     <details className="mobile-nav-group"><summary>التوعية والاتصال</summary><div className="mobile-nav-submenu"><a href="/adviceAndContact">التوعية والأتصال</a><a href="/forKids">ركن الأطفال</a><a href="/toWomen">لك سيدتي</a></div></details>
                     <details className="mobile-nav-group"><summary>جودة المياه</summary><div className="mobile-nav-submenu"><a href="/water-quality">جودة المياه</a><a href="/refining-water">تنقية مياه الشرب</a><a href="/lab-of-company-water">المعمل المركزي لمياه الشرب</a></div></details>
                     <details className="mobile-nav-group"><summary>المناقصات</summary><div className="mobile-nav-submenu"><a href="/allTenders">جميع المناقصات الموجوده بالشركة</a></div></details>
@@ -481,3 +481,4 @@ function Header() {
 }
 
 export default Header;
+

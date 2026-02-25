@@ -47,6 +47,14 @@
       "destination": "/api/ssr?type=home&routeBase=/projects"
     },
     {
+      "source": "/vision-and-message",
+      "destination": "/api/ssr?type=home&routeBase=/vision-and-message"
+    },
+    {
+      "source": "/organization-structure",
+      "destination": "/api/ssr?type=home&routeBase=/organization-structure"
+    },
+    {
       "source": "/news/:id",
       "destination": "/api/ssr?type=news&routeBase=/news&id=:id"
     },
@@ -70,3 +78,4 @@
     }
   }
 }
+
