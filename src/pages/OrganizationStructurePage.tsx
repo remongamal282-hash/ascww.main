@@ -262,6 +262,7 @@ function OrganizationStructurePage() {
                                                             {member.role}
                                                         </span>
                                                     ))}
+
                                                 </div>
                                                 <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                                                     {section.members.map((member) => (
