@@ -288,13 +288,13 @@ function Header() {
             </div>
 
             <div id="site-mainbar" className="site-mainbar border-b border-[#d7b05a]/35 bg-white transition-shadow duration-300">
-                <div className="mx-auto grid w-full max-w-[1600px] grid-cols-[auto_auto] justify-start items-center gap-2 px-4 py-3 sm:gap-4 sm:px-6 sm:py-4 lg:px-8 xl:grid-cols-[auto_minmax(0,1fr)_auto] xl:justify-normal">
+                <div className="mx-auto grid w-full max-w-[1600px] grid-cols-[auto_auto] justify-start items-center gap-2 px-4 py-3 sm:gap-4 sm:px-6 sm:py-4 lg:px-8 xl:grid-cols-[auto_minmax(0,1fr)_auto] xl:justify-normal xl:gap-5">
                     <Link to="/" className="order-2 flex items-center justify-self-start gap-3 xl:order-1 xl:justify-self-end">
                         <img src="/images/egypt.svg" alt="شعار الجمهورية" width={120} height={80} className="h-6 w-auto sm:h-8 lg:h-10" />
                         <img src="/images/ascww-logo.png" alt="شعار الشركة" width={250} height={205} className="h-6 w-auto sm:h-8 lg:h-10" />
                     </Link>
 
-                    <nav ref={desktopMenuRef} className="main-menu-wrap order-3 hidden min-w-0 items-center justify-center gap-1 text-sm font-bold text-slate-800 xl:order-2 xl:flex">
+                    <nav ref={desktopMenuRef} className="main-menu-wrap order-3 hidden min-w-0 items-center justify-center gap-0.5 text-sm font-bold text-slate-800 xl:order-2 xl:flex">
                         <Link className="nav-link-classic nav-link-classic--active" to="/">الرئيسية</Link>
 
                         <div className="nav-dropdown group">

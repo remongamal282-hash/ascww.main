@@ -8,3 +8,10 @@
   font-size: 0.75rem;
   font-weight: 400;
 }
+
+@media (min-width: 1280px) {
+  body .uwy.userway_p1 .userway_buttons_wrapper {
+    top: 132px !important;
+    transform: translate(-100%, 0) !important;
+  }
+}
