@@ -317,7 +317,7 @@ function OrganizationStructurePage() {
 
                             <section className="rounded-3xl border border-slate-200 bg-white p-4 sm:p-5">
                                 <h2 className="text-lg font-extrabold text-slate-800 sm:text-xl">الخريطة الذهنية للهيكل التنظيمي</h2>
-                                <p className="mt-1 text-center text-sm text-slate-600">ارشادات تصفح الخريطة : اضغط على أي كرت موجود بالخريطة عليه اسم قطاع او اداره لعرض الأسماء والوظائف الخاصة به بالاسفل .</p>
+                                <p className="mt-1 text-center text-sm text-slate-600">ارشادات تصفح الخريطة : اضغط على أي كرت موجود عليه اسم قطاع او اداره لعرض الأسماء والوظائف الخاصة به بالاسفل .</p>
 
                                 <div className="mt-5 space-y-3 lg:hidden">
                                     {filteredSections.map((section, index) => {
