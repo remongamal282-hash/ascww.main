@@ -290,7 +290,7 @@ function Header() {
             <div id="site-mainbar" className="site-mainbar border-b border-[#d7b05a]/35 bg-white transition-shadow duration-300">
                 <div className="mx-auto grid w-full max-w-[1600px] grid-cols-[auto_auto] justify-start items-center gap-2 px-4 py-3 sm:gap-4 sm:px-6 sm:py-4 lg:px-8 xl:grid-cols-[auto_minmax(0,1fr)_auto] xl:justify-normal">
                     <Link to="/" className="order-2 flex items-center justify-self-start gap-3 xl:order-1 xl:justify-self-end">
-                        <img src="/egypt.svg" alt="شعار الجمهورية" width={120} height={80} className="h-8 w-auto sm:h-10 lg:h-12" />
+                        <img src="/images/egypt.svg" alt="شعار الجمهورية" width={120} height={80} className="h-8 w-auto sm:h-10 lg:h-12" />
                         <img src="/images/ascww-logo.png" alt="شعار الشركة" width={250} height={205} className="h-8 w-auto sm:h-10 lg:h-12" />
                     </Link>
 
@@ -451,11 +451,10 @@ function Header() {
                         setIsMobileMenuOpen(false);
                     }
                 }}
-                className={`fixed inset-x-0 top-[4.75rem] z-[85] max-h-[calc(100vh-4.75rem)] overflow-y-auto border-b border-[#d7b05a]/35 bg-white px-4 py-3 text-base font-semibold text-slate-800 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] xl:hidden ${
-                    isMobileMenuOpen
+                className={`fixed inset-x-0 top-[4.75rem] z-[85] max-h-[calc(100vh-4.75rem)] overflow-y-auto border-b border-[#d7b05a]/35 bg-white px-4 py-3 text-base font-semibold text-slate-800 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] xl:hidden ${isMobileMenuOpen
                         ? 'visible translate-y-0 opacity-100 pointer-events-auto'
                         : 'invisible -translate-y-3 opacity-0 pointer-events-none'
-                }`}
+                    }`}
             >
                 <div className="grid grid-cols-1 gap-2">
                     <Link className="rounded-lg bg-slate-100 px-3 py-2" to="/">الرئيسية</Link>
