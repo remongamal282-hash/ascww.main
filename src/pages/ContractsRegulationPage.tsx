@@ -5,7 +5,9 @@ import HTMLFlipBook from 'react-pageflip';
 import { GlobalWorkerOptions, getDocument } from 'pdfjs-dist';
 import workerSrc from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 
-const contractsPdfUrl = '/api/tenders/download/standard-cnp-regulation';
+const API_BASE_ENDPOINT = import.meta.env.VITE_API_BASE_URL
+  || (import.meta.env.DEV ? '/api' : 'https://backend.ascww.org/api');
+const contractsPdfUrl = `${API_BASE_ENDPOINT}/tenders/download/standard-cnp-regulation`;
 const contractsPdfDownloadUrl = contractsPdfUrl;
 const INITIAL_RENDER_PAGES = 6;
 const BACKGROUND_FLUSH_INTERVAL = 4;
