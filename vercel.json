@@ -55,6 +55,14 @@
       "destination": "/api/ssr?type=home&routeBase=/organization-structure"
     },
     {
+      "source": "/contract-and-sell",
+      "destination": "/api/ssr?type=home&routeBase=/contract-and-sell"
+    },
+    {
+      "source": "/company-achivement",
+      "destination": "/api/ssr?type=home&routeBase=/company-achivement"
+    },
+    {
       "source": "/news/:id",
       "destination": "/api/ssr?type=news&routeBase=/news&id=:id"
     },
