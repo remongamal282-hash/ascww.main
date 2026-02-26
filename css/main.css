@@ -26,3 +26,23 @@
     transform: none !important;
   }
 }
+
+@media (max-width: 767px) {
+  .flipbook-stage-glass {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .book-viewer-shell {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .book-viewer-shell .stf__parent {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
