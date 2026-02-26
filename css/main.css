@@ -15,3 +15,14 @@
     transform: translate(-100%, 0) !important;
   }
 }
+
+@media (max-width: 1279px) {
+  body .uwy.userway_p1 .userway_buttons_wrapper,
+  body .uwy .userway_buttons_wrapper {
+    top: 84px !important;
+    right: 10px !important;
+    bottom: auto !important;
+    left: auto !important;
+    transform: none !important;
+  }
+}

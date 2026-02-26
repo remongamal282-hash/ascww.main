@@ -8,7 +8,11 @@ import AboutCompanyPage from './pages/AboutCompanyPage';
 import BranchesPage from './pages/BranchesPage';
 import VisionAndMessagePage from './pages/VisionAndMessagePage';
 import OrganizationStructurePage from './pages/OrganizationStructurePage';
+<<<<<<< HEAD
 import ContractsRegulationPage from './pages/ContractsRegulationPage';
+=======
+import CompanyAchievementsPage from './pages/CompanyAchievementsPage';
+>>>>>>> 1b79139d9ec493dc08a93ffe42f66f395f659b73
 import ScrollToTop from './components/ScrollToTop';
 
 function App() {
@@ -21,7 +25,11 @@ function App() {
         <Route path="/branch-of-company" element={<BranchesPage />} />
         <Route path="/vision-and-message" element={<VisionAndMessagePage />} />
         <Route path="/organization-structure" element={<OrganizationStructurePage />} />
+<<<<<<< HEAD
         <Route path="/contract-and-sell" element={<ContractsRegulationPage />} />
+=======
+        <Route path="/company-achivement" element={<CompanyAchievementsPage />} />
+>>>>>>> 1b79139d9ec493dc08a93ffe42f66f395f659b73
         <Route path="/news-company" element={<NewsArchive />} />
         <Route path="/news/:id" element={<NewsDetails />} />
         <Route path="/news-company/:id" element={<NewsDetails />} />
