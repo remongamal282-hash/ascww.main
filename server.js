@@ -28,6 +28,7 @@ const MIME_TYPES = {
   '.woff2': 'font/woff2',
   '.ttf': 'font/ttf',
   '.txt': 'text/plain; charset=utf-8',
+  '.pdf': 'application/pdf',
 };
 
 const IMAGE_PROXY_PATH_PATTERN = /^\/api\/(?:news|projects)\/image\/|^\/api\/image\//;

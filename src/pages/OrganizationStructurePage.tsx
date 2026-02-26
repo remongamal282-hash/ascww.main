@@ -198,6 +198,7 @@ const INFOGRAPHIC_COLORS = [
     { from: '#7a3a00', to: '#d97706', soft: '#fff6ea', badge: '#ffe6c7' },
     { from: '#7f1d1d', to: '#dc2626', soft: '#ffefef', badge: '#ffd7d7' }
 ];
+const ORGANIZATION_PDF_DOWNLOAD_URL = 'https://backend.ascww.org/api/admin-structure/download';
 
 function OrganizationStructurePage() {
     const [activeSectionId, setActiveSectionId] = useState<string>(ORGANIZATION_SECTIONS[0]?.id ?? '');
@@ -275,7 +276,7 @@ function OrganizationStructurePage() {
 
                 <div className="mx-auto w-full max-w-7xl px-4">
                     <section className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_20px_55px_rgba(2,6,23,0.08)]">
-                        <div className="bg-[linear-gradient(120deg,#0a3555_0%,#1170b0_55%,#0e9f6e_100%)] px-6 py-7 text-white sm:px-8">
+                        <div className="bg-[linear-gradient(120deg,#0a3555_0%,#0f4f7b_55%,#0a3555_100%)] px-6 py-7 text-white sm:px-8">
                             <div className="inline-flex items-center rounded-full border border-white/30 bg-white/10 px-3 py-1 text-xs font-bold tracking-wide">
                                 خريطة ذهنية تفاعلية
                             </div>
@@ -305,7 +306,7 @@ function OrganizationStructurePage() {
                                         </div>
                                     </div>
                                     <a
-                                        href="https://backend.ascww.org/api/admin-structure/download"
+                                        href={ORGANIZATION_PDF_DOWNLOAD_URL}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="inline-flex h-10 shrink-0 items-center gap-2 rounded-full bg-[#0a3555] px-4 text-sm font-extrabold text-white transition hover:bg-[#082b47] whitespace-nowrap"
