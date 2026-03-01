@@ -181,7 +181,17 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  const homeMetaPaths = new Set(['/', '/index.html', '/news-company', '/projects-company', '/projects']);
+  const homeMetaPaths = new Set([
+    '/',
+    '/index.html',
+    '/news-company',
+    '/projects-company',
+    '/projects',
+    '/adviceAndContact',
+    '/forKidsAndWomen',
+    '/forKids',
+    '/toWomen',
+  ]);
   if (homeMetaPaths.has(pathname)) {
     const routeBase = pathname === '/index.html' ? '/' : pathname;
     const ssrReq = { query: { type: 'home', routeBase }, headers: req.headers };

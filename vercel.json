@@ -63,6 +63,22 @@
       "destination": "/api/ssr?type=home&routeBase=/company-achivement"
     },
     {
+      "source": "/adviceAndContact",
+      "destination": "/api/ssr?type=home&routeBase=/adviceAndContact"
+    },
+    {
+      "source": "/forKidsAndWomen",
+      "destination": "/api/ssr?type=home&routeBase=/forKidsAndWomen"
+    },
+    {
+      "source": "/forKids",
+      "destination": "/api/ssr?type=home&routeBase=/forKidsAndWomen"
+    },
+    {
+      "source": "/toWomen",
+      "destination": "/api/ssr?type=home&routeBase=/forKidsAndWomen"
+    },
+    {
       "source": "/news/:id",
       "destination": "/api/ssr?type=news&routeBase=/news&id=:id"
     },
