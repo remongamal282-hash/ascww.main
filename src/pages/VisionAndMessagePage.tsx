@@ -63,14 +63,14 @@ function VisionAndMessagePage() {
                                 <div className="space-y-6">
                                     <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                                         <h2 className="mb-3 text-xl font-bold text-[#0a3555]">الـرؤيـه</h2>
-                                        <p className="leading-8 text-slate-700">
+                                        <p className="leading-8 text-slate-700 text-justify">
                                             التميز والريادة والاستدامه في تقديم خدمات مياه شرب نقية وصرف صحي اّمن
                                         </p>
                                     </section>
 
                                     <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                                         <h2 className="mb-3 text-xl font-bold text-[#0a3555]">الـرسـالـة</h2>
-                                        <p className="leading-8 text-slate-700">
+                                        <p className="leading-8 text-slate-700 text-justify">
                                             تقديم خدمات مياه شرب نقيه وصرف صحي اّمن من خلال الاستخدام الامثل للموارد والامكانيات بأحدث التقنيات بما يضمن
                                             الاستدامه والموائمه البينيه والصحيه ونشر الوعي والثقافه المائيه في المجتمع
                                         </p>
@@ -80,7 +80,7 @@ function VisionAndMessagePage() {
                                         <h2 className="mb-3 text-xl font-bold text-[#0a3555]">القـيـم</h2>
                                         <ul className="space-y-2 text-slate-700">
                                             {COMPANY_VALUES.map((value) => (
-                                                <li key={value} className="leading-8">. {value}</li>
+                                                <li key={value} className="leading-8 text-justify">. {value}</li>
                                             ))}
                                         </ul>
                                     </section>

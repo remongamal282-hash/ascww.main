@@ -322,8 +322,7 @@ function Header() {
                             <a className="nav-dropdown-trigger" href="/adviceAndContact">التوعية والاتصال</a>
                             <div className="nav-dropdown-menu">
                                 <a className="nav-dropdown-item" href="/adviceAndContact">التوعية والأتصال</a>
-                                <a className="nav-dropdown-item" href="/forKids">ركن الأطفال</a>
-                                <a className="nav-dropdown-item" href="/toWomen">لك سيدتي</a>
+                                <a className="nav-dropdown-item" href="/forKidsAndWomen">ركن الأطفال ولكِ سيدتي</a>
                             </div>
                         </div>
 
@@ -459,7 +458,7 @@ function Header() {
                 <div className="grid grid-cols-1 gap-2">
                     <Link className="rounded-lg bg-slate-100 px-3 py-2" to="/">الرئيسية</Link>
                     <details className="mobile-nav-group"><summary>عن الشركة</summary><div className="mobile-nav-submenu"><Link to="/an-elsherka">عن الشركة</Link><a href="/branch-of-company">فروع الشركه</a><a href="/projects-company">مشروعات الشركة</a><Link to="/news-company">أرشيف الأخبار</Link><Link to="/vision-and-message">الرؤيه والرساله</Link><Link to="/organization-structure">الهيكل التنظيمي</Link><Link to="/company-achivement">إنجازات الشركة</Link><a href="/contract-and-sell">اللائحه الموحده للعقود والمشتريات</a></div></details>
-                    <details className="mobile-nav-group"><summary>التوعية والاتصال</summary><div className="mobile-nav-submenu"><a href="/adviceAndContact">التوعية والأتصال</a><a href="/forKids">ركن الأطفال</a><a href="/toWomen">لك سيدتي</a></div></details>
+                    <details className="mobile-nav-group"><summary>التوعية والاتصال</summary><div className="mobile-nav-submenu"><a href="/adviceAndContact">التوعية والأتصال</a><a href="/forKidsAndWomen">ركن الأطفال ولكِ سيدتي</a></div></details>
                     <details className="mobile-nav-group"><summary>جودة المياه</summary><div className="mobile-nav-submenu"><a href="/water-quality">جودة المياه</a><a href="/refining-water">تنقية مياه الشرب</a><a href="/lab-of-company-water">المعمل المركزي لمياه الشرب</a></div></details>
                     <details className="mobile-nav-group"><summary>المناقصات</summary><div className="mobile-nav-submenu"><a href="/allTenders">جميع المناقصات الموجوده بالشركة</a></div></details>
                     <details className="mobile-nav-group"><summary>الصرف الصحي</summary><div className="mobile-nav-submenu"><a href="/sewage-treatment">معالجه الصرف الصحي</a><a href="/Riddence-waste-water">تعريف بأهميه التخلص الاَمن من الصرف الصحي</a><a href="/kind-of-waste-water">معالجه الصرف الصحي الخام و أنواع محطات المعالجه</a><a href="/save-web-waste-water">أهميه الحفاظ علي شبكه الصرف الصحي</a><a href="/waste-water-in-manufactring">دور إداره الصرف الصناعي</a><a href="/manufactring-waste">الصرف الصناعي</a></div></details>

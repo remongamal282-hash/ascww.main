@@ -10,6 +10,8 @@ import VisionAndMessagePage from './pages/VisionAndMessagePage';
 import OrganizationStructurePage from './pages/OrganizationStructurePage';
 import ContractsRegulationPage from './pages/ContractsRegulationPage';
 import CompanyAchievementsPage from './pages/CompanyAchievementsPage';
+import AdviceAndContactPage from './pages/AdviceAndContactPage';
+import ForKidsAndWomenPage from './pages/ForKidsAndWomenPage';
 import ScrollToTop from './components/ScrollToTop';
 
 function App() {
@@ -24,6 +26,10 @@ function App() {
         <Route path="/organization-structure" element={<OrganizationStructurePage />} />
         <Route path="/contract-and-sell" element={<ContractsRegulationPage />} />
         <Route path="/company-achivement" element={<CompanyAchievementsPage />} />
+        <Route path="/adviceAndContact" element={<AdviceAndContactPage />} />
+        <Route path="/forKidsAndWomen" element={<ForKidsAndWomenPage />} />
+        <Route path="/forKids" element={<Navigate to="/forKidsAndWomen" replace />} />
+        <Route path="/toWomen" element={<Navigate to="/forKidsAndWomen" replace />} />
         <Route path="/news-company" element={<NewsArchive />} />
         <Route path="/news/:id" element={<NewsDetails />} />
         <Route path="/news-company/:id" element={<NewsDetails />} />

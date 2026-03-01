@@ -117,7 +117,7 @@ function AboutCompanyPage() {
                             <h1 className="mt-3 text-2xl font-extrabold sm:text-3xl">
                                 شركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد
                             </h1>
-                            <p className="mt-2 text-sm text-white/90 sm:text-base">
+                            <p className="mt-2 text-sm text-white/90 text-justify sm:text-base">
                                 نبذة رسمية عن قرار الإنشاء، الأهداف الاستراتيجية، وتشكيل مجلس الإدارة.
                             </p>
                         </div>
@@ -130,7 +130,7 @@ function AboutCompanyPage() {
                                             <span className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-sm font-extrabold ${isFormal ? 'bg-slate-100 text-slate-700' : 'bg-[#1170b0]/15 text-[#0a3555]'}`}>1</span>
                                             <h2 className="text-xl font-bold text-[#0a3555]">قرار إنشاء الشركة</h2>
                                         </div>
-                                        <div className="space-y-3 leading-8 text-slate-700">
+                                        <div className="space-y-3 leading-8 text-slate-700 text-justify">
                                             <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
                                                 <p className="font-bold text-[#0a3555]">2006 قرار رئيس الجمهورية رقم (249)</p>
                                                 <p>نقل تبعية أصول مرافق مياه الشرب والصرف الصحي بوحدات الإدارت المحلية إلي الشركة القابضة.</p>
@@ -154,27 +154,27 @@ function AboutCompanyPage() {
                                         <ul className="space-y-3">
                                             <li className="flex items-start gap-3 leading-8 text-slate-700">
                                                 <span className={`mt-3 h-2 w-2 rounded-full ${isFormal ? 'bg-slate-500' : 'bg-[#1170b0]'}`}></span>
-                                                <span>رفع كفاءة محاور التشغيل والصيانه.</span>
+                                                <span className="text-justify">رفع كفاءة محاور التشغيل والصيانه.</span>
                                             </li>
                                             <li className="flex items-start gap-3 leading-8 text-slate-700">
                                                 <span className={`mt-3 h-2 w-2 rounded-full ${isFormal ? 'bg-slate-500' : 'bg-[#1170b0]'}`}></span>
-                                                <span>تحسين آليات المحافظة على مصادر المياه للمقاييس المصرية.</span>
+                                                <span className="text-justify">تحسين آليات المحافظة على مصادر المياه للمقاييس المصرية.</span>
                                             </li>
                                             <li className="flex items-start gap-3 leading-8 text-slate-700">
                                                 <span className={`mt-3 h-2 w-2 rounded-full ${isFormal ? 'bg-slate-500' : 'bg-[#1170b0]'}`}></span>
-                                                <span>الإرتقاء بمستوى أداء المعامل فنياً وإدارياً للمحافظة على جودة مياه الشرب ومعالجة الصرف الصحي.</span>
+                                                <span className="text-justify">الإرتقاء بمستوى أداء المعامل فنياً وإدارياً للمحافظة على جودة مياه الشرب ومعالجة الصرف الصحي.</span>
                                             </li>
                                             <li className="flex items-start gap-3 leading-8 text-slate-700">
                                                 <span className={`mt-3 h-2 w-2 rounded-full ${isFormal ? 'bg-slate-500' : 'bg-[#1170b0]'}`}></span>
-                                                <span>رفع كفاءة العاملين فنيا وإداريا بإستخدام التقنيات الحديثة.</span>
+                                                <span className="text-justify">رفع كفاءة العاملين فنيا وإداريا بإستخدام التقنيات الحديثة.</span>
                                             </li>
                                             <li className="flex items-start gap-3 leading-8 text-slate-700">
                                                 <span className={`mt-3 h-2 w-2 rounded-full ${isFormal ? 'bg-slate-500' : 'bg-[#1170b0]'}`}></span>
-                                                <span>التحقق من مستوى الرضا الوظيفي الحالى للعاملين وتحسينه.</span>
+                                                <span className="text-justify">التحقق من مستوى الرضا الوظيفي الحالى للعاملين وتحسينه.</span>
                                             </li>
                                             <li className="flex items-start gap-3 leading-8 text-slate-700">
                                                 <span className={`mt-3 h-2 w-2 rounded-full ${isFormal ? 'bg-slate-500' : 'bg-[#1170b0]'}`}></span>
-                                                <span>إدخال برنامج التحول الرقمي في الشركة لتحسين مستوى الخدمة وتقديم الخدمات الإلكترونية في كافة فروع وإدارات الشركة.</span>
+                                                <span className="text-justify">إدخال برنامج التحول الرقمي في الشركة لتحسين مستوى الخدمة وتقديم الخدمات الإلكترونية في كافة فروع وإدارات الشركة.</span>
                                             </li>
                                         </ul>
                                     </section>

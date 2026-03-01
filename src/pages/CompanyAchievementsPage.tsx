@@ -126,9 +126,11 @@ function CompanyAchievementsPage() {
                         <span className="pointer-events-none absolute -top-24 left-8 h-56 w-56 rounded-full bg-[#1170b0]/10 blur-3xl"></span>
                         <span className="pointer-events-none absolute -bottom-24 right-8 h-56 w-56 rounded-full bg-[#0f766e]/10 blur-3xl"></span>
 
-                        <div className="bg-[linear-gradient(120deg,#0a3555_0%,#1170b0_58%,#0e9f6e_100%)] px-6 py-7 text-white sm:px-8">
-                            <div className="inline-flex items-center rounded-full border border-white/30 bg-white/10 px-4 py-1.5 text-base font-extrabold tracking-wide sm:text-lg">
-                                إنجازات الشركة
+                        <div className="bg-[linear-gradient(90deg,#1c76b2_0%,#0f5f94_46%,#0a3555_100%)] px-6 py-7 text-white sm:px-8">
+                            <div className="relative">
+                                <div className="inline-flex items-center rounded-full border border-white/30 bg-white/10 px-4 py-1.5 text-base font-extrabold tracking-wide sm:text-lg">
+                                    إنجازات الشركة
+                                </div>
                             </div>
                         </div>
 
@@ -160,7 +162,7 @@ function CompanyAchievementsPage() {
                                                                 <span className="text-sm leading-none">{item.icon}</span>
                                                                 <span>{item.title}</span>
                                                             </div>
-                                                            <p className="text-sm font-semibold leading-7 text-slate-700">{item.details}</p>
+                                                            <p className="text-sm font-semibold leading-7 text-slate-700 text-justify">{item.details}</p>
                                                         </div>
                                                     </div>
                                                 </article>
