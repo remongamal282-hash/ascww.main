@@ -319,7 +319,14 @@ function Header() {
                         </div>
 
                         <div className="nav-dropdown group">
-                            <a className="nav-dropdown-trigger" href="/adviceAndContact">التوعية والاتصال</a>
+                            <button
+                                type="button"
+                                className="nav-dropdown-trigger"
+                                aria-haspopup="true"
+                                aria-label="قائمة التوعية والاتصال"
+                            >
+                                التوعية والاتصال
+                            </button>
                             <div className="nav-dropdown-menu">
                                 <a className="nav-dropdown-item" href="/adviceAndContact">التوعية والأتصال</a>
                                 <a className="nav-dropdown-item" href="/forKidsAndWomen">ركن الأطفال ولكِ سيدتي</a>
@@ -327,7 +334,14 @@ function Header() {
                         </div>
 
                         <div className="nav-dropdown group">
-                            <a className="nav-dropdown-trigger" href="/water-quality">جودة المياه</a>
+                            <button
+                                type="button"
+                                className="nav-dropdown-trigger"
+                                aria-haspopup="true"
+                                aria-label="قائمة جودة المياه"
+                            >
+                                جودة المياه
+                            </button>
                             <div className="nav-dropdown-menu">
                                 <a className="nav-dropdown-item" href="/water-quality">جودة المياه</a>
                                 <a className="nav-dropdown-item" href="/refining-water">تنقية مياه الشرب</a>

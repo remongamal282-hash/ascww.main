@@ -7,9 +7,9 @@ import workerSrc from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 
 const API_BASE_ENDPOINT = import.meta.env.VITE_API_BASE_URL
   || (import.meta.env.DEV ? '/api' : 'https://backend.ascww.org/api');
-const contractsPdfUrl = `${API_BASE_ENDPOINT}/tenders/download/standard-cnp-regulation`;
-const contractsPdfDownloadUrl = contractsPdfUrl;
-const INITIAL_RENDER_PAGES = 6;
+const contractsPdfApiUrl = `${API_BASE_ENDPOINT}/tenders/download/standard-cnp-regulation`;
+const FAST_OPEN_PAGES = 2;
+const INITIAL_BACKGROUND_PAGES = 6;
 const BACKGROUND_FLUSH_INTERVAL = 4;
 const PAGE_CHUNK_SIZE = 6;
 GlobalWorkerOptions.workerSrc = workerSrc;
@@ -180,7 +180,7 @@ function ContractsRegulationPage() {
     setIsDownloading(true);
 
     try {
-      const response = await fetch(contractsPdfDownloadUrl);
+      const response = await fetch(contractsPdfApiUrl);
       if (!response.ok) throw new Error(`Download failed with status ${response.status}`);
       const blob = await response.blob();
       const objectUrl = URL.createObjectURL(blob);
@@ -193,7 +193,7 @@ function ContractsRegulationPage() {
       URL.revokeObjectURL(objectUrl);
     } catch {
       const fallbackLink = document.createElement('a');
-      fallbackLink.href = contractsPdfDownloadUrl;
+      fallbackLink.href = contractsPdfApiUrl;
       fallbackLink.rel = 'noopener noreferrer';
       fallbackLink.target = '_blank';
       document.body.appendChild(fallbackLink);
@@ -295,14 +295,23 @@ function ContractsRegulationPage() {
       releaseObjectUrls();
 
       try {
-        const response = await fetch(contractsPdfUrl);
-        if (!response.ok) {
-          throw new Error(`PDF request failed with status ${response.status}`);
+        let doc: unknown;
+        try {
+          loadingTask = getDocument({
+            url: contractsPdfApiUrl,
+            disableRange: false,
+            disableStream: false,
+          });
+          doc = await loadingTask.promise;
+        } catch {
+          const response = await fetch(contractsPdfApiUrl);
+          if (!response.ok) {
+            throw new Error(`PDF request failed with status ${response.status}`);
+          }
+          const pdfBytes = new Uint8Array(await response.arrayBuffer());
+          loadingTask = getDocument({ data: pdfBytes });
+          doc = await loadingTask.promise;
         }
-
-        const pdfBytes = new Uint8Array(await response.arrayBuffer());
-        loadingTask = getDocument({ data: pdfBytes });
-        const doc = await loadingTask.promise;
         if (!aliveRef.current) return;
 
         const typedDoc = doc as unknown as PdfDoc;
@@ -315,9 +324,17 @@ function ContractsRegulationPage() {
         setPageImages(placeholders);
         setLoadedPagesCount(0);
 
-        await loadPageRange(1, Math.min(INITIAL_RENDER_PAGES, typedDoc.numPages));
+        const firstPaintEnd = Math.min(FAST_OPEN_PAGES, typedDoc.numPages);
+        await loadPageRange(1, firstPaintEnd);
         if (!aliveRef.current) return;
         setIsLoadingDocument(false);
+
+        const backgroundEnd = Math.min(INITIAL_BACKGROUND_PAGES, typedDoc.numPages);
+        if (firstPaintEnd < backgroundEnd) {
+          void loadPageRange(firstPaintEnd + 1, backgroundEnd).catch(() => {
+            // Ignore background preload failures; page-demand loading still works.
+          });
+        }
       } catch {
         if (!aliveRef.current) return;
         setIsLoadingDocument(false);

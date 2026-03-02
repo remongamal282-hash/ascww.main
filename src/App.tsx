@@ -12,6 +12,9 @@ import ContractsRegulationPage from './pages/ContractsRegulationPage';
 import CompanyAchievementsPage from './pages/CompanyAchievementsPage';
 import AdviceAndContactPage from './pages/AdviceAndContactPage';
 import ForKidsAndWomenPage from './pages/ForKidsAndWomenPage';
+import WaterQualityPage from './pages/WaterQualityPage';
+import RefiningWaterPage from './pages/RefiningWaterPage';
+import LabOfCompanyWaterPage from './pages/LabOfCompanyWaterPage';
 import ScrollToTop from './components/ScrollToTop';
 
 function App() {
@@ -28,6 +31,9 @@ function App() {
         <Route path="/company-achivement" element={<CompanyAchievementsPage />} />
         <Route path="/adviceAndContact" element={<AdviceAndContactPage />} />
         <Route path="/forKidsAndWomen" element={<ForKidsAndWomenPage />} />
+        <Route path="/water-quality" element={<WaterQualityPage />} />
+        <Route path="/refining-water" element={<RefiningWaterPage />} />
+        <Route path="/lab-of-company-water" element={<LabOfCompanyWaterPage />} />
         <Route path="/forKids" element={<Navigate to="/forKidsAndWomen" replace />} />
         <Route path="/toWomen" element={<Navigate to="/forKidsAndWomen" replace />} />
         <Route path="/news-company" element={<NewsArchive />} />
