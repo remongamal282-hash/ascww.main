@@ -184,11 +184,20 @@ const server = http.createServer(async (req, res) => {
   const homeMetaPaths = new Set([
     '/',
     '/index.html',
+    '/an-elsherka',
+    '/branch-of-company',
+    '/vision-and-message',
+    '/organization-structure',
+    '/contract-and-sell',
+    '/company-achivement',
     '/news-company',
     '/projects-company',
     '/projects',
     '/adviceAndContact',
     '/forKidsAndWomen',
+    '/water-quality',
+    '/refining-water',
+    '/lab-of-company-water',
     '/forKids',
     '/toWomen',
   ]);
@@ -200,10 +209,11 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  const newsMatch = pathname.match(/^\/news\/([^/]+)$/);
+  const newsMatch = pathname.match(/^\/(news|news-company)\/([^/]+)$/);
   if (newsMatch) {
-    const id = newsMatch[1];
-    const ssrReq = { query: { id, type: 'news', routeBase: '/news' }, headers: req.headers };
+    const routeBase = `/${newsMatch[1]}`;
+    const id = newsMatch[2];
+    const ssrReq = { query: { id, type: 'news', routeBase }, headers: req.headers };
     const ssrRes = createSsrResponseAdapter(res);
     await ssrHandler(ssrReq, ssrRes);
     return;

@@ -71,6 +71,18 @@
       "destination": "/api/ssr?type=home&routeBase=/forKidsAndWomen"
     },
     {
+      "source": "/water-quality",
+      "destination": "/api/ssr?type=home&routeBase=/water-quality"
+    },
+    {
+      "source": "/refining-water",
+      "destination": "/api/ssr?type=home&routeBase=/refining-water"
+    },
+    {
+      "source": "/lab-of-company-water",
+      "destination": "/api/ssr?type=home&routeBase=/lab-of-company-water"
+    },
+    {
       "source": "/forKids",
       "destination": "/api/ssr?type=home&routeBase=/forKidsAndWomen"
     },
@@ -81,6 +93,10 @@
     {
       "source": "/news/:id",
       "destination": "/api/ssr?type=news&routeBase=/news&id=:id"
+    },
+    {
+      "source": "/news-company/:id",
+      "destination": "/api/ssr?type=news&routeBase=/news-company&id=:id"
     },
     {
       "source": "/projects/:id",
