@@ -674,13 +674,13 @@ function LabOfCompanyWaterPage() {
                             </button>
 
                             <div className="flipbook-stage-glass h-full">
-                              <div className="book-viewer-shell relative mx-auto h-full w-full max-w-[1080px] rounded-xl sm:max-w-[1140px]">
+                              <div className="book-viewer-shell relative mx-auto h-full w-full max-w-[1080px] rounded-xl !transform-none sm:max-w-[1140px]">
                                 <HTMLFlipBook
-                                  autoSize
+                                  autoSize={false}
                                   className="mx-auto h-full w-full"
                                   clickEventForward
                                   disableFlipByClick={false}
-                                  drawShadow
+                                  drawShadow={false}
                                   flippingTime={920}
                                   height={720}
                                   maxHeight={1600}
@@ -691,8 +691,8 @@ function LabOfCompanyWaterPage() {
                                   mobileScrollSupport
                                   onFlip={handleFlip}
                                   showCover
-                                  showPageCorners
-                                  size="stretch"
+                                  showPageCorners={false}
+                                  size="fixed"
                                   startPage={0}
                                   startZIndex={0}
                                   style={{ margin: '0 auto' }}
