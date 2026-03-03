@@ -13,10 +13,10 @@ const labImages = [
   { src: '/images/Labofcompany/lab-4.webp', alt: 'صور المعمل المركزي - 4' },
 ];
 const slideLabImage = '/images/Labofcompany/slide-lab.webp';
-const FAST_OPEN_PAGES = 6;
+const FAST_OPEN_PAGES = 2;
 const INITIAL_BACKGROUND_PAGES = 6;
 const BACKGROUND_FLUSH_INTERVAL = 4;
-const PAGE_CHUNK_SIZE = 6;
+const PAGE_CHUNK_SIZE = 8;
 GlobalWorkerOptions.workerSrc = workerSrc;
 
 type PdfDoc = {
@@ -88,7 +88,7 @@ const trimCanvasWhiteMargins = (source: HTMLCanvasElement) => {
   if (width < 2 || height < 2) return source;
 
   const pixels = ctx.getImageData(0, 0, width, height).data;
-  const sampleStep = 2;
+  const sampleStep = 4;
   const isNonWhite = (r: number, g: number, b: number, a: number) => a > 20 && (r < 245 || g < 245 || b < 245);
 
   const rowHasContent = (y: number) => {
@@ -286,7 +286,7 @@ function LabOfCompanyWaterPage() {
 
   const renderPdfPageToImageUrl = async (doc: PdfDoc, pageNumber: number) => {
     const page = await doc.getPage(pageNumber);
-    const viewport = page.getViewport({ scale: 1 });
+    const viewport = page.getViewport({ scale: 0.85 });
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
     if (!context) return '';
@@ -303,13 +303,13 @@ function LabOfCompanyWaterPage() {
     const imageDataUrl = await new Promise<string>((resolve) => {
       exportCanvas.toBlob((blob) => {
         if (!blob) {
-          resolve(exportCanvas.toDataURL('image/jpeg', 0.9));
+          resolve(exportCanvas.toDataURL('image/jpeg', 0.8));
           return;
         }
         const blobUrl = URL.createObjectURL(blob);
         pageObjectUrlsRef.current.push(blobUrl);
         resolve(blobUrl);
-      }, 'image/webp', 0.9);
+      }, 'image/webp', 0.8);
     });
 
     return imageDataUrl;
