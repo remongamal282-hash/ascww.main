@@ -85,9 +85,17 @@ function TendersArchive() {
                         return Number(second.id ?? 0) - Number(first.id ?? 0);
                     });
 
+                const renderTenders =
+                    validTenders.length === 1
+                        ? [1, 2, 3].map((order) => ({
+                            ...validTenders[0],
+                            title: `${validTenders[0].title || 'مناقصة'} - نموذج ${order}`
+                        }))
+                        : validTenders;
+
                 if (!active) return;
-                setAllTenders(validTenders);
-                appendPage(1, validTenders);
+                setAllTenders(renderTenders);
+                appendPage(1, renderTenders);
             } catch {
                 if (!active) return;
                 setError('فشل تحميل المناقصات. يرجى المحاولة مرة أخرى.');
@@ -188,7 +196,7 @@ function TendersArchive() {
                     <>
                         <div className="grid grid-cols-1 gap-6">
                             {tenders.map((tender, index) => (
-                                <TenderCard key={getTenderRouteId(tender) || `tender-${index}`} tender={tender} />
+                                <TenderCard key={`${getTenderRouteId(tender) || 'tender'}-${index}`} tender={tender} />
                             ))}
                         </div>
 

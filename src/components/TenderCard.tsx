@@ -38,7 +38,7 @@ function TenderCard({ tender }: TenderCardProps) {
 
     return (
         <article className="group flex w-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md md:flex-row" dir="rtl">
-            <Link to={detailsPath} className="relative block h-44 overflow-hidden bg-slate-100 md:h-auto md:w-[260px] md:min-w-[260px] lg:w-[300px] lg:min-w-[300px]">
+            <Link to={detailsPath} className="relative block h-36 overflow-hidden bg-slate-100 md:h-auto md:w-[190px] md:min-w-[190px] lg:w-[220px] lg:min-w-[220px]">
                 {imageUrl ? (
                     <img
                         src={imageUrl}
@@ -85,23 +85,13 @@ function TenderCard({ tender }: TenderCardProps) {
                 </p>
 
                 <div className="mt-auto flex flex-col gap-3 border-t border-slate-100 pt-4 sm:flex-row sm:items-center sm:justify-between">
-                    <Link
-                        to={detailsPath}
-                        className="inline-flex items-center gap-1 text-sm font-bold text-[#0a3555] transition-colors hover:text-[#082b47]"
-                    >
-                        عرض التفاصيل
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                        </svg>
-                    </Link>
-
                     <div className="flex flex-wrap items-center gap-2">
                         {pdfUrl && (
                             <a
                                 href={pdfUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center rounded-lg bg-red-50 px-3 py-1.5 text-xs font-bold text-red-700 transition hover:bg-red-100"
+                                className="inline-flex items-center rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-sm font-black text-red-700 shadow-sm transition hover:bg-red-100"
                             >
                                 ملف PDF
                             </a>
@@ -175,6 +165,16 @@ function TenderCard({ tender }: TenderCardProps) {
                             </button>
                         )}
                     </div>
+
+                    <Link
+                        to={detailsPath}
+                        className="inline-flex items-center gap-1 text-sm font-bold text-[#0a3555] transition-colors hover:text-[#082b47]"
+                    >
+                        عرض التفاصيل
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                    </Link>
                 </div>
             </div>
         </article>

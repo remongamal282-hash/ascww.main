@@ -198,9 +198,9 @@ function TenderDetails() {
         <>
             <Header />
             <main className="container mx-auto max-w-4xl px-4 py-8" dir="rtl">
-                <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-lg">
+                <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-lg md:flex md:flex-row">
                     {imageFiles.length > 0 ? (
-                        <div className="group relative h-[300px] bg-gray-100 md:h-[500px]">
+                        <div className="group relative h-[280px] bg-gray-100 md:h-auto md:min-h-[520px] md:w-[320px] md:min-w-[320px] lg:w-[360px] lg:min-w-[360px]">
                             <img
                                 src={currentImageUrl}
                                 alt={tender.title || 'صورة المناقصة'}
@@ -236,12 +236,12 @@ function TenderDetails() {
                             )}
                         </div>
                     ) : (
-                        <div className="flex h-64 items-center justify-center bg-gray-100 text-gray-400">
+                        <div className="flex h-[280px] items-center justify-center bg-gray-100 text-gray-400 md:min-h-[520px] md:w-[320px] md:min-w-[320px] lg:w-[360px] lg:min-w-[360px]">
                             لا توجد صور
                         </div>
                     )}
 
-                    <div className="p-6 md:p-8">
+                    <div className="p-6 md:flex-1 md:p-8">
                         <div className="mb-6 flex flex-wrap items-center gap-2 border-b border-gray-100 pb-4 text-sm">
                             {typeText && (
                                 <span className="rounded-full bg-[#0a3555]/10 px-3 py-1 font-bold text-[#0a3555]">
@@ -260,7 +260,7 @@ function TenderDetails() {
                             )}
                         </div>
 
-                        <h1 className="mb-6 text-justify text-2xl font-bold leading-tight text-gray-900 md:text-3xl">
+                        <h1 className="mb-6 text-justify text-xl font-bold leading-tight text-gray-900 md:text-2xl">
                             {tender.title || 'مناقصة'}
                         </h1>
 
@@ -271,7 +271,7 @@ function TenderDetails() {
 
                         {pdfFiles.length > 0 && (
                             <div className="mb-8 rounded-xl border border-red-100 bg-red-50/60 p-4">
-                                <h2 className="mb-3 text-base font-extrabold text-red-800">ملفات المناقصة</h2>
+                                <h2 className="mb-3 text-lg font-black text-red-800">ملفات المناقصة</h2>
                                 <div className="flex flex-wrap gap-2">
                                     {pdfFiles.map((file, index) => {
                                         const path = String(file.path || '').trim();
@@ -285,9 +285,10 @@ function TenderDetails() {
                                                 href={fileUrl}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="inline-flex items-center rounded-lg bg-white px-3 py-2 text-sm font-bold text-red-700 shadow-sm transition hover:bg-red-100"
+                                                className="inline-flex items-center gap-2 rounded-xl border border-red-200 bg-white px-4 py-2.5 text-sm font-bold text-red-700 shadow-sm transition hover:bg-red-100"
                                             >
-                                                {fileName}
+                                                <span className="rounded-lg bg-red-100 px-2.5 py-1 text-sm font-black text-red-800">ملف PDF</span>
+                                                <span className="font-extrabold">{fileName}</span>
                                             </a>
                                         );
                                     })}
