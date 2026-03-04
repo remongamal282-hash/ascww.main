@@ -3,9 +3,30 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import TenderCard from '../components/TenderCard';
 import type { TenderItem } from '../types';
-import { TENDERS_ENDPOINT, getTenderRouteId } from '../utils/helpers';
+import {
+    TENDER_FILE_ENDPOINT,
+    TENDERS_ENDPOINT,
+    extractPlainTextFromHtml,
+    getTenderImagePath,
+    getTenderRouteId,
+} from '../utils/helpers';
 
 const ITEMS_PER_LOAD = 6;
+
+function setMetaTag(
+    selector: string,
+    attrName: 'name' | 'property',
+    attrValue: string,
+    content: string
+) {
+    let element = document.head.querySelector(selector) as HTMLMetaElement | null;
+    if (!element) {
+        element = document.createElement('meta');
+        element.setAttribute(attrName, attrValue);
+        document.head.appendChild(element);
+    }
+    element.setAttribute('content', content);
+}
 
 function TendersArchive() {
     const [allTenders, setAllTenders] = useState<TenderItem[]>([]);
@@ -111,6 +132,30 @@ function TendersArchive() {
         window.addEventListener('scroll', onScroll, { passive: true });
         return () => window.removeEventListener('scroll', onScroll);
     }, [hasMore, loadMore, loading, loadingMore]);
+
+    useEffect(() => {
+        const pageUrl = window.location.href;
+        const firstTender = allTenders[0] || null;
+        const title = 'أرشيف المناقصات';
+        const description = firstTender
+            ? extractPlainTextFromHtml(firstTender.description || '').slice(0, 180) || 'تابع أحدث المناقصات والمواصفات الفنية وملفاتها.'
+            : 'تابع أحدث المناقصات والمواصفات الفنية وملفاتها.';
+        const imagePath = firstTender ? getTenderImagePath(firstTender) : '';
+        const imageUrl = imagePath
+            ? `${TENDER_FILE_ENDPOINT}/${encodeURIComponent(imagePath)}`
+            : `${window.location.origin}/images/ascww-logo.png`;
+
+        document.title = `${title} | شركة مياه أسيوط`;
+        setMetaTag('meta[property="og:title"]', 'property', 'og:title', title);
+        setMetaTag('meta[property="og:description"]', 'property', 'og:description', description);
+        setMetaTag('meta[property="og:type"]', 'property', 'og:type', 'website');
+        setMetaTag('meta[property="og:url"]', 'property', 'og:url', pageUrl);
+        setMetaTag('meta[property="og:image"]', 'property', 'og:image', imageUrl);
+        setMetaTag('meta[name="twitter:card"]', 'name', 'twitter:card', 'summary_large_image');
+        setMetaTag('meta[name="twitter:title"]', 'name', 'twitter:title', title);
+        setMetaTag('meta[name="twitter:description"]', 'name', 'twitter:description', description);
+        setMetaTag('meta[name="twitter:image"]', 'name', 'twitter:image', imageUrl);
+    }, [allTenders]);
 
     return (
         <>
