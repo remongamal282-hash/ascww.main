@@ -37,8 +37,8 @@ function TenderCard({ tender }: TenderCardProps) {
     const createdDate = formatArabicDate(tender.created_at || tender.updated_at);
 
     return (
-        <article className="group flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md" dir="rtl">
-            <Link to={detailsPath} className="relative block h-48 overflow-hidden bg-slate-100">
+        <article className="group flex w-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md md:flex-row" dir="rtl">
+            <Link to={detailsPath} className="relative block h-44 overflow-hidden bg-slate-100 md:h-auto md:w-[260px] md:min-w-[260px] lg:w-[300px] lg:min-w-[300px]">
                 {imageUrl ? (
                     <img
                         src={imageUrl}
@@ -55,7 +55,7 @@ function TenderCard({ tender }: TenderCardProps) {
                 )}
             </Link>
 
-            <div className="flex flex-1 flex-col p-5">
+            <div className="flex flex-1 flex-col p-5 md:p-6">
                 <div className="mb-3 flex flex-wrap items-center gap-2 text-xs">
                     {typeText && (
                         <span className="rounded-full bg-[#0a3555]/10 px-2.5 py-1 font-bold text-[#0a3555]">
@@ -84,7 +84,7 @@ function TenderCard({ tender }: TenderCardProps) {
                     {descriptionText || 'لا توجد تفاصيل مختصرة متاحة.'}
                 </p>
 
-                <div className="mt-auto flex items-center justify-between border-t border-slate-100 pt-4">
+                <div className="mt-auto flex flex-col gap-3 border-t border-slate-100 pt-4 sm:flex-row sm:items-center sm:justify-between">
                     <Link
                         to={detailsPath}
                         className="inline-flex items-center gap-1 text-sm font-bold text-[#0a3555] transition-colors hover:text-[#082b47]"
@@ -95,7 +95,7 @@ function TenderCard({ tender }: TenderCardProps) {
                         </svg>
                     </Link>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                         {pdfUrl && (
                             <a
                                 href={pdfUrl}

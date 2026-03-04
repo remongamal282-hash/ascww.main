@@ -107,6 +107,22 @@
       "destination": "/api/ssr?type=project&routeBase=/projects-company&id=:id"
     },
     {
+      "source": "/allTenders",
+      "destination": "/api/ssr?type=tender&routeBase=/allTenders"
+    },
+    {
+      "source": "/allTenders/:id",
+      "destination": "/api/ssr?type=tender&routeBase=/allTenders&id=:id"
+    },
+    {
+      "source": "/alltenders",
+      "destination": "/api/ssr?type=tender&routeBase=/allTenders"
+    },
+    {
+      "source": "/alltenders/:id",
+      "destination": "/api/ssr?type=tender&routeBase=/allTenders&id=:id"
+    },
+    {
       "source": "/api/:path*",
       "destination": "https://backend.ascww.org/api/:path*"
     }

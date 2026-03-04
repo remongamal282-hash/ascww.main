@@ -5,6 +5,7 @@ const SITE_TITLE = 'شركة مياه الشرب والصرف الصحي بأس�
 const HOME_DESCRIPTION = 'البوابة الإلكترونية لشركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد: خدمات المياه، الصرف الصحي، التوعية، المناقصات، والتواصل مع المواطنين.';
 const NEWS_DESCRIPTION = 'أرشيف الأخبار الرسمي لشركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد.';
 const PROJECTS_DESCRIPTION = 'أرشيف المشروعات الرسمي لشركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد.';
+const TENDERS_DESCRIPTION = 'أرشيف المناقصات الرسمي لشركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد.';
 const LOGO_PATH = '/images/ascww-logo.png';
 
 const ORG_SCHEMA = {
@@ -31,6 +32,8 @@ const stripHtml = (html = '') =>
     .replace(/&nbsp;/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
+
+const isImagePath = (path = '') => /\.(png|jpe?g|webp|gif|bmp|svg)$/i.test(String(path).trim());
 
 const escapeHtmlAttr = (value = '') =>
   String(value)
@@ -110,6 +113,15 @@ const buildPageUrl = (siteUrl, routeBase, id = '') => {
 };
 
 const getImagePath = (item, type) => {
+  if (type === 'tender') {
+    const files = Array.isArray(item?.tender_files) ? item.tender_files : [];
+    const typedImage = files.find((file) => String(file?.type || '').toLowerCase() === 'image' && String(file?.path || '').trim() !== '');
+    if (typedImage?.path) return String(typedImage.path).trim();
+
+    const fallbackImage = files.find((file) => isImagePath(file?.path || ''));
+    return String(fallbackImage?.path || '').trim();
+  }
+
   const imageKey = type === 'project' ? 'project_images' : 'news_images';
   const images = Array.isArray(item?.[imageKey]) ? item[imageKey] : [];
   const mainImage = images.find((image) => Number(image?.main_image) === 1);
@@ -123,12 +135,23 @@ const getRouteId = (item, type) => {
     return String(directId).trim();
   }
 
-  if (type !== 'project') return null;
-  const title = String(item?.title || '').trim();
-  const createdAt = String(item?.created_at || '').trim();
-  const updatedAt = String(item?.updated_at || '').trim();
-  const fallbackId = [title, createdAt, updatedAt].filter(Boolean).join('|').trim();
-  return fallbackId || null;
+  if (type === 'project') {
+    const title = String(item?.title || '').trim();
+    const createdAt = String(item?.created_at || '').trim();
+    const updatedAt = String(item?.updated_at || '').trim();
+    const fallbackId = [title, createdAt, updatedAt].filter(Boolean).join('|').trim();
+    return fallbackId || null;
+  }
+
+  if (type === 'tender') {
+    const title = String(item?.title || '').trim();
+    const createdAt = String(item?.created_at || '').trim();
+    const expirationDate = String(item?.expiration_date || '').trim();
+    const fallbackId = [title, createdAt, expirationDate].filter(Boolean).join('|').trim();
+    return fallbackId || null;
+  }
+
+  return null;
 };
 
 const getEntityConfig = (type, apiBase, siteUrl, id, routeBaseInput) => {
@@ -162,6 +185,24 @@ const getEntityConfig = (type, apiBase, siteUrl, id, routeBaseInput) => {
       meta: {
         title: SITE_TITLE,
         description: PROJECTS_DESCRIPTION,
+        image: `${siteUrl}${LOGO_PATH}`,
+        url: buildPageUrl(siteUrl, routeBase, id),
+      },
+    };
+  }
+
+  if (type === 'tender') {
+    const routeBase = normalizeRouteBase(routeBaseInput, '/allTenders');
+    return {
+      listUrls: [`${apiBase}/tenders`],
+      imageBase: `${apiBase}/tenders/file/`,
+      ogType: 'article',
+      twitterCard: 'summary_large_image',
+      imageWidth: '1200',
+      imageHeight: '630',
+      meta: {
+        title: SITE_TITLE,
+        description: TENDERS_DESCRIPTION,
         image: `${siteUrl}${LOGO_PATH}`,
         url: buildPageUrl(siteUrl, routeBase, id),
       },
@@ -205,7 +246,7 @@ export default async function handler(request, response) {
   const rawId = request?.query?.id ?? '';
   const id = decodeURIComponent(String(rawId)).trim();
   const rawType = String(request?.query?.type ?? 'news').trim().toLowerCase();
-  const type = rawType === 'project' || rawType === 'home' ? rawType : 'news';
+  const type = rawType === 'project' || rawType === 'home' || rawType === 'tender' ? rawType : 'news';
   const routeBase = request?.query?.routeBase ?? request?.query?.routebase ?? '';
 
   const API_BASE_URL = process.env.VITE_API_BASE_URL || 'https://backend.ascww.org/api';

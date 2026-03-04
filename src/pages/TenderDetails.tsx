@@ -122,6 +122,11 @@ function TenderDetails() {
         return `${TENDER_FILE_ENDPOINT}/${encodeURIComponent(path)}`;
     }, [imageFiles, currentIndex]);
 
+    const shareDescription = useMemo(
+        () => extractPlainTextFromHtml(tender?.description || '').slice(0, 180),
+        [tender]
+    );
+
     const nextImage = () => {
         if (imageFiles.length < 2) return;
         setCurrentIndex((prev) => (prev === imageFiles.length - 1 ? 0 : prev + 1));
@@ -131,6 +136,31 @@ function TenderDetails() {
         if (imageFiles.length < 2) return;
         setCurrentIndex((prev) => (prev === 0 ? imageFiles.length - 1 : prev - 1));
     };
+
+    useEffect(() => {
+        if (!tender) return;
+
+        const title = tender.title || 'مناقصة';
+        const pageUrl = window.location.href;
+        const imagePath = getTenderImagePath(tender);
+        const imageUrl = imagePath ? `${TENDER_FILE_ENDPOINT}/${encodeURIComponent(imagePath)}` : '';
+
+        document.title = `${title} | أرشيف المناقصات`;
+        setMetaTag('meta[property="og:title"]', 'property', 'og:title', title);
+        setMetaTag('meta[property="og:description"]', 'property', 'og:description', shareDescription);
+        setMetaTag('meta[property="og:type"]', 'property', 'og:type', 'article');
+        setMetaTag('meta[property="og:url"]', 'property', 'og:url', pageUrl);
+        if (imageUrl) {
+            setMetaTag('meta[property="og:image"]', 'property', 'og:image', imageUrl);
+        }
+
+        setMetaTag('meta[name="twitter:card"]', 'name', 'twitter:card', 'summary_large_image');
+        setMetaTag('meta[name="twitter:title"]', 'name', 'twitter:title', title);
+        setMetaTag('meta[name="twitter:description"]', 'name', 'twitter:description', shareDescription);
+        if (imageUrl) {
+            setMetaTag('meta[name="twitter:image"]', 'name', 'twitter:image', imageUrl);
+        }
+    }, [tender, shareDescription]);
 
     if (loading) {
         return (
@@ -163,32 +193,6 @@ function TenderDetails() {
     const cleanContent = String(tender.description || '')
         .replace(/اقرأ المزيد/g, '')
         .replace(/لمزيد من التفاصيل/g, '');
-    const shareDescription = extractPlainTextFromHtml(tender.description || '').slice(0, 180);
-
-    useEffect(() => {
-        if (!tender) return;
-
-        const title = tender.title || 'مناقصة';
-        const pageUrl = window.location.href;
-        const imagePath = getTenderImagePath(tender);
-        const imageUrl = imagePath ? `${TENDER_FILE_ENDPOINT}/${encodeURIComponent(imagePath)}` : '';
-
-        document.title = `${title} | أرشيف المناقصات`;
-        setMetaTag('meta[property="og:title"]', 'property', 'og:title', title);
-        setMetaTag('meta[property="og:description"]', 'property', 'og:description', shareDescription);
-        setMetaTag('meta[property="og:type"]', 'property', 'og:type', 'article');
-        setMetaTag('meta[property="og:url"]', 'property', 'og:url', pageUrl);
-        if (imageUrl) {
-            setMetaTag('meta[property="og:image"]', 'property', 'og:image', imageUrl);
-        }
-
-        setMetaTag('meta[name="twitter:card"]', 'name', 'twitter:card', 'summary_large_image');
-        setMetaTag('meta[name="twitter:title"]', 'name', 'twitter:title', title);
-        setMetaTag('meta[name="twitter:description"]', 'name', 'twitter:description', shareDescription);
-        if (imageUrl) {
-            setMetaTag('meta[name="twitter:image"]', 'name', 'twitter:image', imageUrl);
-        }
-    }, [tender, shareDescription]);
 
     return (
         <>

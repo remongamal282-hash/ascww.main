@@ -47,6 +47,8 @@ function App() {
         <Route path="/projects-company/:id" element={<ProjectDetails />} />
         <Route path="/allTenders" element={<TendersArchive />} />
         <Route path="/allTenders/:id" element={<TenderDetails />} />
+        <Route path="/alltenders" element={<Navigate to="/allTenders" replace />} />
+        <Route path="/alltenders/:id" element={<TenderDetails />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
