@@ -15,6 +15,8 @@ import ForKidsAndWomenPage from './pages/ForKidsAndWomenPage';
 import WaterQualityPage from './pages/WaterQualityPage';
 import RefiningWaterPage from './pages/RefiningWaterPage';
 import LabOfCompanyWaterPage from './pages/LabOfCompanyWaterPage';
+import TendersArchive from './pages/TendersArchive';
+import TenderDetails from './pages/TenderDetails';
 import ScrollToTop from './components/ScrollToTop';
 
 function App() {
@@ -43,6 +45,8 @@ function App() {
         <Route path="/projects-company" element={<ProjectsArchive />} />
         <Route path="/projects/:id" element={<ProjectDetails />} />
         <Route path="/projects-company/:id" element={<ProjectDetails />} />
+        <Route path="/allTenders" element={<TendersArchive />} />
+        <Route path="/allTenders/:id" element={<TenderDetails />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>

@@ -1,4 +1,4 @@
-import type { NewsItem, ProjectItem } from '../types';
+import type { NewsItem, ProjectItem, TenderItem } from '../types';
 
 export const API_BASE_ENDPOINT = import.meta.env.VITE_API_BASE_URL || '/api';
 export const ADMIN_INFO_ENDPOINT = `${API_BASE_ENDPOINT}/admin-info`;
@@ -9,6 +9,9 @@ export const NEWS_ARCHIVE_PATH = '/news-company';
 export const PROJECTS_ENDPOINT = `${API_BASE_ENDPOINT}/projects/home`;
 export const PROJECT_IMAGE_ENDPOINT = `${API_BASE_ENDPOINT}/projects/image`;
 export const PROJECTS_ARCHIVE_PATH = '/projects-company';
+export const TENDERS_ENDPOINT = `${API_BASE_ENDPOINT}/tenders`;
+export const TENDER_FILE_ENDPOINT = `${API_BASE_ENDPOINT}/tenders/file`;
+export const TENDERS_ARCHIVE_PATH = '/allTenders';
 export const BOSS_SINGLE_LINE_PHRASE = 'تحية تقدير وإعزاز لكل مواطن يساعد ويساهم في تحقيق هذا الهدف المنشود';
 
 export const extractPlainTextFromHtml = (html?: string) => {
@@ -71,6 +74,40 @@ export const getProjectDetailsPath = (projectItem: ProjectItem) => {
     const routeId = getProjectRouteId(projectItem);
     if (!routeId) return PROJECTS_ARCHIVE_PATH;
     return `${PROJECTS_ARCHIVE_PATH}/${encodeURIComponent(routeId)}`;
+};
+
+export const getTenderRouteId = (tenderItem: TenderItem) => {
+    const directId = tenderItem.id ?? tenderItem.slug;
+    if (directId !== undefined && directId !== null && `${directId}`.trim() !== '') {
+        return String(directId).trim();
+    }
+
+    const title = String(tenderItem.title || '').trim();
+    const createdAt = String(tenderItem.created_at || '').trim();
+    const expiresAt = String(tenderItem.expiration_date || '').trim();
+    const fallbackId = [title, createdAt, expiresAt].filter(Boolean).join('|').trim();
+    return fallbackId || null;
+};
+
+export const getTenderDetailsPath = (tenderItem: TenderItem) => {
+    const routeId = getTenderRouteId(tenderItem);
+    if (!routeId) return TENDERS_ARCHIVE_PATH;
+    return `${TENDERS_ARCHIVE_PATH}/${encodeURIComponent(routeId)}`;
+};
+
+const isImageFile = (path: string) => /\.(png|jpe?g|webp|gif|bmp|svg)$/i.test(path);
+
+export const getTenderImagePath = (tenderItem: TenderItem) => {
+    const files = tenderItem.tender_files || [];
+    const typedImage = files.find((file) => String(file.type || '').toLowerCase() === 'image' && String(file.path || '').trim());
+    if (typedImage?.path) return typedImage.path.trim();
+
+    const fallbackImage = files.find((file) => {
+        const path = String(file.path || '').trim();
+        return path && isImageFile(path);
+    });
+
+    return (fallbackImage?.path || '').trim();
 };
 
 export const sanitizeBossSpeechHtml = (html: string) => {

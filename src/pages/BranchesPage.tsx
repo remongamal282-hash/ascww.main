@@ -6,8 +6,6 @@ type BranchOffice = {
     id: number;
     name: string;
     address: string;
-    phone: string;
-    fax: string;
     lat: number | null;
     lng: number | null;
 };
@@ -16,19 +14,19 @@ const LEGACY_BRANCHES_PAGE_URL = 'https://ascww.org/branch-of-company';
 const LEGACY_BASE_URL = 'https://ascww.org';
 
 const ALL_BRANCHES: BranchOffice[] = [
-    { id: 1, name: 'فرع ديروط', address: 'شارع البحر الأعظم', phone: '01210487781', fax: '088-2131662', lat: 27.4452136379, lng: 30.8218154894 },
-    { id: 2, name: 'فرع منفلوط', address: 'شارع جسر أبو منديل - بجوار المعهد الأزهري', phone: '01210487749', fax: '088-2131662', lat: 27.3115858342, lng: 30.9713984287 },
-    { id: 3, name: 'فرع القوصية', address: 'أمام المرور القديم', phone: '01210487678', fax: '088-2131662', lat: 27.4397136271, lng: 30.8268023357 },
-    { id: 4, name: 'الفرع الرئيسي', address: 'محطة مياه المرشحة بنزلة عبد اللاه - أسيوط', phone: '088/2131662 - 2131654 - 2131655', fax: '088-2131662', lat: 27.1730480301, lng: 31.2030938552 },
-    { id: 5, name: 'فرع شرق أسيوط', address: 'شارع الهلالي أمام مديرية الإسكان', phone: '088/2131662 - 2131654 - 2131655', fax: '088-2131662', lat: 27.1851287383, lng: 31.1948550978 },
-    { id: 6, name: 'فرع غرب أسيوط', address: 'شارع 23 يوليو خلف بنك ناصر', phone: '088/2131662 - 2131654 - 2131655', fax: '088-2131662', lat: 27.1755750159, lng: 31.1764614822 },
-    { id: 7, name: 'فرع أبنوب', address: 'شارع عثمان الغزالي بجوار المخبز الآلي', phone: '01210487737', fax: '088-2131662', lat: 27.2674845387, lng: 31.1519329371 },
-    { id: 8, name: 'فرع مركز الفتح', address: 'الناصرية أمام مركز الشرطة', phone: '01210487740', fax: '088-2131662', lat: 27.1756268394, lng: 31.1839359957 },
-    { id: 9, name: 'فرع مركز البداري', address: 'شارع مجلس النيابة القديم', phone: '01284447689', fax: '088-2131662', lat: 26.9924993574, lng: 31.4100708614 },
-    { id: 10, name: 'فرع الغنايم', address: 'الغنايم بحري خلف مركز الشرطة', phone: '01210487696', fax: '088-2131662', lat: 26.9956968011, lng: 31.2549023398 },
-    { id: 11, name: 'فرع أبوتيج', address: 'بجوار رعاية الطفل', phone: '01210487708', fax: '088-2131662', lat: 27.0510815445, lng: 31.3198190263 },
-    { id: 12, name: 'فرع صدفا', address: 'شارع الصيانة', phone: '01210487698', fax: '088-2131662', lat: 26.9495989244, lng: 31.3654710481 },
-    { id: 13, name: 'فرع مركز أسيوط', address: 'شارع الجمهورية خلف فندق الوطنية', phone: '088/2131662 - 2131654 - 2131655', fax: '088-2131662', lat: 26.9495989244, lng: 31.3654710481 }
+    { id: 1, name: 'فرع ديروط', address: 'شارع البحر الأعظم', lat: 27.4452136379, lng: 30.8218154894 },
+    { id: 2, name: 'فرع منفلوط', address: 'شارع جسر أبو منديل - بجوار المعهد الأزهري', lat: 27.3115858342, lng: 30.9713984287 },
+    { id: 3, name: 'فرع القوصية', address: 'أمام المرور القديم', lat: 27.4397136271, lng: 30.8268023357 },
+    { id: 4, name: 'الفرع الرئيسي', address: 'محطة مياه المرشحة بنزلة عبد اللاه - أسيوط', lat: 27.1730480301, lng: 31.2030938552 },
+    { id: 5, name: 'فرع شرق أسيوط', address: 'شارع الهلالي أمام مديرية الإسكان', lat: 27.1851287383, lng: 31.1948550978 },
+    { id: 6, name: 'فرع غرب أسيوط', address: 'شارع 23 يوليو خلف بنك ناصر', lat: 27.1755750159, lng: 31.1764614822 },
+    { id: 7, name: 'فرع أبنوب', address: 'شارع عثمان الغزالي بجوار المخبز الآلي', lat: 27.2674845387, lng: 31.1519329371 },
+    { id: 8, name: 'فرع مركز الفتح', address: 'الناصرية أمام مركز الشرطة', lat: 27.1756268394, lng: 31.1839359957 },
+    { id: 9, name: 'فرع مركز البداري', address: 'شارع مجلس النيابة القديم', lat: 26.9924993574, lng: 31.4100708614 },
+    { id: 10, name: 'فرع الغنايم', address: 'الغنايم بحري خلف مركز الشرطة', lat: 26.9956968011, lng: 31.2549023398 },
+    { id: 11, name: 'فرع أبوتيج', address: 'بجوار رعاية الطفل', lat: 27.0510815445, lng: 31.3198190263 },
+    { id: 12, name: 'فرع صدفا', address: 'شارع الصيانة', lat: 26.9495989244, lng: 31.3654710481 },
+    { id: 13, name: 'فرع مركز أسيوط', address: 'شارع الجمهورية خلف فندق الوطنية', lat: 26.9495989244, lng: 31.3654710481 }
 ];
 
 const cleanText = (value: unknown) =>
@@ -36,9 +34,6 @@ const cleanText = (value: unknown) =>
         .replace(/\u00a0/g, ' ')
         .replace(/\s+/g, ' ')
         .trim();
-
-const normalizePhoneForTel = (value: string) =>
-    value.replace(/[^\d+]/g, '');
 
 const parseNumeric = (value: unknown) => {
     const num = Number(value);
@@ -146,8 +141,6 @@ const parseBranchObjects = (arrayLiteral: string | null): BranchOffice[] => {
                 id: Number(record.Id ?? record.id ?? index + 1),
                 name,
                 address,
-                phone: cleanText(record.phone),
-                fax: cleanText(record.fax),
                 lat: parseNumeric(record.lat),
                 lng: parseNumeric(record.lng)
             } satisfies BranchOffice;
@@ -163,9 +156,7 @@ const parseBranchObjects = (arrayLiteral: string | null): BranchOffice[] => {
         }
 
         const existing = deduped.get(key)!;
-        const nextPhone = branch.phone.length > existing.phone.length ? branch.phone : existing.phone;
-        const nextFax = branch.fax.length > existing.fax.length ? branch.fax : existing.fax;
-        deduped.set(key, { ...existing, phone: nextPhone, fax: nextFax });
+        deduped.set(key, existing);
     });
 
     return Array.from(deduped.values());
@@ -183,8 +174,6 @@ const syncKnownBranches = (known: BranchOffice[], incoming: BranchOffice[]) => {
         return {
             ...branch,
             address: fresh.address || branch.address,
-            phone: fresh.phone || branch.phone,
-            fax: fresh.fax || branch.fax,
             lat: fresh.lat ?? branch.lat,
             lng: fresh.lng ?? branch.lng
         };
@@ -256,7 +245,7 @@ function BranchesPage() {
         const normalizedQuery = cleanText(query).toLowerCase();
         if (!normalizedQuery) return branches;
         return branches.filter((branch) => {
-            const haystack = `${branch.name} ${branch.address} ${branch.phone} ${branch.fax}`.toLowerCase();
+            const haystack = `${branch.name} ${branch.address}`.toLowerCase();
             return haystack.includes(normalizedQuery);
         });
     }, [branches, query]);
@@ -275,25 +264,27 @@ function BranchesPage() {
                         </div>
 
                         <div className="px-6 py-6 sm:px-8">
-                            <div className="mb-6 grid gap-3 md:grid-cols-[1fr_auto] md:items-center">
-                                <label className="relative block">
-                                    <span className="sr-only">ابحث عن فرع</span>
-                                    <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-[#0a3555]/70">
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                            <circle cx="11" cy="11" r="8"></circle>
-                                            <path d="m21 21-4.35-4.35"></path>
-                                        </svg>
-                                    </span>
-                                    <input
-                                        type="search"
-                                        value={query}
-                                        onChange={(event) => setQuery(event.target.value)}
-                                        placeholder="ابحث باسم الفرع أو العنوان أو رقم الهاتف..."
-                                        className="h-10 w-full rounded-full border border-[#d7b05a]/55 bg-white pr-9 pl-4 text-sm text-slate-700 outline-none transition focus:border-[#0a3555] focus:ring-2 focus:ring-[#0a3555]/15"
-                                    />
-                                </label>
-                                <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-700">
-                                    عدد الفروع: <span className="text-[#0a3555]">{filteredBranches.length}</span>
+                            <div className="mb-6 rounded-xl bg-[#eef5fa] px-3 py-3">
+                                <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                                    <p className="text-right text-sm font-extrabold leading-7 text-[#b42318] sm:text-base">
+                                        إرشاد -: فى حالة وجود اى شكاوى او استفسارات اتصل بخدمة الخط الساخن <span className="text-xl font-black text-[#dc2626]">125</span>
+                                    </p>
+                                    <label className="relative block w-full md:max-w-md">
+                                        <span className="sr-only">ابحث عن فرع</span>
+                                        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-[#0a3555]/70">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                <circle cx="11" cy="11" r="8"></circle>
+                                                <path d="m21 21-4.35-4.35"></path>
+                                            </svg>
+                                        </span>
+                                        <input
+                                            type="search"
+                                            value={query}
+                                            onChange={(event) => setQuery(event.target.value)}
+                                            placeholder="ابحث باسم الفرع أو العنوان..."
+                                            className="h-10 w-full rounded-lg border border-[#d7b05a]/65 bg-white pr-9 pl-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[#0a3555] focus:ring-2 focus:ring-[#0a3555]/20"
+                                        />
+                                    </label>
                                 </div>
                             </div>
 
@@ -308,7 +299,6 @@ function BranchesPage() {
                                         const mapLink = hasMap
                                             ? `https://www.google.com/maps?q=${branch.lat},${branch.lng}`
                                             : '';
-                                        const tel = normalizePhoneForTel(branch.phone);
 
                                         return (
                                             <article
@@ -317,22 +307,6 @@ function BranchesPage() {
                                             >
                                                 <h2 className="text-lg font-extrabold text-[#0a3555]">{branch.name}</h2>
                                                 <p className="mt-2 min-h-14 text-sm leading-7 text-slate-700">{branch.address}</p>
-
-                                                <div className="mt-3 space-y-2 text-sm">
-                                                    <p className="text-slate-700">
-                                                        <span className="font-bold text-slate-900">الهاتف:</span>{' '}
-                                                        {tel ? (
-                                                            <a className="text-[#0a3555] underline-offset-2 hover:underline" href={`tel:${tel}`}>
-                                                                {branch.phone}
-                                                            </a>
-                                                        ) : (
-                                                            <span>{branch.phone || '-'}</span>
-                                                        )}
-                                                    </p>
-                                                    <p className="text-slate-700">
-                                                        <span className="font-bold text-slate-900">الفاكس:</span> {branch.fax || '-'}
-                                                    </p>
-                                                </div>
 
                                                 <div className="mt-4 flex items-center gap-2">
                                                     {hasMap ? (

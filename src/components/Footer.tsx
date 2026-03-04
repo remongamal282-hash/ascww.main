@@ -58,7 +58,7 @@ function Footer() {
                             <a className="block transition hover:text-white" href="https://ascww.org/call-center">خدمة العملاء</a>
                             <Link className="block transition hover:text-white" to="/projects-company">أرشيف المشروعات</Link>
                             <Link className="block transition hover:text-white" to="/news-company">أرشيف الأخبار</Link>
-                            <a className="block transition hover:text-white" href="https://ascww.org/allTenders">المناقصات</a>
+                            <Link className="block transition hover:text-white" to="/allTenders">المناقصات</Link>
                             <a className="block transition hover:text-white" href="https://ascww.org/general-admin-training">الإدارة العامة للتدريب</a>
                             <a className="block transition hover:text-white" href="https://ascww.org/school-new-assuit">المدرسة الفنية</a>
                         </div>

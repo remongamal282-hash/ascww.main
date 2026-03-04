@@ -39,3 +39,27 @@ export type ProjectItem = {
     updated_at?: string;
     project_images?: ProjectImage[];
 };
+
+export type TenderFile = {
+    id?: number;
+    tender_id?: number;
+    type?: string;
+    name?: string;
+    path?: string;
+    created_at?: string;
+    updated_at?: string;
+};
+
+export type TenderItem = {
+    id?: number;
+    title?: string;
+    slug?: string;
+    type?: string;
+    active?: number;
+    home?: number;
+    description?: string;
+    expiration_date?: string;
+    created_at?: string;
+    updated_at?: string;
+    tender_files?: TenderFile[];
+};
