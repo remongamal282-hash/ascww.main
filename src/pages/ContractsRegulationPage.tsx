@@ -12,6 +12,8 @@ const FAST_OPEN_PAGES = 2;
 const INITIAL_BACKGROUND_PAGES = 6;
 const BACKGROUND_FLUSH_INTERVAL = 4;
 const PAGE_CHUNK_SIZE = 6;
+const PDF_RENDER_SCALE = 1.15;
+const PDF_IMAGE_QUALITY = 0.9;
 GlobalWorkerOptions.workerSrc = workerSrc;
 
 type PdfDoc = {
@@ -206,7 +208,7 @@ function ContractsRegulationPage() {
 
   const renderPdfPageToImageUrl = async (doc: PdfDoc, pageNumber: number) => {
     const page = await doc.getPage(pageNumber);
-    const viewport = page.getViewport({ scale: 0.66 });
+    const viewport = page.getViewport({ scale: PDF_RENDER_SCALE });
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
     if (!context) return '';
@@ -222,13 +224,13 @@ function ContractsRegulationPage() {
     const imageDataUrl = await new Promise<string>((resolve) => {
       canvas.toBlob((blob) => {
         if (!blob) {
-          resolve(canvas.toDataURL('image/jpeg', 0.62));
+          resolve(canvas.toDataURL('image/webp', PDF_IMAGE_QUALITY));
           return;
         }
         const blobUrl = URL.createObjectURL(blob);
         pageObjectUrlsRef.current.push(blobUrl);
         resolve(blobUrl);
-      }, 'image/webp', 0.62);
+      }, 'image/webp', PDF_IMAGE_QUALITY);
     });
 
     return imageDataUrl;
