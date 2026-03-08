@@ -85,17 +85,9 @@ function TendersArchive() {
                         return Number(second.id ?? 0) - Number(first.id ?? 0);
                     });
 
-                const renderTenders =
-                    validTenders.length === 1
-                        ? [1, 2, 3].map((order) => ({
-                            ...validTenders[0],
-                            title: `${validTenders[0].title || 'مناقصة'} - نموذج ${order}`
-                        }))
-                        : validTenders;
-
                 if (!active) return;
-                setAllTenders(renderTenders);
-                appendPage(1, renderTenders);
+                setAllTenders(validTenders);
+                appendPage(1, validTenders);
             } catch {
                 if (!active) return;
                 setError('فشل تحميل المناقصات. يرجى المحاولة مرة أخرى.');
@@ -207,9 +199,24 @@ function TendersArchive() {
                         )}
 
                         {tenders.length === 0 && (
-                            <div className="py-12 text-center text-gray-500">
-                                لا توجد مناقصات لعرضها حاليًا.
-                            </div>
+                            <section className="mx-auto mt-4 max-w-2xl overflow-hidden rounded-2xl border border-[#d7b05a]/35 bg-gradient-to-b from-[#0a3555]/5 to-white p-6 text-center shadow-sm sm:p-8">
+                                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#0a3555]/10 text-[#0a3555]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path d="M3 7h18" />
+                                        <path d="M8 3v4" />
+                                        <path d="M16 3v4" />
+                                        <rect x="3" y="5" width="18" height="16" rx="2" />
+                                        <path d="M8 12h8" />
+                                    </svg>
+                                </div>
+                                <h2 className="mt-4 text-xl font-extrabold text-slate-900 sm:text-2xl">
+                                    لا توجد مناقصات لعرضها حاليًا.
+                                </h2>
+                                <p className="mt-3 mx-auto max-w-full whitespace-nowrap text-center text-xs leading-6 text-slate-600 sm:text-sm">
+                                    سيتم نشر أي مناقصات جديدة فور إضافتها. يمكنك تحديث الصفحة لاحقًا للاطلاع على أحدث المحتوى.
+                                </p>
+
+                            </section>
                         )}
                     </>
                 )}

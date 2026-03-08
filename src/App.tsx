@@ -15,6 +15,7 @@ import ForKidsAndWomenPage from './pages/ForKidsAndWomenPage';
 import WaterQualityPage from './pages/WaterQualityPage';
 import RefiningWaterPage from './pages/RefiningWaterPage';
 import LabOfCompanyWaterPage from './pages/LabOfCompanyWaterPage';
+import SewageTreatmentPage from './pages/SewageTreatmentPage';
 import TendersArchive from './pages/TendersArchive';
 import TenderDetails from './pages/TenderDetails';
 import ScrollToTop from './components/ScrollToTop';
@@ -36,6 +37,7 @@ function App() {
         <Route path="/water-quality" element={<WaterQualityPage />} />
         <Route path="/refining-water" element={<RefiningWaterPage />} />
         <Route path="/lab-of-company-water" element={<LabOfCompanyWaterPage />} />
+        <Route path="/sewage-treatment" element={<SewageTreatmentPage />} />
         <Route path="/forKids" element={<Navigate to="/forKidsAndWomen" replace />} />
         <Route path="/toWomen" element={<Navigate to="/forKidsAndWomen" replace />} />
         <Route path="/news-company" element={<NewsArchive />} />
