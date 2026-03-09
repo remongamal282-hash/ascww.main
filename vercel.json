@@ -27,6 +27,54 @@
       "destination": "/api/ssr?type=home&routeBase=/"
     },
     {
+      "source": "/about-company",
+      "destination": "/api/ssr?type=home&routeBase=/about-company"
+    },
+    {
+      "source": "/branches",
+      "destination": "/api/ssr?type=home&routeBase=/branches"
+    },
+    {
+      "source": "/news-archive",
+      "destination": "/api/ssr?type=home&routeBase=/news-archive"
+    },
+    {
+      "source": "/projects-archive",
+      "destination": "/api/ssr?type=home&routeBase=/projects-archive"
+    },
+    {
+      "source": "/contracts-regulation",
+      "destination": "/api/ssr?type=home&routeBase=/contracts-regulation"
+    },
+    {
+      "source": "/company-achievements",
+      "destination": "/api/ssr?type=home&routeBase=/company-achievements"
+    },
+    {
+      "source": "/advice-and-contact",
+      "destination": "/api/ssr?type=home&routeBase=/advice-and-contact"
+    },
+    {
+      "source": "/for-kids-and-women",
+      "destination": "/api/ssr?type=home&routeBase=/for-kids-and-women"
+    },
+    {
+      "source": "/safe-sewage-disposal",
+      "destination": "/api/ssr?type=home&routeBase=/safe-sewage-disposal"
+    },
+    {
+      "source": "/save-sewage-network",
+      "destination": "/api/ssr?type=home&routeBase=/save-sewage-network"
+    },
+    {
+      "source": "/industrial-waste",
+      "destination": "/api/ssr?type=home&routeBase=/industrial-waste"
+    },
+    {
+      "source": "/industrial-waste-role",
+      "destination": "/api/ssr?type=home&routeBase=/industrial-waste-role"
+    },
+    {
       "source": "/an-elsherka",
       "destination": "/api/ssr?type=home&routeBase=/an-elsherka"
     },
@@ -131,8 +179,16 @@
       "destination": "/api/ssr?type=tender&routeBase=/allTenders"
     },
     {
+      "source": "/tenders-archive",
+      "destination": "/api/ssr?type=tender&routeBase=/tenders-archive"
+    },
+    {
       "source": "/allTenders/:id",
       "destination": "/api/ssr?type=tender&routeBase=/allTenders&id=:id"
+    },
+    {
+      "source": "/tenders/:id",
+      "destination": "/api/ssr?type=tender&routeBase=/tenders&id=:id"
     },
     {
       "source": "/alltenders",

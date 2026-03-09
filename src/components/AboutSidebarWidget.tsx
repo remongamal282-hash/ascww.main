@@ -56,7 +56,7 @@ function AboutSidebarWidget({
                         </summary>
                         <div className={`border-t px-3 py-3 ${isFormal ? 'border-slate-200' : 'border-[#d7cfc3]'}`}>
                             <img
-                                src="/images/about/company-message.png"
+                                src="/images/about/company-message.webp"
                                 alt="رسالة الشركة"
                                 className="w-full rounded-lg border border-slate-300 bg-white"
                                 loading="lazy"
