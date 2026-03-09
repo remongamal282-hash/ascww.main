@@ -69,3 +69,19 @@ npm run build -- --base=/portal/
 ```
 
 Then deploy the built output under `/portal/`.
+
+## 4) White Screen Quick Fix
+
+If you still get a white page on private hosting, it is usually one of:
+1. Missing SPA rewrite to `index.html`.
+2. Wrong deploy base path.
+
+Temporary fallback (works even without rewrite):
+1. Copy `.env.production.private` content into `.env.production`.
+2. Build again:
+
+```bash
+npm run build
+```
+
+This enables hash routing (`/#/about-company`) and avoids blank pages caused by server routing.
