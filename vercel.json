@@ -83,6 +83,10 @@
       "destination": "/api/ssr?type=home&routeBase=/lab-of-company-water"
     },
     {
+      "source": "/sewage-treatment",
+      "destination": "/api/ssr?type=home&routeBase=/sewage-treatment"
+    },
+    {
       "source": "/forKids",
       "destination": "/api/ssr?type=home&routeBase=/forKidsAndWomen"
     },

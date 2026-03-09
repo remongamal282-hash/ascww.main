@@ -168,9 +168,12 @@ function SewageTreatmentPage() {
                         <h3 className="text-lg font-extrabold text-[#0a3555]">{section.title}</h3>
                         {isFilteringSection ? (
                           <div className="mt-3 md:grid md:grid-cols-[minmax(0,1fr)_minmax(280px,40%)] md:items-stretch md:gap-6">
-                            <div className="space-y-3 md:order-1 md:flex md:h-full md:flex-col md:justify-between md:space-y-0">
+                            <div className="space-y-3 md:order-1 md:space-y-8">
                               {section.paragraphs.map((paragraph) => (
-                                <p key={paragraph} className="text-right leading-8 text-slate-700 md:leading-9">
+                                <p
+                                  key={paragraph}
+                                  className="text-right leading-8 text-slate-700 md:leading-[3rem]"
+                                >
                                   {paragraph}
                                 </p>
                               ))}

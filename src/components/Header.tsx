@@ -361,7 +361,7 @@ function Header() {
                                 الصرف الصحي
                             </button>
                             <div className="nav-dropdown-menu">
-                                <a className="nav-dropdown-item" href="/sewage-treatment">معالجه الصرف الصحي</a>
+                                <Link className="nav-dropdown-item" to="/sewage-treatment">معالجه الصرف الصحي</Link>
                                 <a className="nav-dropdown-item" href="/Riddence-waste-water">أهمية التخلص الآمن من الصرف الصحى ومعالجته</a>
                                 <a className="nav-dropdown-item" href="/save-web-waste-water">أهميه الحفاظ علي شبكه الصرف الصحي</a>
                                 <a className="nav-dropdown-item" href="/waste-water-in-manufactring">دور إداره الصرف الصناعي</a>
@@ -476,7 +476,7 @@ function Header() {
                     <details className="mobile-nav-group"><summary>التوعية والاتصال</summary><div className="mobile-nav-submenu"><a href="/adviceAndContact">التوعية والأتصال</a><a href="/forKidsAndWomen">ركن الأطفال ولكِ سيدتي</a></div></details>
                     <details className="mobile-nav-group"><summary>جودة المياه</summary><div className="mobile-nav-submenu"><a href="/water-quality">جودة المياه</a><a href="/refining-water">تنقية مياه الشرب</a><a href="/lab-of-company-water">المعمل المركزي لمياه الشرب</a></div></details>
                     <Link className="rounded-lg bg-slate-100 px-3 py-2" to="/allTenders">المناقصات</Link>
-                    <details className="mobile-nav-group"><summary>الصرف الصحي</summary><div className="mobile-nav-submenu"><a href="/sewage-treatment">معالجه الصرف الصحي</a><a href="/Riddence-waste-water">أهمية التخلص الآمن من الصرف الصحى ومعالجته</a><a href="/save-web-waste-water">أهميه الحفاظ علي شبكه الصرف الصحي</a><a href="/waste-water-in-manufactring">دور إداره الصرف الصناعي</a><a href="/manufactring-waste">الصرف الصناعي</a></div></details>
+                    <details className="mobile-nav-group"><summary>الصرف الصحي</summary><div className="mobile-nav-submenu"><Link to="/sewage-treatment">معالجه الصرف الصحي</Link><a href="/Riddence-waste-water">أهمية التخلص الآمن من الصرف الصحى ومعالجته</a><a href="/save-web-waste-water">أهميه الحفاظ علي شبكه الصرف الصحي</a><a href="/waste-water-in-manufactring">دور إداره الصرف الصناعي</a><a href="/manufactring-waste">الصرف الصناعي</a></div></details>
                     <details className="mobile-nav-group"><summary>التدريب</summary><div className="mobile-nav-submenu"><a href="/general-admin-training">أنواع التدريب والقاعات</a><a href="/Result-of-school">نتائج المدرسه</a></div></details>
                     <details className="mobile-nav-group"><summary>وظائف</summary><div className="mobile-nav-submenu"><a href="/jobs-and-competition">مسابقات و وظائف</a><a href="/result_of_worker">نتائج المسابقات</a></div></details>
                     <details className="mobile-nav-group"><summary>خدمات</summary><div className="mobile-nav-submenu"><a href="/inquire-your-bill">استعلم عن فاتورتك</a><a href="/call-center">خدمه العملاء</a><a href="/Customer-Charter">ميثاق المتعاملين</a><a href="/Services-Evidance">دليل الخدمات</a><a href="/Contract-On-Service">رحلة المتعامل للتعاقد على طلب خدمة</a><a href="/provide-request">تقديم طلب</a><a href="/provide-complaine">تقديم شكوي</a></div></details>
