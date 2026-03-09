@@ -5,7 +5,7 @@ import HTMLFlipBook from 'react-pageflip';
 import { GlobalWorkerOptions, getDocument } from 'pdfjs-dist';
 import workerSrc from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 
-const industrialWasteRolePdfUrl = '/manufactring.pdf';
+const industrialWasteRolePdfUrl = new URL('manufactring.pdf', import.meta.env.BASE_URL).toString();
 const FAST_OPEN_PAGES = 2;
 const INITIAL_BACKGROUND_PAGES = 6;
 const BACKGROUND_FLUSH_INTERVAL = 4;
