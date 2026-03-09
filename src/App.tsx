@@ -16,14 +16,20 @@ import WaterQualityPage from './pages/WaterQualityPage';
 import RefiningWaterPage from './pages/RefiningWaterPage';
 import LabOfCompanyWaterPage from './pages/LabOfCompanyWaterPage';
 import SewageTreatmentPage from './pages/SewageTreatmentPage';
+import SafeSewageDisposalPage from './pages/SafeSewageDisposalPage';
+import SaveSewageNetworkPage from './pages/SaveSewageNetworkPage';
+import IndustrialWastePage from './pages/IndustrialWastePage';
+import IndustrialWasteRolePage from './pages/IndustrialWasteRolePage';
 import TendersArchive from './pages/TendersArchive';
 import TenderDetails from './pages/TenderDetails';
 import ScrollToTop from './components/ScrollToTop';
+import PageTitle from './components/PageTitle';
 
 function App() {
   return (
     <>
       <ScrollToTop />
+      <PageTitle />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/an-elsherka" element={<AboutCompanyPage />} />
@@ -38,6 +44,10 @@ function App() {
         <Route path="/refining-water" element={<RefiningWaterPage />} />
         <Route path="/lab-of-company-water" element={<LabOfCompanyWaterPage />} />
         <Route path="/sewage-treatment" element={<SewageTreatmentPage />} />
+        <Route path="/Riddence-waste-water" element={<SafeSewageDisposalPage />} />
+        <Route path="/save-web-waste-water" element={<SaveSewageNetworkPage />} />
+        <Route path="/manufactring-waste" element={<IndustrialWastePage />} />
+        <Route path="/waste-water-in-manufactring" element={<IndustrialWasteRolePage />} />
         <Route path="/forKids" element={<Navigate to="/forKidsAndWomen" replace />} />
         <Route path="/toWomen" element={<Navigate to="/forKidsAndWomen" replace />} />
         <Route path="/news-company" element={<NewsArchive />} />

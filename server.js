@@ -199,6 +199,10 @@ const server = http.createServer(async (req, res) => {
     '/refining-water',
     '/lab-of-company-water',
     '/sewage-treatment',
+    '/Riddence-waste-water',
+    '/save-web-waste-water',
+    '/manufactring-waste',
+    '/waste-water-in-manufactring',
     '/forKids',
     '/toWomen',
   ]);

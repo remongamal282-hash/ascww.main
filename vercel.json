@@ -87,6 +87,22 @@
       "destination": "/api/ssr?type=home&routeBase=/sewage-treatment"
     },
     {
+      "source": "/Riddence-waste-water",
+      "destination": "/api/ssr?type=home&routeBase=/Riddence-waste-water"
+    },
+    {
+      "source": "/save-web-waste-water",
+      "destination": "/api/ssr?type=home&routeBase=/save-web-waste-water"
+    },
+    {
+      "source": "/manufactring-waste",
+      "destination": "/api/ssr?type=home&routeBase=/manufactring-waste"
+    },
+    {
+      "source": "/waste-water-in-manufactring",
+      "destination": "/api/ssr?type=home&routeBase=/waste-water-in-manufactring"
+    },
+    {
       "source": "/forKids",
       "destination": "/api/ssr?type=home&routeBase=/forKidsAndWomen"
     },

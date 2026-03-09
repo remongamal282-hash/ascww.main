@@ -7,6 +7,60 @@ const NEWS_DESCRIPTION = 'أرشيف الأخبار الرسمي لشركة مي
 const PROJECTS_DESCRIPTION = 'أرشيف المشروعات الرسمي لشركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد.';
 const TENDERS_DESCRIPTION = 'أرشيف المناقصات الرسمي لشركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد.';
 const LOGO_PATH = '/images/ascww-logo.png';
+const ROUTE_TITLES = {
+  '/': SITE_TITLE,
+  '/an-elsherka': 'نبذه عن الشركة',
+  '/branch-of-company': 'فروع الشركه',
+  '/vision-and-message': 'الرؤيه والرساله',
+  '/organization-structure': 'الهيكل التنظيمي',
+  '/contract-and-sell': 'اللائحة الموحدة للعقود والمشتريات',
+  '/company-achivement': 'إنجازات الشركة',
+  '/adviceAndContact': 'التوعية والأتصال',
+  '/forKidsAndWomen': 'ركن الأطفال ولكِ سيدتي',
+  '/forKids': 'ركن الأطفال ولكِ سيدتي',
+  '/toWomen': 'ركن الأطفال ولكِ سيدتي',
+  '/water-quality': 'جودة المياه',
+  '/refining-water': 'تنقية مياه الشرب',
+  '/lab-of-company-water': 'المعمل المركزي لمياه الشرب',
+  '/sewage-treatment': 'معالجه الصرف الصحي',
+  '/Riddence-waste-water': 'أهمية التخلص الآمن من الصرف الصحى',
+  '/save-web-waste-water': 'أهمية الحفاظ على شبكة الصرف الصحى',
+  '/manufactring-waste': 'الصرف الصناعي',
+  '/waste-water-in-manufactring': 'دور إداره الصرف الصناعي',
+  '/news-company': 'أرشيف الأخبار',
+  '/projects': 'أرشيف المشروعات',
+  '/projects-company': 'أرشيف المشروعات',
+  '/allTenders': 'المناقصات',
+  '/alltenders': 'المناقصات',
+  '/general-admin-training': 'الإدارة العامة للتدريب',
+  '/Result-of-school': 'نتائج المدرسه',
+  '/jobs-and-competition': 'مسابقات و وظائف',
+  '/result_of_worker': 'نتائج المسابقات',
+  '/inquire-your-bill': 'استعلم عن فاتورتك',
+  '/call-center': 'خدمه العملاء',
+  '/Customer-Charter': 'ميثاق المتعاملين',
+  '/Services-Evidance': 'دليل الخدمات',
+  '/Contract-On-Service': 'رحلة المتعامل للتعاقد على طلب خدمة',
+  '/provide-request': 'تقديم طلب',
+  '/provide-complaine': 'تقديم شكوي',
+  '/nabza-an-daam-elnazaha': 'نبذه عن إداره دعم النزاهة',
+  '/abrz-amaal-daam-elnazaha': 'أبرز أعمال دعم النزاهة',
+  '/elslookElwazefy': 'السلوك الوظيفي',
+  '/trips-the-boss': 'جولات رئيس مجلس الإداره',
+  '/lab-of-company': 'معامل الشركه',
+  '/waste-of-company': 'محطات الصرف',
+  '/traning-of-company': 'مركز التدريب',
+  '/information-technology-of-company': 'قطاع تكنولوجيا المعلومات',
+  '/school-new-assuit': 'المدرسه الفنيه',
+  '/sport-of-company': 'النشاط الرياضي',
+  '/enter-reading': 'إدخل قراءه عدادك',
+  '/hotline-app': 'تطبيق الخط الساخن',
+  '/my-reading-app': 'تطبيق قرائتي',
+  '/hotline125': 'تطبيق الخط الساخن',
+  '/readme': 'تطبيق قرائتي',
+  '/send-your-reader': 'استعلم عن فاتورتك',
+  '/under-build': 'الخدمة قيد التطوير',
+};
 
 const ORG_SCHEMA = {
   '@context': 'https://schema.org',
@@ -112,6 +166,11 @@ const buildPageUrl = (siteUrl, routeBase, id = '') => {
   return `${siteUrl}${normalizedBase}/${encodeURIComponent(trimmedId)}`;
 };
 
+const getRouteTitle = (routeBase) => {
+  const normalizedRoute = normalizeRouteBase(routeBase, '/');
+  return ROUTE_TITLES[normalizedRoute] || '';
+};
+
 const getImagePath = (item, type) => {
   if (type === 'tender') {
     const files = Array.isArray(item?.tender_files) ? item.tender_files : [];
@@ -157,6 +216,7 @@ const getRouteId = (item, type) => {
 const getEntityConfig = (type, apiBase, siteUrl, id, routeBaseInput) => {
   if (type === 'home') {
     const routeBase = normalizeRouteBase(routeBaseInput, '/');
+    const routeTitle = getRouteTitle(routeBase);
     return {
       listUrls: [],
       imageBase: '',
@@ -165,7 +225,7 @@ const getEntityConfig = (type, apiBase, siteUrl, id, routeBaseInput) => {
       imageWidth: '400',
       imageHeight: '328',
       meta: {
-        title: SITE_TITLE,
+        title: routeTitle && routeTitle !== SITE_TITLE ? `${routeTitle} | ${SITE_TITLE}` : SITE_TITLE,
         description: HOME_DESCRIPTION,
         image: `${siteUrl}${LOGO_PATH}`,
         url: buildPageUrl(siteUrl, routeBase, ''),
