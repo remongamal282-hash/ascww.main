@@ -24,6 +24,7 @@ import TendersArchive from './pages/TendersArchive';
 import TenderDetails from './pages/TenderDetails';
 import ScrollToTop from './components/ScrollToTop';
 import PageTitle from './components/PageTitle';
+import { LEGACY_ROUTE_REDIRECTS, ROUTES } from './constants/routes';
 
 function App() {
   return (
@@ -31,37 +32,41 @@ function App() {
       <ScrollToTop />
       <PageTitle />
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/an-elsherka" element={<AboutCompanyPage />} />
-        <Route path="/branch-of-company" element={<BranchesPage />} />
-        <Route path="/vision-and-message" element={<VisionAndMessagePage />} />
-        <Route path="/organization-structure" element={<OrganizationStructurePage />} />
-        <Route path="/contract-and-sell" element={<ContractsRegulationPage />} />
-        <Route path="/company-achivement" element={<CompanyAchievementsPage />} />
-        <Route path="/adviceAndContact" element={<AdviceAndContactPage />} />
-        <Route path="/forKidsAndWomen" element={<ForKidsAndWomenPage />} />
-        <Route path="/water-quality" element={<WaterQualityPage />} />
-        <Route path="/refining-water" element={<RefiningWaterPage />} />
-        <Route path="/lab-of-company-water" element={<LabOfCompanyWaterPage />} />
-        <Route path="/sewage-treatment" element={<SewageTreatmentPage />} />
-        <Route path="/Riddence-waste-water" element={<SafeSewageDisposalPage />} />
-        <Route path="/save-web-waste-water" element={<SaveSewageNetworkPage />} />
-        <Route path="/manufactring-waste" element={<IndustrialWastePage />} />
-        <Route path="/waste-water-in-manufactring" element={<IndustrialWasteRolePage />} />
-        <Route path="/forKids" element={<Navigate to="/forKidsAndWomen" replace />} />
-        <Route path="/toWomen" element={<Navigate to="/forKidsAndWomen" replace />} />
-        <Route path="/news-company" element={<NewsArchive />} />
-        <Route path="/news/:id" element={<NewsDetails />} />
+        <Route path={ROUTES.home} element={<HomePage />} />
+        <Route path={ROUTES.aboutCompany} element={<AboutCompanyPage />} />
+        <Route path={ROUTES.branches} element={<BranchesPage />} />
+        <Route path={ROUTES.visionAndMessage} element={<VisionAndMessagePage />} />
+        <Route path={ROUTES.organizationStructure} element={<OrganizationStructurePage />} />
+        <Route path={ROUTES.contractsRegulation} element={<ContractsRegulationPage />} />
+        <Route path={ROUTES.companyAchievements} element={<CompanyAchievementsPage />} />
+        <Route path={ROUTES.adviceAndContact} element={<AdviceAndContactPage />} />
+        <Route path={ROUTES.forKidsAndWomen} element={<ForKidsAndWomenPage />} />
+        <Route path={ROUTES.waterQuality} element={<WaterQualityPage />} />
+        <Route path={ROUTES.refiningWater} element={<RefiningWaterPage />} />
+        <Route path={ROUTES.labOfCompanyWater} element={<LabOfCompanyWaterPage />} />
+        <Route path={ROUTES.sewageTreatment} element={<SewageTreatmentPage />} />
+        <Route path={ROUTES.safeSewageDisposal} element={<SafeSewageDisposalPage />} />
+        <Route path={ROUTES.saveSewageNetwork} element={<SaveSewageNetworkPage />} />
+        <Route path={ROUTES.industrialWaste} element={<IndustrialWastePage />} />
+        <Route path={ROUTES.industrialWasteRole} element={<IndustrialWasteRolePage />} />
+        <Route path={ROUTES.newsArchive} element={<NewsArchive />} />
+        <Route path={ROUTES.newsDetails} element={<NewsDetails />} />
+        <Route path={ROUTES.projectsArchive} element={<ProjectsArchive />} />
+        <Route path={ROUTES.projectDetails} element={<ProjectDetails />} />
+        <Route path={ROUTES.tendersArchive} element={<TendersArchive />} />
+        <Route path={ROUTES.tenderDetails} element={<TenderDetails />} />
         <Route path="/news-company/:id" element={<NewsDetails />} />
-        <Route path="/projects" element={<ProjectsArchive />} />
-        <Route path="/projects-company" element={<ProjectsArchive />} />
-        <Route path="/projects/:id" element={<ProjectDetails />} />
         <Route path="/projects-company/:id" element={<ProjectDetails />} />
-        <Route path="/allTenders" element={<TendersArchive />} />
         <Route path="/allTenders/:id" element={<TenderDetails />} />
-        <Route path="/alltenders" element={<Navigate to="/allTenders" replace />} />
         <Route path="/alltenders/:id" element={<TenderDetails />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        {LEGACY_ROUTE_REDIRECTS.map((legacyRoute) => (
+          <Route
+            key={legacyRoute.from}
+            path={legacyRoute.from}
+            element={<Navigate to={legacyRoute.to} replace />}
+          />
+        ))}
+        <Route path="*" element={<Navigate to={ROUTES.home} replace />} />
       </Routes>
     </>
   );

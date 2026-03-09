@@ -1,33 +1,33 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { ROUTES } from '../constants/routes';
 
 const SITE_TITLE = 'شركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد';
 
 const routeTitles: Record<string, string> = {
-  '/': SITE_TITLE,
-  '/an-elsherka': 'نبذه عن الشركة',
-  '/branch-of-company': 'فروع الشركه',
-  '/vision-and-message': 'الرؤيه والرساله',
-  '/organization-structure': 'الهيكل التنظيمي',
-  '/contract-and-sell': 'اللائحة الموحدة للعقود والمشتريات',
-  '/company-achivement': 'إنجازات الشركة',
-  '/adviceAndContact': 'التوعية والأتصال',
-  '/forKidsAndWomen': 'ركن الأطفال ولكِ سيدتي',
+  [ROUTES.home]: SITE_TITLE,
+  [ROUTES.aboutCompany]: 'نبذه عن الشركة',
+  [ROUTES.branches]: 'فروع الشركه',
+  [ROUTES.visionAndMessage]: 'الرؤيه والرساله',
+  [ROUTES.organizationStructure]: 'الهيكل التنظيمي',
+  [ROUTES.contractsRegulation]: 'اللائحة الموحدة للعقود والمشتريات',
+  [ROUTES.companyAchievements]: 'إنجازات الشركة',
+  [ROUTES.adviceAndContact]: 'التوعية والأتصال',
+  [ROUTES.forKidsAndWomen]: 'ركن الأطفال ولكِ سيدتي',
   '/forKids': 'ركن الأطفال ولكِ سيدتي',
   '/toWomen': 'ركن الأطفال ولكِ سيدتي',
-  '/water-quality': 'جودة المياه',
-  '/refining-water': 'تنقية مياه الشرب',
-  '/lab-of-company-water': 'المعمل المركزي لمياه الشرب',
-  '/sewage-treatment': 'معالجه الصرف الصحي',
-  '/Riddence-waste-water': 'أهمية التخلص الآمن من الصرف الصحى',
-  '/save-web-waste-water': 'أهمية الحفاظ على شبكة الصرف الصحى',
-  '/manufactring-waste': 'الصرف الصناعي',
-  '/waste-water-in-manufactring': 'دور إداره الصرف الصناعي',
-  '/news-company': 'أرشيف الأخبار',
+  [ROUTES.waterQuality]: 'جودة المياه',
+  [ROUTES.refiningWater]: 'تنقية مياه الشرب',
+  [ROUTES.labOfCompanyWater]: 'المعمل المركزي لمياه الشرب',
+  [ROUTES.sewageTreatment]: 'معالجه الصرف الصحي',
+  [ROUTES.safeSewageDisposal]: 'أهمية التخلص الآمن من الصرف الصحى',
+  [ROUTES.saveSewageNetwork]: 'أهمية الحفاظ على شبكة الصرف الصحى',
+  [ROUTES.industrialWaste]: 'الصرف الصناعي',
+  [ROUTES.industrialWasteRole]: 'دور إداره الصرف الصناعي',
+  [ROUTES.newsArchive]: 'أرشيف الأخبار',
   '/projects': 'أرشيف المشروعات',
-  '/projects-company': 'أرشيف المشروعات',
-  '/allTenders': 'المناقصات',
-  '/alltenders': 'المناقصات',
+  [ROUTES.projectsArchive]: 'أرشيف المشروعات',
+  [ROUTES.tendersArchive]: 'المناقصات',
   '/general-admin-training': 'الإدارة العامة للتدريب',
   '/Result-of-school': 'نتائج المدرسه',
   '/jobs-and-competition': 'مسابقات و وظائف',
@@ -70,9 +70,9 @@ function PageTitle() {
     const normalizedPath = normalizePathname(pathname);
     const pageTitle =
       routeTitles[normalizedPath]
-      || (normalizedPath.startsWith('/news/') || normalizedPath.startsWith('/news-company/') ? 'أرشيف الأخبار' : '')
-      || (normalizedPath.startsWith('/projects/') || normalizedPath.startsWith('/projects-company/') ? 'أرشيف المشروعات' : '')
-      || (normalizedPath.startsWith('/allTenders/') || normalizedPath.startsWith('/alltenders/') ? 'المناقصات' : '');
+      || (normalizedPath.startsWith('/news/') || normalizedPath.startsWith(`${ROUTES.newsArchive}/`) || normalizedPath.startsWith('/news-company/') ? 'أرشيف الأخبار' : '')
+      || (normalizedPath.startsWith('/projects/') || normalizedPath.startsWith(`${ROUTES.projectsArchive}/`) || normalizedPath.startsWith('/projects-company/') ? 'أرشيف المشروعات' : '')
+      || (normalizedPath.startsWith('/tenders/') || normalizedPath.startsWith(`${ROUTES.tendersArchive}/`) || normalizedPath.startsWith('/allTenders/') || normalizedPath.startsWith('/alltenders/') ? 'المناقصات' : '');
     if (!pageTitle) return;
 
     document.title = pageTitle === SITE_TITLE ? SITE_TITLE : `${pageTitle} | ${SITE_TITLE}`;

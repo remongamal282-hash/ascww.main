@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { ROUTES } from '../constants/routes';
 
 function Header() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -307,14 +308,14 @@ function Header() {
                                 عن الشركة
                             </button>
                             <div className="nav-dropdown-menu">
-                                <Link className="nav-dropdown-item" to="/an-elsherka">نبذه عن الشركة</Link>
-                                <a className="nav-dropdown-item" href="/branch-of-company">فروع الشركه</a>
-                                <a className="nav-dropdown-item" href="/projects-company">مشروعات الشركة</a>
-                                <Link className="nav-dropdown-item" to="/news-company">أرشيف الأخبار</Link>
-                                <Link className="nav-dropdown-item" to="/vision-and-message">الرؤيه والرساله</Link>
-                                <Link className="nav-dropdown-item" to="/organization-structure">الهيكل التنظيمي</Link>
-                                <Link className="nav-dropdown-item" to="/company-achivement">إنجازات الشركة</Link>
-                                <a className="nav-dropdown-item" href="/contract-and-sell">اللائحه الموحده للعقود والمشتريات</a>
+                                <Link className="nav-dropdown-item" to={ROUTES.aboutCompany}>نبذه عن الشركة</Link>
+                                <a className="nav-dropdown-item" href={ROUTES.branches}>فروع الشركه</a>
+                                <a className="nav-dropdown-item" href={ROUTES.projectsArchive}>مشروعات الشركة</a>
+                                <Link className="nav-dropdown-item" to={ROUTES.newsArchive}>أرشيف الأخبار</Link>
+                                <Link className="nav-dropdown-item" to={ROUTES.visionAndMessage}>الرؤيه والرساله</Link>
+                                <Link className="nav-dropdown-item" to={ROUTES.organizationStructure}>الهيكل التنظيمي</Link>
+                                <Link className="nav-dropdown-item" to={ROUTES.companyAchievements}>إنجازات الشركة</Link>
+                                <a className="nav-dropdown-item" href={ROUTES.contractsRegulation}>اللائحه الموحده للعقود والمشتريات</a>
                             </div>
                         </div>
 
@@ -328,8 +329,8 @@ function Header() {
                                 التوعية والاتصال
                             </button>
                             <div className="nav-dropdown-menu">
-                                <a className="nav-dropdown-item" href="/adviceAndContact">التوعية والأتصال</a>
-                                <a className="nav-dropdown-item" href="/forKidsAndWomen">ركن الأطفال ولكِ سيدتي</a>
+                                <a className="nav-dropdown-item" href={ROUTES.adviceAndContact}>التوعية والأتصال</a>
+                                <a className="nav-dropdown-item" href={ROUTES.forKidsAndWomen}>ركن الأطفال ولكِ سيدتي</a>
                             </div>
                         </div>
 
@@ -343,13 +344,13 @@ function Header() {
                                 جودة المياه
                             </button>
                             <div className="nav-dropdown-menu">
-                                <a className="nav-dropdown-item" href="/water-quality">جودة المياه</a>
-                                <a className="nav-dropdown-item" href="/refining-water">تنقية مياه الشرب</a>
-                                <a className="nav-dropdown-item" href="/lab-of-company-water">المعمل المركزي لمياه الشرب</a>
+                                <a className="nav-dropdown-item" href={ROUTES.waterQuality}>جودة المياه</a>
+                                <a className="nav-dropdown-item" href={ROUTES.refiningWater}>تنقية مياه الشرب</a>
+                                <a className="nav-dropdown-item" href={ROUTES.labOfCompanyWater}>المعمل المركزي لمياه الشرب</a>
                             </div>
                         </div>
 
-                        <Link className="nav-link-classic" to="/allTenders">المناقصات</Link>
+                        <Link className="nav-link-classic" to={ROUTES.tendersArchive}>المناقصات</Link>
 
                         <div className="nav-dropdown nav-dropdown--sewage group">
                             <button
@@ -361,11 +362,11 @@ function Header() {
                                 الصرف الصحي
                             </button>
                             <div className="nav-dropdown-menu">
-                                <Link className="nav-dropdown-item" to="/sewage-treatment">معالجه الصرف الصحي</Link>
-                                <a className="nav-dropdown-item" href="/Riddence-waste-water">أهمية التخلص الآمن من الصرف الصحى ومعالجته</a>
-                                <a className="nav-dropdown-item" href="/save-web-waste-water">أهميه الحفاظ علي شبكه الصرف الصحي</a>
-                                <a className="nav-dropdown-item" href="/manufactring-waste">الصرف الصناعي</a>
-                                <a className="nav-dropdown-item" href="/waste-water-in-manufactring">دور إداره الصرف الصناعي</a>
+                                <Link className="nav-dropdown-item" to={ROUTES.sewageTreatment}>معالجه الصرف الصحي</Link>
+                                <a className="nav-dropdown-item" href={ROUTES.safeSewageDisposal}>أهمية التخلص الآمن من الصرف الصحى ومعالجته</a>
+                                <a className="nav-dropdown-item" href={ROUTES.saveSewageNetwork}>أهميه الحفاظ علي شبكه الصرف الصحي</a>
+                                <a className="nav-dropdown-item" href={ROUTES.industrialWaste}>الصرف الصناعي</a>
+                                <a className="nav-dropdown-item" href={ROUTES.industrialWasteRole}>دور إداره الصرف الصناعي</a>
                             </div>
                         </div>
 
@@ -472,11 +473,11 @@ function Header() {
             >
                 <div className="grid grid-cols-1 gap-2">
                     <Link className="rounded-lg bg-slate-100 px-3 py-2" to="/">الرئيسية</Link>
-                    <details className="mobile-nav-group"><summary>عن الشركة</summary><div className="mobile-nav-submenu"><Link to="/an-elsherka">عن الشركة</Link><a href="/branch-of-company">فروع الشركه</a><a href="/projects-company">مشروعات الشركة</a><Link to="/news-company">أرشيف الأخبار</Link><Link to="/vision-and-message">الرؤيه والرساله</Link><Link to="/organization-structure">الهيكل التنظيمي</Link><Link to="/company-achivement">إنجازات الشركة</Link><a href="/contract-and-sell">اللائحه الموحده للعقود والمشتريات</a></div></details>
-                    <details className="mobile-nav-group"><summary>التوعية والاتصال</summary><div className="mobile-nav-submenu"><a href="/adviceAndContact">التوعية والأتصال</a><a href="/forKidsAndWomen">ركن الأطفال ولكِ سيدتي</a></div></details>
-                    <details className="mobile-nav-group"><summary>جودة المياه</summary><div className="mobile-nav-submenu"><a href="/water-quality">جودة المياه</a><a href="/refining-water">تنقية مياه الشرب</a><a href="/lab-of-company-water">المعمل المركزي لمياه الشرب</a></div></details>
-                    <Link className="rounded-lg bg-slate-100 px-3 py-2" to="/allTenders">المناقصات</Link>
-                    <details className="mobile-nav-group"><summary>الصرف الصحي</summary><div className="mobile-nav-submenu"><Link to="/sewage-treatment">معالجه الصرف الصحي</Link><a href="/Riddence-waste-water">أهمية التخلص الآمن من الصرف الصحى ومعالجته</a><a href="/save-web-waste-water">أهميه الحفاظ علي شبكه الصرف الصحي</a><a href="/manufactring-waste">الصرف الصناعي</a><a href="/waste-water-in-manufactring">دور إداره الصرف الصناعي</a></div></details>
+                    <details className="mobile-nav-group"><summary>عن الشركة</summary><div className="mobile-nav-submenu"><Link to={ROUTES.aboutCompany}>عن الشركة</Link><a href={ROUTES.branches}>فروع الشركه</a><a href={ROUTES.projectsArchive}>مشروعات الشركة</a><Link to={ROUTES.newsArchive}>أرشيف الأخبار</Link><Link to={ROUTES.visionAndMessage}>الرؤيه والرساله</Link><Link to={ROUTES.organizationStructure}>الهيكل التنظيمي</Link><Link to={ROUTES.companyAchievements}>إنجازات الشركة</Link><a href={ROUTES.contractsRegulation}>اللائحه الموحده للعقود والمشتريات</a></div></details>
+                    <details className="mobile-nav-group"><summary>التوعية والاتصال</summary><div className="mobile-nav-submenu"><a href={ROUTES.adviceAndContact}>التوعية والأتصال</a><a href={ROUTES.forKidsAndWomen}>ركن الأطفال ولكِ سيدتي</a></div></details>
+                    <details className="mobile-nav-group"><summary>جودة المياه</summary><div className="mobile-nav-submenu"><a href={ROUTES.waterQuality}>جودة المياه</a><a href={ROUTES.refiningWater}>تنقية مياه الشرب</a><a href={ROUTES.labOfCompanyWater}>المعمل المركزي لمياه الشرب</a></div></details>
+                    <Link className="rounded-lg bg-slate-100 px-3 py-2" to={ROUTES.tendersArchive}>المناقصات</Link>
+                    <details className="mobile-nav-group"><summary>الصرف الصحي</summary><div className="mobile-nav-submenu"><Link to={ROUTES.sewageTreatment}>معالجه الصرف الصحي</Link><a href={ROUTES.safeSewageDisposal}>أهمية التخلص الآمن من الصرف الصحى ومعالجته</a><a href={ROUTES.saveSewageNetwork}>أهميه الحفاظ علي شبكه الصرف الصحي</a><a href={ROUTES.industrialWaste}>الصرف الصناعي</a><a href={ROUTES.industrialWasteRole}>دور إداره الصرف الصناعي</a></div></details>
                     <details className="mobile-nav-group"><summary>التدريب</summary><div className="mobile-nav-submenu"><a href="/general-admin-training">أنواع التدريب والقاعات</a><a href="/Result-of-school">نتائج المدرسه</a></div></details>
                     <details className="mobile-nav-group"><summary>وظائف</summary><div className="mobile-nav-submenu"><a href="/jobs-and-competition">مسابقات و وظائف</a><a href="/result_of_worker">نتائج المسابقات</a></div></details>
                     <details className="mobile-nav-group"><summary>خدمات</summary><div className="mobile-nav-submenu"><a href="/inquire-your-bill">استعلم عن فاتورتك</a><a href="/call-center">خدمه العملاء</a><a href="/Customer-Charter">ميثاق المتعاملين</a><a href="/Services-Evidance">دليل الخدمات</a><a href="/Contract-On-Service">رحلة المتعامل للتعاقد على طلب خدمة</a><a href="/provide-request">تقديم طلب</a><a href="/provide-complaine">تقديم شكوي</a></div></details>

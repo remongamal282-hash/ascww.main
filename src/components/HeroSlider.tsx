@@ -1,10 +1,12 @@
+import { ROUTES } from '../constants/routes';
+
 function HeroSlider() {
     return (
         <section id="home" className="relative overflow-hidden bg-[#0a3555]">
             <div className="hero-slider absolute inset-0 z-0" aria-hidden="true">
-                <div className="hero-slide is-active" style={{ backgroundImage: "url('/images/slider/1.webp')" }} data-title="معامل علي اعلي مستوي" data-subtitle="الاهتمام بمعايير منظمة الصحة العالمية للتاكد من جودة المياه بأحدث المعايير والتقنيات" data-link="https://ascww.org/lab-of-company-water" data-cta="تعرف علي المزيد"></div>
+                <div className="hero-slide is-active" style={{ backgroundImage: "url('/images/slider/1.webp')" }} data-title="معامل علي اعلي مستوي" data-subtitle="الاهتمام بمعايير منظمة الصحة العالمية للتاكد من جودة المياه بأحدث المعايير والتقنيات" data-link={`https://ascww.org${ROUTES.labOfCompanyWater}`} data-cta="تعرف علي المزيد"></div>
                 <div className="hero-slide" style={{ backgroundImage: "url('/images/slider/2.webp')" }} data-title="لتنزيل برنامج قرائتي اضغط هنا" data-subtitle="" data-link="https://ascww.org/readme" data-cta="فتح الخدمة"></div>
-                <div className="hero-slide" style={{ backgroundImage: "url('/images/slider/3.webp')" }} data-title="شركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد" data-subtitle="ترحب بكم و نفخر بأننا احدي الشركات الرائده في جمهوريه مصر العربيه" data-link="https://ascww.org/an-elsherka" data-cta="تعرف علي المزيد"></div>
+                <div className="hero-slide" style={{ backgroundImage: "url('/images/slider/3.webp')" }} data-title="شركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد" data-subtitle="ترحب بكم و نفخر بأننا احدي الشركات الرائده في جمهوريه مصر العربيه" data-link={`https://ascww.org${ROUTES.aboutCompany}`} data-cta="تعرف علي المزيد"></div>
                 <div className="hero-slide" style={{ backgroundImage: "url('/images/slider/4.webp')" }} data-title="الإداره العامه للتدريب" data-subtitle="متاح حجز قاعات التدريب من داخل و خارج الشركة" data-link="https://ascww.org/general-admin-training" data-cta="تعرف علي المزيد"></div>
                 <div className="hero-slide" style={{ backgroundImage: "url('/images/slider/5.webp')" }} data-title="مركز خدمة العملاء" data-subtitle="مراكز خدمه العملاء وطرق التواصل وعنوان أقرب فرع" data-link="https://ascww.org/call-center" data-cta="تعرف علي المزيد"></div>
                 <div className="hero-slide" style={{ backgroundImage: "url('/images/slider/6.webp')" }} data-title="لتنزيل برنامج الخط الساخن اضغط هنا" data-subtitle="" data-link="https://ascww.org/hotline125" data-cta="فتح الخدمة"></div>
@@ -20,7 +22,7 @@ function HeroSlider() {
                 <div id="hero-content" className="hero-content-animate text-center text-white">
                     <h1 id="hero-title" className="hero-title hero-anim-item">شركة مياه الشرب والصرف الصحي بأسيوط والوادي الجديد</h1>
                     <p id="hero-subtitle" className="hero-anim-item mx-auto mt-4 max-w-4xl text-base leading-8 text-slate-100 sm:text-lg">ترحب بكم و نفخر بأننا احدي الشركات الرائده في جمهوريه مصر العربيه</p>
-                    <a id="hero-cta" href="https://ascww.org/an-elsherka" target="_blank" rel="noopener noreferrer" className="hero-anim-item mt-7 inline-flex rounded-md border border-[#d7b05a]/80 bg-[#d7b05a]/95 px-7 py-3 text-sm font-bold text-[#0a3555] transition hover:bg-[#d7b05a]">تعرف علي المزيد</a>
+                    <a id="hero-cta" href={`https://ascww.org${ROUTES.aboutCompany}`} target="_blank" rel="noopener noreferrer" className="hero-anim-item mt-7 inline-flex rounded-md border border-[#d7b05a]/80 bg-[#d7b05a]/95 px-7 py-3 text-sm font-bold text-[#0a3555] transition hover:bg-[#d7b05a]">تعرف علي المزيد</a>
                 </div>
             </div>
             <div className="pointer-events-none absolute inset-x-0 bottom-5 z-30 flex items-center justify-center gap-2">

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { ROUTES } from '../constants/routes';
 
 function Footer() {
     return (
@@ -56,9 +57,9 @@ function Footer() {
                         <div className="space-y-2 text-sm">
                             <a className="block transition hover:text-white" href="https://ascww.org/inquire-your-bill">استعلم عن فاتورتك</a>
                             <a className="block transition hover:text-white" href="https://ascww.org/call-center">خدمة العملاء</a>
-                            <Link className="block transition hover:text-white" to="/projects-company">أرشيف المشروعات</Link>
-                            <Link className="block transition hover:text-white" to="/news-company">أرشيف الأخبار</Link>
-                            <Link className="block transition hover:text-white" to="/allTenders">المناقصات</Link>
+                            <Link className="block transition hover:text-white" to={ROUTES.projectsArchive}>أرشيف المشروعات</Link>
+                            <Link className="block transition hover:text-white" to={ROUTES.newsArchive}>أرشيف الأخبار</Link>
+                            <Link className="block transition hover:text-white" to={ROUTES.tendersArchive}>المناقصات</Link>
                             <a className="block transition hover:text-white" href="https://ascww.org/general-admin-training">الإدارة العامة للتدريب</a>
                             <a className="block transition hover:text-white" href="https://ascww.org/school-new-assuit">المدرسة الفنية</a>
                         </div>

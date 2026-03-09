@@ -1,18 +1,21 @@
 import type { NewsItem, ProjectItem, TenderItem } from '../types';
+import { ROUTES } from '../constants/routes';
 
 export const API_BASE_ENDPOINT = import.meta.env.VITE_API_BASE_URL || '/api';
 export const ADMIN_INFO_ENDPOINT = `${API_BASE_ENDPOINT}/admin-info`;
 export const ADMIN_IMAGE_ENDPOINT = `${API_BASE_ENDPOINT}/image`;
 export const NEWS_ENDPOINT = `${API_BASE_ENDPOINT}/news/home`;
 export const NEWS_IMAGE_ENDPOINT = `${API_BASE_ENDPOINT}/news/image`;
-export const NEWS_ARCHIVE_PATH = '/news-company';
+export const NEWS_ARCHIVE_PATH = ROUTES.newsArchive;
 export const PROJECTS_ENDPOINT = `${API_BASE_ENDPOINT}/projects/home`;
 export const PROJECT_IMAGE_ENDPOINT = `${API_BASE_ENDPOINT}/projects/image`;
-export const PROJECTS_ARCHIVE_PATH = '/projects-company';
+export const PROJECTS_ARCHIVE_PATH = ROUTES.projectsArchive;
 export const TENDERS_ENDPOINT = `${API_BASE_ENDPOINT}/tenders`;
 export const TENDER_FILE_ENDPOINT = `${API_BASE_ENDPOINT}/tenders/file`;
-export const TENDERS_ARCHIVE_PATH = '/allTenders';
+export const TENDERS_ARCHIVE_PATH = ROUTES.tendersArchive;
 export const BOSS_SINGLE_LINE_PHRASE = 'تحية تقدير وإعزاز لكل مواطن يساعد ويساهم في تحقيق هذا الهدف المنشود';
+
+const buildDetailsPath = (pattern: string, id: string) => pattern.replace(':id', encodeURIComponent(id));
 
 export const extractPlainTextFromHtml = (html?: string) => {
     if (!html) return '';
@@ -47,7 +50,7 @@ export const getLatestNewsImagePath = (newsItem: NewsItem) => {
 export const getNewsDetailsPath = (newsItem: NewsItem) => {
     const id = newsItem.id ?? newsItem.slug;
     if (id === undefined || id === null || `${id}`.trim() === '') return NEWS_ARCHIVE_PATH;
-    return `/news/${encodeURIComponent(String(id))}`;
+    return buildDetailsPath(ROUTES.newsDetails, String(id));
 };
 
 export const getProjectImagePath = (projectItem: ProjectItem) => {
@@ -73,7 +76,7 @@ export const getProjectRouteId = (projectItem: ProjectItem) => {
 export const getProjectDetailsPath = (projectItem: ProjectItem) => {
     const routeId = getProjectRouteId(projectItem);
     if (!routeId) return PROJECTS_ARCHIVE_PATH;
-    return `${PROJECTS_ARCHIVE_PATH}/${encodeURIComponent(routeId)}`;
+    return buildDetailsPath(ROUTES.projectDetails, routeId);
 };
 
 export const getTenderRouteId = (tenderItem: TenderItem) => {
@@ -92,7 +95,7 @@ export const getTenderRouteId = (tenderItem: TenderItem) => {
 export const getTenderDetailsPath = (tenderItem: TenderItem) => {
     const routeId = getTenderRouteId(tenderItem);
     if (!routeId) return TENDERS_ARCHIVE_PATH;
-    return `${TENDERS_ARCHIVE_PATH}/${encodeURIComponent(routeId)}`;
+    return buildDetailsPath(ROUTES.tenderDetails, routeId);
 };
 
 const isImageFile = (path: string) => /\.(png|jpe?g|webp|gif|bmp|svg)$/i.test(path);
