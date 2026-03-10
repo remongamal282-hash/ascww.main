@@ -371,7 +371,13 @@ function Header() {
                         </div>
 
                         <div className="nav-dropdown group">
-                            <a className="nav-dropdown-trigger" href="/general-admin-training">التدريب</a>
+                            <button
+                                type="button"
+                                className="nav-dropdown-trigger"
+                                aria-label="قائمة التدريب"
+                            >
+                                التدريب
+                            </button>
                             <div className="nav-dropdown-menu">
                                 <a className="nav-dropdown-item" href="/general-admin-training">أنواع التدريب والقاعات</a>
                                 <a className="nav-dropdown-item" href="/Result-of-school">نتائج المدرسه</a>
@@ -379,7 +385,13 @@ function Header() {
                         </div>
 
                         <div className="nav-dropdown group">
-                            <a className="nav-dropdown-trigger" href="/jobs-and-competition">وظائف</a>
+                            <button
+                                type="button"
+                                className="nav-dropdown-trigger"
+                                aria-label="قائمة الوظائف"
+                            >
+                                وظائف
+                            </button>
                             <div className="nav-dropdown-menu">
                                 <a className="nav-dropdown-item" href="/jobs-and-competition">مسابقات و وظائف</a>
                                 <a className="nav-dropdown-item" href="/result_of_worker">نتائج المسابقات</a>
@@ -387,7 +399,13 @@ function Header() {
                         </div>
 
                         <div className="nav-dropdown group">
-                            <a className="nav-dropdown-trigger" href="/inquire-your-bill">خدمات</a>
+                            <button
+                                type="button"
+                                className="nav-dropdown-trigger"
+                                aria-label="قائمة الخدمات"
+                            >
+                                خدمات
+                            </button>
                             <div className="nav-dropdown-menu">
                                 <a className="nav-dropdown-item" href="/inquire-your-bill">استعلم عن فاتورتك</a>
                                 <a className="nav-dropdown-item" href="/call-center">خدمه العملاء</a>
@@ -400,7 +418,13 @@ function Header() {
                         </div>
 
                         <div className="nav-dropdown group">
-                            <a className="nav-dropdown-trigger" href="/nabza-an-daam-elnazaha">دعم النزاهة</a>
+                            <button
+                                type="button"
+                                className="nav-dropdown-trigger"
+                                aria-label="قائمة دعم النزاهة"
+                            >
+                                دعم النزاهة
+                            </button>
                             <div className="nav-dropdown-menu">
                                 <a className="nav-dropdown-item" href="/nabza-an-daam-elnazaha">نبذه عن إداره دعم النزاهة</a>
                                 <a className="nav-dropdown-item" href="/abrz-amaal-daam-elnazaha">أبرز أعمال دعم النزاهة</a>
@@ -409,7 +433,13 @@ function Header() {
                         </div>
 
                         <div className="nav-dropdown group">
-                            <a className="nav-dropdown-trigger" href="/trips-the-boss">معرض الصور</a>
+                            <button
+                                type="button"
+                                className="nav-dropdown-trigger"
+                                aria-label="قائمة معرض الصور"
+                            >
+                                معرض الصور
+                            </button>
                             <div className="nav-dropdown-menu">
                                 <a className="nav-dropdown-item" href="/trips-the-boss">جولات رئيس مجلس الإداره</a>
                                 <a className="nav-dropdown-item" href="/lab-of-company">معامل الشركه</a>

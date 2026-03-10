@@ -22,6 +22,7 @@ export const ROUTES = {
   projectDetails: '/projects/:id',
   tendersArchive: '/tenders-archive',
   tenderDetails: '/tenders/:id',
+  generalAdminTraining: '/general-admin-training',
 } as const;
 
 export const LEGACY_ROUTE_REDIRECTS: ReadonlyArray<{ from: string; to: string }> = [

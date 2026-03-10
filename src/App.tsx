@@ -22,6 +22,7 @@ import IndustrialWastePage from './pages/IndustrialWastePage';
 import IndustrialWasteRolePage from './pages/IndustrialWasteRolePage';
 import TendersArchive from './pages/TendersArchive';
 import TenderDetails from './pages/TenderDetails';
+import GeneralAdminTrainingPage from './pages/GeneralAdminTrainingPage';
 import ScrollToTop from './components/ScrollToTop';
 import PageTitle from './components/PageTitle';
 import { LEGACY_ROUTE_REDIRECTS, ROUTES } from './constants/routes';
@@ -55,6 +56,7 @@ function App() {
         <Route path={ROUTES.projectDetails} element={<ProjectDetails />} />
         <Route path={ROUTES.tendersArchive} element={<TendersArchive />} />
         <Route path={ROUTES.tenderDetails} element={<TenderDetails />} />
+        <Route path={ROUTES.generalAdminTraining} element={<GeneralAdminTrainingPage />} />
         <Route path="/news-company/:id" element={<NewsDetails />} />
         <Route path="/projects-company/:id" element={<ProjectDetails />} />
         <Route path="/allTenders/:id" element={<TenderDetails />} />
