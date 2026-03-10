@@ -131,6 +131,10 @@
       "destination": "/api/ssr?type=home&routeBase=/lab-of-company-water"
     },
     {
+      "source": "/general-admin-training",
+      "destination": "/api/ssr?type=home&routeBase=/general-admin-training"
+    },
+    {
       "source": "/sewage-treatment",
       "destination": "/api/ssr?type=home&routeBase=/sewage-treatment"
     },
