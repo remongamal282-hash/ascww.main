@@ -61,7 +61,8 @@ function Header() {
         if (!dropdowns.length) return;
 
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const hoverDelay = prefersReducedMotion ? 0 : 200;
+        const openDelay = 0;
+        const closeDelay = prefersReducedMotion ? 0 : 200;
         const slideDuration = prefersReducedMotion ? 1 : 400;
         const openTimers = new WeakMap<HTMLElement, number>();
         const closeTimers = new WeakMap<HTMLElement, number>();
@@ -203,7 +204,7 @@ function Header() {
             clearTimer(openTimers, dropdown);
             const timerId = window.setTimeout(() => {
                 openDropdown(dropdown);
-            }, hoverDelay);
+            }, openDelay);
             openTimers.set(dropdown, timerId);
         };
 
@@ -212,7 +213,7 @@ function Header() {
             clearTimer(closeTimers, dropdown);
             const timerId = window.setTimeout(() => {
                 closeDropdown(dropdown);
-            }, hoverDelay);
+            }, closeDelay);
             closeTimers.set(dropdown, timerId);
         };
 
@@ -407,7 +408,7 @@ function Header() {
                                 خدمات
                             </button>
                             <div className="nav-dropdown-menu">
-                                <a className="nav-dropdown-item" href="/inquire-your-bill">استعلم عن فاتورتك</a>
+                                <a className="nav-dropdown-item" href="http://bills.ascww.com.eg/Inqeury.aspx" target="_blank" rel="noopener noreferrer">استعلم عن فاتورتك</a>
                                 <a className="nav-dropdown-item" href="/call-center">خدمه العملاء</a>
                                 <a className="nav-dropdown-item" href="/Customer-Charter">ميثاق المتعاملين</a>
                                 <a className="nav-dropdown-item" href="/Services-Evidance">دليل الخدمات</a>
@@ -510,7 +511,7 @@ function Header() {
                     <details className="mobile-nav-group"><summary>الصرف الصحي</summary><div className="mobile-nav-submenu"><Link to={ROUTES.sewageTreatment}>معالجه الصرف الصحي</Link><a href={ROUTES.safeSewageDisposal}>أهمية التخلص الآمن من الصرف الصحى ومعالجته</a><a href={ROUTES.saveSewageNetwork}>أهميه الحفاظ علي شبكه الصرف الصحي</a><a href={ROUTES.industrialWaste}>الصرف الصناعي</a><a href={ROUTES.industrialWasteRole}>دور إداره الصرف الصناعي</a></div></details>
                     <details className="mobile-nav-group"><summary>التدريب</summary><div className="mobile-nav-submenu"><a href="/general-admin-training">أنواع التدريب والقاعات</a><a href="/Result-of-school">نتائج المدرسه</a></div></details>
                     <details className="mobile-nav-group"><summary>وظائف</summary><div className="mobile-nav-submenu"><a href="/jobs-and-competition">مسابقات و وظائف</a><a href="/result_of_worker">نتائج المسابقات</a></div></details>
-                    <details className="mobile-nav-group"><summary>خدمات</summary><div className="mobile-nav-submenu"><a href="/inquire-your-bill">استعلم عن فاتورتك</a><a href="/call-center">خدمه العملاء</a><a href="/Customer-Charter">ميثاق المتعاملين</a><a href="/Services-Evidance">دليل الخدمات</a><a href="/Contract-On-Service">رحلة المتعامل للتعاقد على طلب خدمة</a><a href="/provide-request">تقديم طلب</a><a href="/provide-complaine">تقديم شكوي</a></div></details>
+                    <details className="mobile-nav-group"><summary>خدمات</summary><div className="mobile-nav-submenu"><a href="http://bills.ascww.com.eg/Inqeury.aspx" target="_blank" rel="noopener noreferrer">استعلم عن فاتورتك</a><a href="/call-center">خدمه العملاء</a><a href="/Customer-Charter">ميثاق المتعاملين</a><a href="/Services-Evidance">دليل الخدمات</a><a href="/Contract-On-Service">رحلة المتعامل للتعاقد على طلب خدمة</a><a href="/provide-request">تقديم طلب</a><a href="/provide-complaine">تقديم شكوي</a></div></details>
                     <details className="mobile-nav-group"><summary>دعم النزاهة</summary><div className="mobile-nav-submenu"><a href="/nabza-an-daam-elnazaha">نبذه عن إداره دعم النزاهة</a><a href="/abrz-amaal-daam-elnazaha">أبرز أعمال دعم النزاهة</a><a href="/elslookElwazefy">السلوك الوظيفي</a></div></details>
                     <details className="mobile-nav-group"><summary>معرض الصور</summary><div className="mobile-nav-submenu"><a href="/trips-the-boss">جولات رئيس مجلس الإداره</a><a href="/lab-of-company">معامل الشركه</a><a href="/waste-of-company">محطات الصرف</a><a href="/traning-of-company">مركز التدريب</a><a href="/information-technology-of-company">قطاع تكنولوجيا المعلومات</a><a href="/school-new-assuit">المدرسه الفنيه</a><a href="/sport-of-company">النشاط الرياضي</a></div></details>
                     <a className="rounded-lg bg-[#0a3555] px-3 py-2 text-center text-white" href="tel:2331604">الخط الساخن: 2331604</a>
