@@ -20,6 +20,7 @@
     "react-pageflip": "^2.0.3",
     "react-router-dom": "^7.13.0",
     "router": "^2.2.0",
+    "run": "^1.5.0",
     "sharp": "^0.34.4"
   },
   "devDependencies": {

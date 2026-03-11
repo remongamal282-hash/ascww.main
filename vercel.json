@@ -1,5 +1,7 @@
 {
   "rewrites": [
+    { "source": "/api/ssr", "destination": "/api/ssr" },
+    { "source": "/api/(.*)", "destination": "https://backend.ascww.org/api/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
