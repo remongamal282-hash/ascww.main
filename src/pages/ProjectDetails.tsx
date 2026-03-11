@@ -233,11 +233,11 @@ function ProjectDetails() {
                         </h1>
 
                         <div
-                            className="prose prose-lg mb-8 max-w-none text-justify leading-relaxed text-gray-700"
+                            className="prose prose-lg mb-8 max-w-none break-words text-justify leading-relaxed text-gray-700"
                             dangerouslySetInnerHTML={{ __html: cleanContent }}
                         />
 
-                        <div className="flex items-center justify-between border-t border-gray-100 pt-6">
+                        <div className="flex flex-col gap-4 border-t border-gray-100 pt-6 sm:flex-row sm:items-center sm:justify-between">
                             <Link
                                 to={PROJECTS_ARCHIVE_PATH}
                                 className="inline-flex items-center gap-2 font-medium text-blue-600 transition-colors hover:text-blue-800"
@@ -249,7 +249,7 @@ function ProjectDetails() {
                                 العودة إلى المشروعات
                             </Link>
 
-                            <div className="flex gap-3">
+                            <div className="flex flex-wrap gap-3">
                                 <button
                                     type="button"
                                     onClick={async () => {

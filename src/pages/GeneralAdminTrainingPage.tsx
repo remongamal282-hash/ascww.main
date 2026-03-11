@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 
@@ -8,7 +8,7 @@ const trainingSlides = [
   { src: '/images/training/49.webp', alt: 'قاعة التدريب رقم 3' },
   { src: '/images/training/50.webp', alt: 'قاعة التدريب رقم 4' },
 ];
-const SLIDE_INTERVAL_MS = 6500;
+const SLIDE_INTERVAL_MS = 4000;
 
 const trainingTabs = [
   {
@@ -16,6 +16,12 @@ const trainingTabs = [
     title: 'أهدافنا الاستراتيجية',
     description:
       'إعداد الكوادر الإدارية والفنية المتخصصة كل في مجاله\nتنمية الموارد البشرية بمساعدتها على اكتساب وتحسين المهارات والكفاءات للقيام بالواجبات الحالية والمستقبلية\nتمكين الشركة من العمل طبقا لمعايير الجودة المطلوبة\nتعزيز فرص النمو والتطور لدى موظفي الشركة من أجل تنمية طاقاتهم',
+  },
+  {
+    id: 'values',
+    title: 'قيمنا',
+    description:
+      'الولاء والانتماء . المصداقية . الالتزام وبناء الثقة . الشفافية',
   },
   {
     id: 'mission',
@@ -146,19 +152,39 @@ function GeneralAdminTrainingPage() {
   const [isPaused, setIsPaused] = useState(false);
   const [activeTab, setActiveTab] = useState(trainingTabs[0]?.id ?? 'goals');
   const [openedHallImage, setOpenedHallImage] = useState<{ src: string; alt: string } | null>(null);
+  const autoplayRef = useRef<number | null>(null);
+
+  const stopAutoplay = useCallback(() => {
+    if (autoplayRef.current !== null) {
+      window.clearInterval(autoplayRef.current);
+      autoplayRef.current = null;
+    }
+  }, []);
+
+  const startAutoplay = useCallback(() => {
+    if (trainingSlides.length <= 1) return;
+    stopAutoplay();
+    autoplayRef.current = window.setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % trainingSlides.length);
+    }, SLIDE_INTERVAL_MS);
+  }, [stopAutoplay]);
 
   const goToSlide = (index: number) => {
     const total = trainingSlides.length;
     setActiveSlide((index + total) % total);
+    if (!isPaused) {
+      startAutoplay();
+    }
   };
 
   useEffect(() => {
-    if (trainingSlides.length <= 1 || isPaused) return;
-    const timerId = window.setInterval(() => {
-      setActiveSlide((prev) => (prev + 1) % trainingSlides.length);
-    }, SLIDE_INTERVAL_MS);
-    return () => window.clearInterval(timerId);
-  }, [isPaused]);
+    if (isPaused) {
+      stopAutoplay();
+      return undefined;
+    }
+    startAutoplay();
+    return () => stopAutoplay();
+  }, [isPaused, startAutoplay, stopAutoplay]);
 
   useEffect(() => {
     if (!openedHallImage) return;
@@ -311,7 +337,7 @@ function GeneralAdminTrainingPage() {
                       <div className="relative">
                         <h3
                           className={`text-xl font-extrabold text-[#0a3555] transition duration-300 group-hover:text-[#1170b0] ${
-                            item.id === 'community-awareness' ? 'whitespace-nowrap' : ''
+                            item.id === 'community-awareness' ? 'sm:whitespace-nowrap' : ''
                           }`}
                         >
                           {item.title}
@@ -352,7 +378,7 @@ function GeneralAdminTrainingPage() {
                               key={point}
                               className={
                                 point === 'ادارة المراسم والبروتوكولات وتنظيم المعارض والمؤتمرات'
-                                  ? 'whitespace-nowrap'
+                                  ? 'sm:whitespace-nowrap'
                                   : undefined
                               }
                             >
@@ -369,7 +395,7 @@ function GeneralAdminTrainingPage() {
               <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
                 <h2 className="text-2xl font-extrabold text-[#0a3555]">القاعات</h2>
                 <div className="mt-2 text-sm leading-7 text-slate-700">
-                  <p className="whitespace-nowrap text-base font-semibold">
+                  <p className="text-base font-semibold leading-7 sm:whitespace-nowrap">
                     يوجد لدينا قاعات تدريب بشركه مياه أسيوط والصرف الصحي متاح الاستعلام والحجز من أي جهه داخل أو خارج الشركة
                   </p>
                   <div className="mt-3 flex flex-wrap items-center gap-2">
@@ -415,7 +441,7 @@ function GeneralAdminTrainingPage() {
                   <button
                     type="button"
                     onClick={() => setOpenedHallImage({ src: '/images/training/47.webp', alt: 'قاعة رقم 1' })}
-                    className="group overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/70"
+                    className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/70 cursor-zoom-in"
                     aria-label="تكبير صورة قاعة رقم 1"
                   >
                     <img
@@ -424,6 +450,12 @@ function GeneralAdminTrainingPage() {
                       loading="lazy"
                       className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]"
                     />
+                    <span className="pointer-events-none absolute inset-0 flex items-center justify-center bg-slate-950/25 opacity-0 transition duration-300 group-hover:opacity-100">
+                      <span className="flex items-center gap-2 rounded-full border border-white/40 bg-white/15 px-4 py-2 text-sm font-bold text-white shadow-lg backdrop-blur">
+                        <span className="text-base">🔍</span>
+                        تكبير
+                      </span>
+                    </span>
                   </button>
                   <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-5 text-slate-700">
                     <h2 className="text-xl font-extrabold text-[#0a3555]">قاعة رقم ( 1 )</h2>
@@ -453,7 +485,7 @@ function GeneralAdminTrainingPage() {
                   <button
                     type="button"
                     onClick={() => setOpenedHallImage({ src: '/images/training/48.webp', alt: 'قاعة رقم 2' })}
-                    className="group overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/70"
+                    className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/70 cursor-zoom-in"
                     aria-label="تكبير صورة قاعة رقم 2"
                   >
                     <img
@@ -462,6 +494,12 @@ function GeneralAdminTrainingPage() {
                       loading="lazy"
                       className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]"
                     />
+                    <span className="pointer-events-none absolute inset-0 flex items-center justify-center bg-slate-950/25 opacity-0 transition duration-300 group-hover:opacity-100">
+                      <span className="flex items-center gap-2 rounded-full border border-white/40 bg-white/15 px-4 py-2 text-sm font-bold text-white shadow-lg backdrop-blur">
+                        <span className="text-base">🔍</span>
+                        تكبير
+                      </span>
+                    </span>
                   </button>
                   <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-5 text-slate-700">
                     <h2 className="text-xl font-extrabold text-[#0a3555]">قاعة رقم ( 2 )</h2>
@@ -491,7 +529,7 @@ function GeneralAdminTrainingPage() {
                   <button
                     type="button"
                     onClick={() => setOpenedHallImage({ src: '/images/training/49.webp', alt: 'قاعة رقم 3' })}
-                    className="group overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/70"
+                    className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/70 cursor-zoom-in"
                     aria-label="تكبير صورة قاعة رقم 3"
                   >
                     <img
@@ -500,6 +538,12 @@ function GeneralAdminTrainingPage() {
                       loading="lazy"
                       className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]"
                     />
+                    <span className="pointer-events-none absolute inset-0 flex items-center justify-center bg-slate-950/25 opacity-0 transition duration-300 group-hover:opacity-100">
+                      <span className="flex items-center gap-2 rounded-full border border-white/40 bg-white/15 px-4 py-2 text-sm font-bold text-white shadow-lg backdrop-blur">
+                        <span className="text-base">🔍</span>
+                        تكبير
+                      </span>
+                    </span>
                   </button>
                   <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-5 text-slate-700">
                     <h2 className="text-xl font-extrabold text-[#0a3555]">قاعة رقم ( 3 )</h2>
@@ -529,7 +573,7 @@ function GeneralAdminTrainingPage() {
                   <button
                     type="button"
                     onClick={() => setOpenedHallImage({ src: '/images/training/50.webp', alt: 'قاعة رقم 4' })}
-                    className="group overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/70"
+                    className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/70 cursor-zoom-in"
                     aria-label="تكبير صورة قاعة رقم 4"
                   >
                     <img
@@ -538,6 +582,12 @@ function GeneralAdminTrainingPage() {
                       loading="lazy"
                       className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]"
                     />
+                    <span className="pointer-events-none absolute inset-0 flex items-center justify-center bg-slate-950/25 opacity-0 transition duration-300 group-hover:opacity-100">
+                      <span className="flex items-center gap-2 rounded-full border border-white/40 bg-white/15 px-4 py-2 text-sm font-bold text-white shadow-lg backdrop-blur">
+                        <span className="text-base">🔍</span>
+                        تكبير
+                      </span>
+                    </span>
                   </button>
                   <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-5 text-slate-700">
                     <h2 className="text-xl font-extrabold text-[#0a3555]">قاعة رقم ( 4 )</h2>

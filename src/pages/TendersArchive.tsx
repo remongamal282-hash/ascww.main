@@ -212,7 +212,7 @@ function TendersArchive() {
                                 <h2 className="mt-4 text-xl font-extrabold text-slate-900 sm:text-2xl">
                                     لا توجد مناقصات لعرضها حاليًا.
                                 </h2>
-                                <p className="mt-3 mx-auto max-w-full whitespace-nowrap text-center text-xs leading-6 text-slate-600 sm:text-sm">
+                                <p className="mt-3 mx-auto max-w-full text-center text-xs leading-6 text-slate-600 sm:text-sm sm:whitespace-nowrap">
                                     سيتم نشر أي مناقصات جديدة فور إضافتها. يمكنك تحديث الصفحة لاحقًا للاطلاع على أحدث المحتوى.
                                 </p>
 

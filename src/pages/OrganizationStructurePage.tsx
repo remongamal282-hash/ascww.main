@@ -309,7 +309,7 @@ function OrganizationStructurePage() {
                                         href={ORGANIZATION_PDF_DOWNLOAD_URL}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="inline-flex h-10 shrink-0 items-center gap-2 rounded-full bg-[#0a3555] px-4 text-sm font-extrabold text-white transition hover:bg-[#082b47] whitespace-nowrap"
+                                        className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-full bg-[#0a3555] px-4 text-center text-sm font-extrabold text-white transition hover:bg-[#082b47] sm:w-auto sm:whitespace-nowrap"
                                     >
                                         تحميل ملف الهيكل التنظيمي (PDF)
                                     </a>
