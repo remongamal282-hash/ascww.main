@@ -323,10 +323,11 @@ export default async function handler(request, response) {
   const type = rawType === 'project' || rawType === 'home' || rawType === 'tender' ? rawType : 'news';
   const routeBase = request?.query?.routeBase ?? request?.query?.routebase ?? '';
 
-  const API_BASE_URL = process.env.VITE_API_BASE_URL || 'https://backend.ascww.org/api';
   const siteUrl = resolveSiteUrl(request);
+  const rawApiBase = process.env.VITE_API_BASE_URL || 'https://backend.ascww.org/api';
+  const apiBase = rawApiBase.startsWith('/') ? `${siteUrl}${rawApiBase}` : rawApiBase;
 
-  const entityConfig = getEntityConfig(type, API_BASE_URL, siteUrl, id, routeBase);
+  const entityConfig = getEntityConfig(type, apiBase, siteUrl, id, routeBase);
   const defaultMeta = entityConfig.meta;
   let meta = { ...defaultMeta };
 
