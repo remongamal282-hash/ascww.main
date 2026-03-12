@@ -463,7 +463,7 @@ function ContractsRegulationPage() {
                         {loadingError}
                       </div>
                     ) : (
-                      <div className="flipbook-stage h-[66vh] sm:h-[70vh] lg:h-[74vh]" ref={stageRef}>
+                      <div className="flipbook-stage flipbook-stage--portrait h-[78vh] sm:h-[84vh] lg:h-[88vh]" ref={stageRef}>
                         <div className="absolute left-3 top-3 z-40 flex items-center gap-1 rounded-md border border-[#0a3555]/20 bg-[#b8d7b4]/95 px-1.5 py-1 shadow-[0_6px_14px_rgba(0,0,0,0.2)] backdrop-blur-sm">
                           <button
                             aria-label={isSoundEnabled ? 'كتم الصوت' : 'تشغيل الصوت'}

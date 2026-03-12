@@ -16,6 +16,7 @@ export const ROUTES = {
   saveSewageNetwork: '/save-sewage-network',
   industrialWaste: '/industrial-waste',
   industrialWasteRole: '/industrial-waste-role',
+  customerCharter: '/Customer-Charter',
   newsArchive: '/news-archive',
   newsDetails: '/news/:id',
   projectsArchive: '/projects-archive',

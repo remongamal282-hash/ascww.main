@@ -20,6 +20,7 @@ import SafeSewageDisposalPage from './pages/SafeSewageDisposalPage';
 import SaveSewageNetworkPage from './pages/SaveSewageNetworkPage';
 import IndustrialWastePage from './pages/IndustrialWastePage';
 import IndustrialWasteRolePage from './pages/IndustrialWasteRolePage';
+import CustomerCharterPage from './pages/CustomerCharterPage';
 import TendersArchive from './pages/TendersArchive';
 import TenderDetails from './pages/TenderDetails';
 import GeneralAdminTrainingPage from './pages/GeneralAdminTrainingPage';
@@ -51,6 +52,7 @@ function App() {
         <Route path={ROUTES.saveSewageNetwork} element={<SaveSewageNetworkPage />} />
         <Route path={ROUTES.industrialWaste} element={<IndustrialWastePage />} />
         <Route path={ROUTES.industrialWasteRole} element={<IndustrialWasteRolePage />} />
+        <Route path={ROUTES.customerCharter} element={<CustomerCharterPage />} />
         <Route path={ROUTES.newsArchive} element={<NewsArchive />} />
         <Route path={ROUTES.newsDetails} element={<NewsDetails />} />
         <Route path={ROUTES.projectsArchive} element={<ProjectsArchive />} />
