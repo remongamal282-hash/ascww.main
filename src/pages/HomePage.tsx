@@ -266,11 +266,15 @@ function HomePage() {
         });
       };
 
-      if ('requestIdleCallback' in window) {
-        (window as Window & { requestIdleCallback?: (cb: () => void) => number }).requestIdleCallback?.(preloadIdleSlides);
-      } else {
-        window.setTimeout(preloadIdleSlides, 1200);
-      }
+      const scheduleIdle = (cb: () => void) => {
+        const win = window as Window & { requestIdleCallback?: (callback: () => void) => number };
+        if (typeof win.requestIdleCallback === 'function') {
+          return win.requestIdleCallback(cb);
+        }
+        return window.setTimeout(cb, 1200);
+      };
+
+      scheduleIdle(preloadIdleSlides);
 
       let intervalId: number | undefined;
       const startAutoplay = () => {
