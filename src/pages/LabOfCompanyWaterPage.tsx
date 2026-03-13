@@ -76,7 +76,7 @@ function LabOfCompanyWaterPage() {
 
             <div className="space-y-6 px-4 py-6 sm:px-8 sm:py-8">
               <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-                <img
+                <img decoding="async"
                   src={slideLabImage}
                   alt="المعمل المركزي لمياه الشركة"
                   loading="lazy"
@@ -109,7 +109,7 @@ function LabOfCompanyWaterPage() {
                 <h3 className="mb-4 text-lg font-extrabold text-[#0a3555] sm:text-xl">صور المعمل المركزى</h3>
                 <div className="grid gap-4 lg:grid-cols-[1.65fr_1fr]">
                   <article className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_14px_34px_rgba(15,23,42,0.14)]">
-                    <img
+                    <img decoding="async"
                       src={selectedLabImage.src}
                       alt={selectedLabImage.alt}
                       loading="lazy"
@@ -129,7 +129,7 @@ function LabOfCompanyWaterPage() {
                             : 'border-slate-200 hover:border-[#0a3555]/45'
                         }`}
                       >
-                        <img
+                        <img decoding="async"
                           src={image.src}
                           alt={image.alt}
                           loading="lazy"
@@ -171,7 +171,7 @@ function LabOfCompanyWaterPage() {
                     <span className="absolute bottom-3 left-3 z-10 rounded bg-black/60 px-2 py-1 text-xs font-bold text-white">
                       {selectedStructureImage.rank} / {labSectorStructureImages.length}
                     </span>
-                    <img
+                    <img decoding="async"
                       src={selectedStructureImage.src}
                       alt={selectedStructureImage.alt}
                       loading="lazy"
@@ -191,7 +191,7 @@ function LabOfCompanyWaterPage() {
                               : 'border-slate-300 hover:border-slate-500'
                           }`}
                         >
-                          <img src={image.src} alt={image.alt} loading="lazy" className="h-full w-full object-cover" />
+                          <img decoding="async" src={image.src} alt={image.alt} loading="lazy" className="h-full w-full object-cover" />
                           <span className="absolute bottom-1 right-1 rounded bg-white/90 px-1 text-[10px] font-black text-slate-900">
                             {image.rank}
                           </span>
@@ -240,7 +240,7 @@ function LabOfCompanyWaterPage() {
             <span className="absolute right-3 top-3 z-10 rounded bg-black/55 px-2 py-1 text-xs font-bold text-white">
               {openedStructureImage.rank} / {labSectorStructureImages.length}
             </span>
-            <img
+            <img loading="lazy" decoding="async"
               src={openedStructureImage.src}
               alt={openedStructureImage.alt}
               className="mx-auto max-h-[78vh] w-auto max-w-full object-contain sm:max-h-[72vh]"

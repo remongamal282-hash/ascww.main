@@ -221,7 +221,7 @@ function GeneralAdminTrainingPage() {
                     {trainingSlides.map((slide, index) => {
                       const isActive = index === activeSlide;
                       return (
-                        <img
+                        <img decoding="async"
                           key={slide.src}
                           src={slide.src}
                           alt={slide.alt}
@@ -347,7 +347,7 @@ function GeneralAdminTrainingPage() {
                             item.id === 'item-6-public-relations' ? 'mb-12' : ''
                           }`}
                         >
-                          <img
+                          <img decoding="async"
                             src={item.image}
                             alt={item.title}
                             loading="lazy"
@@ -444,7 +444,7 @@ function GeneralAdminTrainingPage() {
                     className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/70 cursor-zoom-in"
                     aria-label="تكبير صورة قاعة رقم 1"
                   >
-                    <img
+                    <img decoding="async"
                       src="/images/training/47.webp"
                       alt="قاعة رقم 1"
                       loading="lazy"
@@ -488,7 +488,7 @@ function GeneralAdminTrainingPage() {
                     className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/70 cursor-zoom-in"
                     aria-label="تكبير صورة قاعة رقم 2"
                   >
-                    <img
+                    <img decoding="async"
                       src="/images/training/48.webp"
                       alt="قاعة رقم 2"
                       loading="lazy"
@@ -532,7 +532,7 @@ function GeneralAdminTrainingPage() {
                     className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/70 cursor-zoom-in"
                     aria-label="تكبير صورة قاعة رقم 3"
                   >
-                    <img
+                    <img decoding="async"
                       src="/images/training/49.webp"
                       alt="قاعة رقم 3"
                       loading="lazy"
@@ -576,7 +576,7 @@ function GeneralAdminTrainingPage() {
                     className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/70 cursor-zoom-in"
                     aria-label="تكبير صورة قاعة رقم 4"
                   >
-                    <img
+                    <img decoding="async"
                       src="/images/training/50.webp"
                       alt="قاعة رقم 4"
                       loading="lazy"
@@ -632,7 +632,7 @@ function GeneralAdminTrainingPage() {
             >
               إغلاق
             </button>
-            <img
+            <img loading="lazy" decoding="async"
               src={openedHallImage.src}
               alt={openedHallImage.alt}
               className="max-h-[82vh] w-full object-contain"

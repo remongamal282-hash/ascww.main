@@ -32,7 +32,7 @@ function CallCenterPage() {
                 <div className="mt-8 space-y-6">
                   <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_1.2fr]">
                     <div className="mx-auto w-full max-w-[520px] aspect-[13/7] overflow-hidden rounded-2xl border border-slate-200 bg-white md:mx-0">
-                      <img
+                      <img decoding="async"
                         src="/images/call-center/4.webp"
                         alt="مركز خدمة عملاء الرئيسي"
                         className="h-full w-full object-cover"
@@ -60,7 +60,7 @@ function CallCenterPage() {
 
                   <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_1.2fr]">
                     <div className="mx-auto w-full max-w-[520px] aspect-[13/7] overflow-hidden rounded-2xl border border-slate-200 bg-white md:mx-0">
-                      <img
+                      <img decoding="async"
                         src="/images/call-center/35.webp"
                         alt="مركز خدمة عملاء فرع ديروط"
                         className="h-full w-full object-cover"
@@ -88,7 +88,7 @@ function CallCenterPage() {
 
                   <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_1.2fr]">
                     <div className="mx-auto w-full max-w-[520px] aspect-[13/7] overflow-hidden rounded-2xl border border-slate-200 bg-white md:mx-0">
-                      <img
+                      <img decoding="async"
                         src="/images/call-center/33.webp"
                         alt="مركز خدمة عملاء فرع أبوتيج"
                         className="h-full w-full object-cover"
@@ -116,7 +116,7 @@ function CallCenterPage() {
 
                   <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_1.2fr]">
                     <div className="mx-auto w-full max-w-[520px] aspect-[13/7] overflow-hidden rounded-2xl border border-slate-200 bg-white md:mx-0">
-                      <img
+                      <img decoding="async"
                         src="/images/call-center/32.webp"
                         alt="مركز خدمة عملاء فرع ساحل سليم"
                         className="h-full w-full object-cover"
@@ -144,7 +144,7 @@ function CallCenterPage() {
 
                   <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_1.2fr]">
                     <div className="mx-auto w-full max-w-[520px] aspect-[13/7] overflow-hidden rounded-2xl border border-slate-200 bg-white md:mx-0">
-                      <img
+                      <img decoding="async"
                         src="/images/call-center/10.webp"
                         alt="مركز خدمة عملاء فرع منفلوط"
                         className="h-full w-full object-cover"
@@ -172,7 +172,7 @@ function CallCenterPage() {
 
                   <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_1.2fr]">
                     <div className="mx-auto w-full max-w-[520px] aspect-[13/7] overflow-hidden rounded-2xl border border-slate-200 bg-white md:mx-0">
-                      <img
+                      <img decoding="async"
                         src="/images/call-center/31.webp"
                         alt="مركز خدمة عملاء فرع القوصيه"
                         className="h-full w-full object-cover"
@@ -200,7 +200,7 @@ function CallCenterPage() {
 
                   <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_1.2fr]">
                     <div className="mx-auto w-full max-w-[520px] aspect-[13/7] overflow-hidden rounded-2xl border border-slate-200 bg-white md:mx-0">
-                      <img
+                      <img decoding="async"
                         src="/images/call-center/2.webp"
                         alt="مركز خدمة عملاء فرع أبنوب"
                         className="h-full w-full object-cover"
@@ -228,7 +228,7 @@ function CallCenterPage() {
 
                   <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_1.2fr]">
                     <div className="mx-auto w-full max-w-[520px] aspect-[13/7] overflow-hidden rounded-2xl border border-slate-200 bg-white md:mx-0">
-                      <img
+                      <img decoding="async"
                         src="/images/call-center/1.webp"
                         alt="مركز خدمة عملاء فرع مركز الفتح"
                         className="h-full w-full object-cover"
@@ -256,7 +256,7 @@ function CallCenterPage() {
 
                   <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_1.2fr]">
                     <div className="mx-auto w-full max-w-[520px] aspect-[13/7] overflow-hidden rounded-2xl border border-slate-200 bg-white md:mx-0">
-                      <img
+                      <img decoding="async"
                         src="/images/call-center/40.webp"
                         alt="مركز خدمة عملاء فرع صدفا"
                         className="h-full w-full object-cover"
@@ -284,7 +284,7 @@ function CallCenterPage() {
 
                   <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_1.2fr]">
                     <div className="mx-auto w-full max-w-[520px] aspect-[13/7] overflow-hidden rounded-2xl border border-slate-200 bg-white md:mx-0">
-                      <img
+                      <img decoding="async"
                         src="/images/call-center/31.webp"
                         alt="مركز خدمة عملاء فرع مركز البداري"
                         className="h-full w-full object-cover"
@@ -312,7 +312,7 @@ function CallCenterPage() {
 
                   <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_1.2fr]">
                     <div className="mx-auto w-full max-w-[520px] aspect-[13/7] overflow-hidden rounded-2xl border border-slate-200 bg-white md:mx-0">
-                      <img
+                      <img decoding="async"
                         src="/images/call-center/1.webp"
                         alt="مركز خدمة عملاء فرع الغنايم"
                         className="h-full w-full object-cover"

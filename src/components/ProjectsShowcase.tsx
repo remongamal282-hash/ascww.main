@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { ProjectItem } from '../types';
 import {
@@ -171,6 +171,7 @@ function ProjectsShowcase() {
                                                 alt={currentProject.title || 'صورة مشروع'}
                                                 className="h-full w-full object-cover"
                                                 loading="lazy"
+                                                decoding="async"
                                                 onError={(event) => {
                                                     event.currentTarget.style.display = 'none';
                                                 }}
@@ -226,4 +227,4 @@ function ProjectsShowcase() {
     );
 }
 
-export default ProjectsShowcase;
+export default memo(ProjectsShowcase);

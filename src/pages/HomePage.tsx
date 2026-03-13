@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react';
+import { Suspense, lazy, useEffect, useState } from 'react';
 import type { AdminInfoResponse, NewsItem } from '../types';
 import { ADMIN_INFO_ENDPOINT, NEWS_ENDPOINT } from '../utils/helpers';
 import Header from '../components/Header';
 import HeroSlider from '../components/HeroSlider';
-import BossWord from '../components/BossWord';
-import LatestNews from '../components/LatestNews';
-import MainContent from '../components/MainContent';
-import Footer from '../components/Footer';
+
+const BossWord = lazy(() => import('../components/BossWord'));
+const LatestNews = lazy(() => import('../components/LatestNews'));
+const MainContent = lazy(() => import('../components/MainContent'));
+const Footer = lazy(() => import('../components/Footer'));
 
 function HomePage() {
   const [adminInfo, setAdminInfo] = useState<AdminInfoResponse | null>(null);
@@ -217,11 +218,20 @@ function HomePage() {
         });
       };
 
+      const ensureSlideBackground = (slide: HTMLElement | undefined) => {
+        if (!slide) return;
+        const background = slide.dataset.bg;
+        if (!background || slide.style.backgroundImage) return;
+        slide.style.backgroundImage = `url('${background}')`;
+      };
+
       const moveToSlide = (nextIndex: number, directionClass: HeroDirectionClass = 'dir-right') => {
         if (nextIndex === currentSlide) return;
         const current = heroSlides[currentSlide];
         const next = heroSlides[nextIndex];
         if (!current || !next) return;
+
+        ensureSlideBackground(next);
 
         if (transitionTimeoutId) {
           clearTimeout(transitionTimeoutId);
@@ -248,6 +258,19 @@ function HomePage() {
       updateActiveDot(currentSlide);
       updateHeroContent(currentSlide);
       triggerHeroTextAnimation();
+
+      const preloadIdleSlides = () => {
+        heroSlides.forEach((slide, index) => {
+          if (index === currentSlide) return;
+          ensureSlideBackground(slide);
+        });
+      };
+
+      if ('requestIdleCallback' in window) {
+        (window as Window & { requestIdleCallback?: (cb: () => void) => number }).requestIdleCallback?.(preloadIdleSlides);
+      } else {
+        window.setTimeout(preloadIdleSlides, 1200);
+      }
 
       let intervalId: number | undefined;
       const startAutoplay = () => {
@@ -360,22 +383,54 @@ function HomePage() {
 
   return (
     <>
-      <Header />
-      <main>
-        <HeroSlider />
+    <Header />
+    <main>
+      <HeroSlider />
+      <Suspense
+        fallback={
+          <section className="mx-auto max-w-7xl px-4 py-8 text-center text-sm font-semibold text-slate-500 sm:px-6 lg:px-8">
+            جاري تحميل المحتوى...
+          </section>
+        }
+      >
         <BossWord
           adminInfo={adminInfo}
           adminInfoLoading={adminInfoLoading}
           adminInfoError={adminInfoError}
         />
+      </Suspense>
+      <Suspense
+        fallback={
+          <section className="mx-auto max-w-7xl px-4 py-8 text-center text-sm font-semibold text-slate-500 sm:px-6 lg:px-8">
+            جاري تحميل الأخبار...
+          </section>
+        }
+      >
         <LatestNews
           latestNews={latestNews}
           newsLoading={newsLoading}
           newsError={newsError}
         />
+      </Suspense>
+      <Suspense
+        fallback={
+          <section className="mx-auto max-w-7xl px-4 py-8 text-center text-sm font-semibold text-slate-500 sm:px-6 lg:px-8">
+            جاري تحميل أقسام الصفحة...
+          </section>
+        }
+      >
         <MainContent />
-      </main>
+      </Suspense>
+    </main>
+    <Suspense
+      fallback={
+        <footer className="px-4 py-6 text-center text-xs font-semibold text-slate-500">
+          جاري تحميل التذييل...
+        </footer>
+      }
+    >
       <Footer />
+    </Suspense>
       <a
         href={messengerUrl}
         target="_blank"

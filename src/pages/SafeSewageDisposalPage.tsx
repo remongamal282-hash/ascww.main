@@ -88,7 +88,7 @@ function SafeSewageDisposalPage() {
                       <div className="mt-4">
                         {section.image && (
                           <figure className="mb-4 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm md:float-left md:mb-3 md:ml-6 md:w-[36%]">
-                            <img
+                            <img decoding="async"
                               src={section.image.src}
                               alt={section.image.alt}
                               loading="lazy"
@@ -119,7 +119,7 @@ function SafeSewageDisposalPage() {
                           </p>
                           {section.image && (
                             <figure className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm md:mt-0">
-                              <img
+                              <img decoding="async"
                                 src={section.image.src}
                                 alt={section.image.alt}
                                 loading="lazy"
@@ -171,7 +171,7 @@ function SafeSewageDisposalPage() {
             >
               إغلاق
             </button>
-            <img
+            <img loading="lazy" decoding="async"
               src={lightboxImage.src}
               alt={lightboxImage.alt}
               className="max-h-[85vh] w-auto max-w-full rounded-2xl border border-white/20 bg-white object-contain shadow-2xl"

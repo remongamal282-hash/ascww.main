@@ -55,7 +55,7 @@ function AboutSidebarWidget({
                             <span className="transition-transform duration-200 group-open:rotate-180">▾</span>
                         </summary>
                         <div className={`border-t px-3 py-3 ${isFormal ? 'border-slate-200' : 'border-[#d7cfc3]'}`}>
-                            <img
+                            <img decoding="async"
                                 src="/images/about/company-message.webp"
                                 alt="رسالة الشركة"
                                 className="w-full rounded-lg border border-slate-300 bg-white"

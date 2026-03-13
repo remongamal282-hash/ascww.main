@@ -158,7 +158,7 @@ function RefiningWaterPage() {
                       رساله الشركة
                     </summary>
                     <div className="px-4 pb-4">
-                      <img
+                      <img decoding="async"
                         src={companyMessageImage}
                         alt="رساله الشركة"
                         loading="lazy"

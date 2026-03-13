@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Link } from 'react-router-dom';
 import type { NewsItem } from '../types';
 import { useSpeech } from '../hooks/useSpeech';
@@ -37,6 +38,8 @@ function NewsCard({ article }: NewsCardProps) {
                         src={imageUrl}
                         alt={article.title || 'صورة الخبر'}
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy"
+                        decoding="async"
                         onError={(event) => {
                             event.currentTarget.style.display = 'none';
                         }}
@@ -159,4 +162,4 @@ function NewsCard({ article }: NewsCardProps) {
     );
 }
 
-export default NewsCard;
+export default memo(NewsCard);

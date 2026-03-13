@@ -137,7 +137,7 @@ function SewageTreatmentPage() {
 
                   {sourcesSection?.image && (
                     <figure className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-slate-50 shadow-sm md:order-2 md:mt-0 md:flex md:h-full md:flex-col">
-                      <img
+                      <img decoding="async"
                         src={sourcesSection.image.src}
                         alt={sourcesSection.image.alt}
                         loading="lazy"
@@ -180,7 +180,7 @@ function SewageTreatmentPage() {
                             </div>
                             {section.image && (
                               <figure className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-slate-50 shadow-sm md:order-2 md:mt-0 md:flex md:h-full md:flex-col">
-                                <img
+                                <img decoding="async"
                                   src={section.image.src}
                                   alt={section.image.alt}
                                   loading="lazy"
@@ -211,7 +211,7 @@ function SewageTreatmentPage() {
                             </div>
                             {section.image && (
                               <figure className={`${sectionFigureClass} md:order-2`}>
-                            <img
+                            <img decoding="async"
                               src={section.image.src}
                               alt={section.image.alt}
                               loading="lazy"
@@ -256,7 +256,7 @@ function SewageTreatmentPage() {
                     </ul>
                   </div>
                   <figure className={`${sectionFigureClass} md:order-2`}>
-                    <img
+                    <img decoding="async"
                       src="/images/prosses-water/prosses2.webp"
                       alt="مشهد توضيحي لمعالجة مياه الصرف الصحي"
                       loading="lazy"
@@ -304,7 +304,7 @@ function SewageTreatmentPage() {
             className="w-full max-w-6xl"
             onClick={(event) => event.stopPropagation()}
           >
-            <img
+            <img loading="lazy" decoding="async"
               src={lightboxImage.src}
               alt={lightboxImage.alt}
               className="max-h-[82vh] w-full rounded-xl object-contain"

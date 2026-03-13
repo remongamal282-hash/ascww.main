@@ -183,7 +183,7 @@ function NewsDetails() {
                 <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-lg">
                     {images.length > 0 ? (
                         <div className="group relative h-[300px] bg-gray-100 md:h-[500px]">
-                            <img
+                            <img loading="lazy" decoding="async"
                                 src={currentImageUrl}
                                 alt={news.title || 'صورة الخبر'}
                                 className="h-full w-full object-contain"

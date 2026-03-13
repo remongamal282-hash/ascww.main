@@ -74,7 +74,7 @@ function IndustrialWastePage() {
                 <h2 className="text-xl font-extrabold text-[#0a3555] sm:text-2xl">نبذه عن الصرف الصناعي</h2>
                 <div className="mt-4 flow-root">
                   <figure className="mb-4 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm md:float-left md:mb-3 md:ml-6 md:w-[36%]">
-                    <img
+                    <img decoding="async"
                       src="/images/prosses-water/manufactring-waste1.webp"
                       alt="نبذه عن الصرف الصناعي"
                       loading="lazy"
@@ -102,7 +102,7 @@ function IndustrialWastePage() {
                 <h2 className="text-xl font-extrabold text-[#0a3555] sm:text-2xl">محطات المعالجه</h2>
                 <div className="mt-4 flow-root">
                   <figure className="mb-4 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm md:float-left md:mb-3 md:ml-6 md:w-[36%]">
-                    <img
+                    <img decoding="async"
                       src="/images/prosses-water/manufactring-waste2.webp"
                       alt="محطات المعالجه"
                       loading="lazy"
@@ -130,7 +130,7 @@ function IndustrialWastePage() {
                 <h2 className="text-xl font-extrabold text-[#0a3555] sm:text-2xl">الملوثات فى مياه الصرف الصناعي</h2>
                 <div className="mt-4 flow-root">
                   <figure className="mb-4 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm md:float-left md:mb-3 md:ml-6 md:w-[36%]">
-                    <img
+                    <img decoding="async"
                       src="/images/prosses-water/manufactring-waste3.webp"
                       alt="الملوثات فى مياه الصرف الصناعي"
                       loading="lazy"
@@ -161,7 +161,7 @@ function IndustrialWastePage() {
                 <h2 className="text-xl font-extrabold text-[#0a3555] sm:text-2xl">الطرق الشائعة لمعالجة مياه الصرف الصناعي</h2>
                 <div className="mt-4 flow-root">
                   <figure className="mb-4 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm md:float-left md:mb-3 md:ml-6 md:w-[36%]">
-                    <img
+                    <img decoding="async"
                       src="/images/prosses-water/manufactring-waste4.webp"
                       alt="الطرق الشائعة لمعالجة مياه الصرف الصناعي"
                       loading="lazy"
@@ -208,7 +208,7 @@ function IndustrialWastePage() {
             >
               إغلاق
             </button>
-            <img
+            <img loading="lazy" decoding="async"
               src={lightboxImage.src}
               alt={lightboxImage.alt}
               className="max-h-[92vh] w-auto max-w-full rounded-2xl border border-white/20 bg-white object-contain shadow-2xl"

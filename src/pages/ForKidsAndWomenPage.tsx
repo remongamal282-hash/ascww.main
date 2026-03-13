@@ -80,7 +80,7 @@ function ForKidsAndWomenPage() {
                 <div className="mb-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   {WOMEN_SECTION_IMAGES.map((imageUrl, index) => (
                     <div key={imageUrl} className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-sm">
-                      <img
+                      <img decoding="async"
                         src={imageUrl}
                         alt={`صورة توعوية ${index + 1}`}
                         loading="lazy"

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 
 type CompanyStat = {
     id: string;
@@ -166,4 +166,4 @@ function CompanyStats() {
     );
 }
 
-export default CompanyStats;
+export default memo(CompanyStats);

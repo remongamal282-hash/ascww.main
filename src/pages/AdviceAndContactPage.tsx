@@ -68,7 +68,7 @@ function AdviceAndContactPage() {
 
                 <div className="relative grid gap-4 lg:grid-cols-[minmax(0,1fr)_300px]">
                   <article className="group relative min-h-[260px] overflow-hidden rounded-2xl border border-white/30 shadow-[0_12px_25px_rgba(2,6,23,0.28)] sm:min-h-[360px]">
-                    <img
+                    <img decoding="async"
                       src={selectedCard.imageUrl}
                       alt={`صورة توعوية ${selectedCardIndex + 1}`}
                       loading="lazy"
@@ -95,7 +95,7 @@ function AdviceAndContactPage() {
                             }`}
                         >
                           <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/25 to-transparent" />
-                          <img
+                          <img decoding="async"
                             src={card.imageUrl}
                             alt={`صورة مصغرة ${index + 1}`}
                             loading="lazy"

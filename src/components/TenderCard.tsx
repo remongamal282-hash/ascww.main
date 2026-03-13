@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { memo } from 'react';
 import type { TenderItem } from '../types';
 import { useSpeech } from '../hooks/useSpeech';
 import {
@@ -44,6 +45,8 @@ function TenderCard({ tender }: TenderCardProps) {
                         src={imageUrl}
                         alt={tender.title || 'صورة المناقصة'}
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy"
+                        decoding="async"
                         onError={(event) => {
                             event.currentTarget.style.display = 'none';
                         }}
@@ -181,4 +184,4 @@ function TenderCard({ tender }: TenderCardProps) {
     );
 }
 
-export default TenderCard;
+export default memo(TenderCard);

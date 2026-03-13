@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import type { AdminInfoResponse } from '../types';
 import { ADMIN_IMAGE_ENDPOINT, sanitizeBossSpeechHtml } from '../utils/helpers';
 
@@ -45,6 +46,7 @@ function BossWord({ adminInfo, adminInfoLoading, adminInfoError }: BossWordProps
                             alt={`صورة ${bossName}`}
                             className="boss-word-photo h-full w-full object-cover"
                             loading="lazy"
+                            decoding="async"
                             onError={(event) => {
                                 const image = event.currentTarget;
                                 if (image.dataset.fallbackApplied) return;
@@ -59,4 +61,4 @@ function BossWord({ adminInfo, adminInfoLoading, adminInfoError }: BossWordProps
     );
 }
 
-export default BossWord;
+export default memo(BossWord);

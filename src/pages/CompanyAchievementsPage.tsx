@@ -136,7 +136,7 @@ function CompanyAchievementsPage() {
 
                         <div className="space-y-6 px-6 py-6 sm:px-8">
                             <div className="w-full rounded-2xl border-2 border-[#d7b05a]/45 bg-white shadow-sm">
-                                <img
+                                <img decoding="async"
                                     src={achievementsInfographicImage}
                                     alt="إنفوجراف إنجازات قطاع المشروعات"
                                     className="block h-auto w-full rounded-2xl border border-slate-200 object-cover"

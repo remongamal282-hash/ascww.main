@@ -58,7 +58,7 @@ const BookPage = forwardRef<HTMLDivElement, BookPageProps>(({
       className={`relative h-full w-full overflow-hidden rounded-md ${isCover ? 'bg-[#eadfc8]' : 'bg-[#f4f2ea]'}`}
     >
       {imageUrl ? (
-        <img
+        <img loading="lazy" decoding="async"
           alt={`صفحة ${pageNumber}`}
           className="h-full w-full object-contain"
           draggable={false}

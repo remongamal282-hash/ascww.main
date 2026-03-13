@@ -201,7 +201,7 @@ function TenderDetails() {
                 <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-lg md:flex md:flex-row">
                     {imageFiles.length > 0 ? (
                         <div className="group relative h-[280px] bg-gray-100 md:h-auto md:min-h-[520px] md:w-[320px] md:min-w-[320px] lg:w-[360px] lg:min-w-[360px]">
-                            <img
+                            <img loading="lazy" decoding="async"
                                 src={currentImageUrl}
                                 alt={tender.title || 'صورة المناقصة'}
                                 className="h-full w-full object-contain"

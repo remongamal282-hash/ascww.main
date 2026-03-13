@@ -86,7 +86,7 @@ function SaveSewageNetworkPage() {
                 </h2>
                 <div className="mt-4">
                   <figure className="mb-4 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm md:float-left md:mb-3 md:ml-6 md:w-[36%]">
-                    <img
+                    <img decoding="async"
                       src="/images/prosses-water/save1.webp"
                       alt="أهمية الحفاظ على شبكة الصرف الصحي"
                       loading="lazy"
@@ -114,7 +114,7 @@ function SaveSewageNetworkPage() {
                 <h2 className="text-xl font-extrabold text-[#0a3555] sm:text-2xl">مشاكل صيانه الشبكه</h2>
                 <div className="mt-4">
                   <figure className="mb-4 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm md:float-left md:mb-3 md:ml-6 md:w-[36%]">
-                    <img
+                    <img decoding="async"
                       src="/images/prosses-water/save2.webp"
                       alt="مشاكل صيانة شبكة الصرف الصحي"
                       loading="lazy"
@@ -145,7 +145,7 @@ function SaveSewageNetworkPage() {
                 </h2>
                 <div className="mt-4">
                   <figure className="mb-4 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm md:float-left md:mb-3 md:ml-6 md:w-[36%]">
-                    <img
+                    <img decoding="async"
                       src="/images/prosses-water/save3.webp"
                       alt="التعليمات حول تخطيط شبكة النقل ومحطات الضخ وصيانتها"
                       loading="lazy"
@@ -175,7 +175,7 @@ function SaveSewageNetworkPage() {
                 </h2>
                 <div className="mt-4">
                   <figure className="mb-4 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm md:float-left md:mb-3 md:ml-6 md:w-[44%]">
-                    <img
+                    <img decoding="async"
                       src="/images/prosses-water/save4.webp"
                       alt="الأنظمة حول تخطيط شبكة نقل الصرف الصحي وصيانتها"
                       loading="lazy"
@@ -222,7 +222,7 @@ function SaveSewageNetworkPage() {
             >
               إغلاق
             </button>
-            <img
+            <img loading="lazy" decoding="async"
               src={lightboxImage.src}
               alt={lightboxImage.alt}
               className="max-h-[92vh] w-auto max-w-full rounded-2xl border border-white/20 bg-white object-contain shadow-2xl"

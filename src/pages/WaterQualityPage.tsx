@@ -44,7 +44,7 @@ function WaterQualityPage() {
                   <div className="mb-3 text-center text-sm font-bold text-[#0a3555]">
                     {image.alt}
                   </div>
-                  <img
+                  <img decoding="async"
                     src={image.src}
                     alt={image.alt}
                     loading="lazy"

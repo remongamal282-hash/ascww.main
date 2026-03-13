@@ -1,4 +1,5 @@
 ﻿import { Link } from 'react-router-dom';
+import { memo } from 'react';
 import type { ProjectItem } from '../types';
 import { useSpeech } from '../hooks/useSpeech';
 import {
@@ -35,6 +36,8 @@ function ProjectCard({ project }: ProjectCardProps) {
                         src={imageUrl}
                         alt={project.title || 'صورة المشروع'}
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy"
+                        decoding="async"
                         onError={(event) => {
                             event.currentTarget.style.display = 'none';
                         }}
@@ -148,5 +151,5 @@ function ProjectCard({ project }: ProjectCardProps) {
     );
 }
 
-export default ProjectCard;
+export default memo(ProjectCard);
 
