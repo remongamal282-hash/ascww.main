@@ -181,6 +181,26 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  const archiveMetaRoutes = new Map([
+    ['/news-archive', { type: 'news', routeBase: '/news-archive' }],
+    ['/news-company', { type: 'news', routeBase: '/news-company' }],
+    ['/projects-archive', { type: 'project', routeBase: '/projects-archive' }],
+    ['/projects-company', { type: 'project', routeBase: '/projects-company' }],
+    ['/projects', { type: 'project', routeBase: '/projects' }],
+    ['/tenders-archive', { type: 'tender', routeBase: '/tenders-archive' }],
+    ['/tenders', { type: 'tender', routeBase: '/tenders' }],
+    ['/allTenders', { type: 'tender', routeBase: '/allTenders' }],
+    ['/alltenders', { type: 'tender', routeBase: '/alltenders' }],
+  ]);
+
+  const archiveMetaConfig = archiveMetaRoutes.get(pathname);
+  if (archiveMetaConfig) {
+    const ssrReq = { query: { type: archiveMetaConfig.type, routeBase: archiveMetaConfig.routeBase }, headers: req.headers };
+    const ssrRes = createSsrResponseAdapter(res);
+    await ssrHandler(ssrReq, ssrRes);
+    return;
+  }
+
   const homeMetaPaths = new Set([
     '/',
     '/index.html',
@@ -190,9 +210,6 @@ const server = http.createServer(async (req, res) => {
     '/organization-structure',
     '/contract-and-sell',
     '/company-achivement',
-    '/news-company',
-    '/projects-company',
-    '/projects',
     '/adviceAndContact',
     '/forKidsAndWomen',
     '/water-quality',
@@ -229,6 +246,16 @@ const server = http.createServer(async (req, res) => {
     const routeBase = `/${projectMatch[1]}`;
     const id = projectMatch[2];
     const ssrReq = { query: { id, type: 'project', routeBase }, headers: req.headers };
+    const ssrRes = createSsrResponseAdapter(res);
+    await ssrHandler(ssrReq, ssrRes);
+    return;
+  }
+
+  const tenderMatch = pathname.match(/^\/(tenders|allTenders|alltenders)\/([^/]+)$/);
+  if (tenderMatch) {
+    const routeBase = `/${tenderMatch[1]}`;
+    const id = tenderMatch[2];
+    const ssrReq = { query: { id, type: 'tender', routeBase }, headers: req.headers };
     const ssrRes = createSsrResponseAdapter(res);
     await ssrHandler(ssrReq, ssrRes);
     return;

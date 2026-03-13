@@ -5,8 +5,8 @@ import HTMLFlipBook from 'react-pageflip';
 import { GlobalWorkerOptions, getDocument } from 'pdfjs-dist';
 import workerSrc from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 
-const industrialWasteRolePdfFileName = 'manufactring.pdf';
-const industrialWasteRolePdfUrl = `${import.meta.env.BASE_URL}${industrialWasteRolePdfFileName}`;
+const customerCharterPdfFileName = 'CustomerCharter-site.pdf';
+const customerCharterPdfUrl = `${import.meta.env.BASE_URL}${customerCharterPdfFileName}`;
 const FAST_OPEN_PAGES = 2;
 const INITIAL_BACKGROUND_PAGES = 6;
 const BACKGROUND_FLUSH_INTERVAL = 4;
@@ -61,7 +61,7 @@ const BookPage = forwardRef<HTMLDivElement, BookPageProps>(({
       className={`relative h-full w-full overflow-hidden rounded-md ${isCover ? 'bg-[#eadfc8]' : 'bg-[#f4f2ea]'}`}
     >
       {imageUrl ? (
-        <img loading="lazy" decoding="async"
+        <img
           alt={`صفحة ${pageNumber} من ${totalPages}`}
           className="h-full w-full object-contain"
           draggable={false}
@@ -78,7 +78,7 @@ const BookPage = forwardRef<HTMLDivElement, BookPageProps>(({
 
 BookPage.displayName = 'BookPage';
 
-function IndustrialWasteRolePage() {
+function CustomerCharterPage() {
   const [isDownloading, setIsDownloading] = useState(false);
   const [isLoadingDocument, setIsLoadingDocument] = useState(true);
   const [loadingError, setLoadingError] = useState<string | null>(null);
@@ -187,20 +187,20 @@ function IndustrialWasteRolePage() {
     setIsDownloading(true);
 
     try {
-      const response = await fetch(industrialWasteRolePdfUrl);
+      const response = await fetch(customerCharterPdfUrl);
       if (!response.ok) throw new Error(`Download failed with status ${response.status}`);
       const blob = await response.blob();
       const objectUrl = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = objectUrl;
-      link.download = industrialWasteRolePdfFileName;
+      link.download = customerCharterPdfFileName;
       document.body.appendChild(link);
       link.click();
       link.remove();
       URL.revokeObjectURL(objectUrl);
     } catch {
       const fallbackLink = document.createElement('a');
-      fallbackLink.href = industrialWasteRolePdfUrl;
+      fallbackLink.href = customerCharterPdfUrl;
       fallbackLink.rel = 'noopener noreferrer';
       fallbackLink.target = '_blank';
       document.body.appendChild(fallbackLink);
@@ -303,13 +303,13 @@ function IndustrialWasteRolePage() {
         let doc: unknown;
         try {
           loadingTask = getDocument({
-            url: industrialWasteRolePdfUrl,
+            url: customerCharterPdfUrl,
             disableRange: false,
             disableStream: false,
           });
           doc = await loadingTask.promise;
         } catch {
-          const response = await fetch(industrialWasteRolePdfUrl);
+          const response = await fetch(customerCharterPdfUrl);
           if (!response.ok) {
             throw new Error(`PDF request failed with status ${response.status}`);
           }
@@ -343,7 +343,7 @@ function IndustrialWasteRolePage() {
       } catch {
         if (!aliveRef.current) return;
         setIsLoadingDocument(false);
-        setLoadingError('تعذر تحميل ملف دور إداره الصرف الصناعي. يمكنك استخدام زر تحميل PDF.');
+        setLoadingError('تعذر تحميل ملف ميثاق المتعاملين. يمكنك استخدام زر تحميل PDF.');
       }
     };
 
@@ -423,7 +423,7 @@ function IndustrialWasteRolePage() {
           <section className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_24px_60px_rgba(15,23,42,0.12)]">
             <div className="bg-gradient-to-l from-[#0a3555] to-[#1170b0] px-6 py-7 text-white sm:px-8">
               <h1 className="text-xl font-extrabold sm:text-2xl">
-                دور إداره الصرف الصناعي
+                ميثاق المتعاملين
               </h1>
             </div>
 
@@ -589,4 +589,4 @@ function IndustrialWasteRolePage() {
   );
 }
 
-export default IndustrialWasteRolePage;
+export default CustomerCharterPage;

@@ -729,6 +729,16 @@
     padding: 0;
   }
 
+  .flipbook-stage--portrait {
+    display: flex;
+    justify-content: center;
+  }
+
+  .flipbook-stage--portrait .flipbook-stage-glass {
+    width: min(86vw, 560px);
+    margin: 0 auto;
+  }
+
   .flipbook-stage-backdrop {
     display: none;
   }
