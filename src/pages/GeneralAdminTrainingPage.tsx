@@ -332,7 +332,7 @@ function GeneralAdminTrainingPage() {
                         className={`rounded-full px-4 py-2 text-sm font-bold transition sm:text-base ${
                           isActive
                             ? 'bg-gradient-to-l from-[#0a3555] to-[#1170b0] text-white shadow-[0_10px_24px_rgba(10,53,85,0.3)]'
-                            : 'border border-slate-200 bg-slate-50 text-slate-700 hover:border-[#1170b0]/50 hover:text-[#0a3555]'
+                            : 'bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900'
                         }`}
                       >
                         <span className="inline-flex items-center gap-2">

@@ -176,6 +176,9 @@ function JobsAndCompetitionPage() {
                             const fileUrl = filePath
                                 ? `${CAREER_FILE_ENDPOINT}/${encodeURIComponent(filePath)}`
                                 : '';
+                            const pdfEmbedUrl = fileUrl
+                                ? `${fileUrl}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`
+                                : '';
                             const imageUrl = imagePath && isImageFile(imagePath)
                                 ? `${CAREER_IMAGE_ENDPOINT}/${encodeURIComponent(imagePath)}`
                                 : '';
@@ -210,11 +213,17 @@ function JobsAndCompetitionPage() {
                                         ) : null}
                                         {fileUrl ? (
                                             <div className="overflow-hidden rounded-xl border border-slate-200">
-                                                <iframe
-                                                    title={currentJob.title || 'ملف الإعلان'}
-                                                    src={fileUrl}
+                                                <object
+                                                    data={pdfEmbedUrl}
+                                                    type="application/pdf"
                                                     className="h-[520px] w-full"
-                                                />
+                                                >
+                                                    <iframe
+                                                        title={currentJob.title || 'ملف الإعلان'}
+                                                        src={pdfEmbedUrl}
+                                                        className="h-[520px] w-full"
+                                                    />
+                                                </object>
                                             </div>
                                         ) : null}
                                         {fileUrl ? (

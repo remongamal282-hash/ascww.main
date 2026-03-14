@@ -151,10 +151,16 @@ const renderPanels = (items: CareerItem[]) => {
                 const downloadUrl = filePath
                     ? `${CAREER_FILE_ENDPOINT.replace('/file', '/download')}/${encodeURIComponent(filePath)}`
                     : '';
+                const pdfEmbedUrl = fileUrl
+                    ? `${fileUrl}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`
+                    : '';
                 const imageUrl = imagePath ? `${CAREER_IMAGE_ENDPOINT}/${encodeURIComponent(imagePath)}` : '';
 
                 return (
-                    <details key={item.id ?? item.slug ?? item.title} className="rounded-xl border border-slate-200 bg-white">
+                    <details
+                        key={item.id ?? item.slug ?? item.title}
+                        className="rounded-xl border border-slate-200 bg-white"
+                    >
                         <summary className="cursor-pointer px-4 py-3 text-sm font-semibold text-slate-800">
                             {item.title}
                         </summary>
@@ -177,7 +183,7 @@ const renderPanels = (items: CareerItem[]) => {
                                 <div className="overflow-hidden rounded-lg border border-slate-200">
                                     <iframe
                                         title={item.title || 'ملف'}
-                                        src={fileUrl}
+                                        src={pdfEmbedUrl}
                                         className="h-[520px] w-full"
                                     />
                                 </div>
