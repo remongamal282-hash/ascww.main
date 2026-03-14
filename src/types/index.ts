@@ -63,3 +63,21 @@ export type TenderItem = {
     updated_at?: string;
     tender_files?: TenderFile[];
 };
+
+export type CareerItem = {
+    id?: number;
+    slug?: string;
+    title?: string;
+    description?: string;
+    type_id?: number;
+    image_name?: string;
+    image_path?: string;
+    file_name?: string;
+    file_path?: string;
+    active?: number;
+    home?: number;
+    user_id?: number;
+    edit_user_id?: number | null;
+    created_at?: string;
+    updated_at?: string;
+};

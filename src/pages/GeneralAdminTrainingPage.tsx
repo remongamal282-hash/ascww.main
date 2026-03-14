@@ -37,6 +37,53 @@ const trainingTabs = [
   },
 ];
 
+const renderTrainingTabIcon = (id: string) => {
+  const wrapClass =
+    'flex h-7 w-7 items-center justify-center rounded-full text-white shadow-sm ring-1 ring-black/5';
+  const iconClass = 'h-4 w-4';
+
+  switch (id) {
+    case 'goals':
+      return (
+        <span className={`${wrapClass} bg-emerald-500`}>
+          <svg viewBox="0 0 24 24" className={iconClass} fill="none" stroke="currentColor" strokeWidth="1.9">
+            <path d="M5 4h9l4 4v12H5z" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M14 4v4h4" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="m9 13 2 2 4-4" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </span>
+      );
+    case 'values':
+      return (
+        <span className={`${wrapClass} bg-rose-500`}>
+          <svg viewBox="0 0 24 24" className={iconClass} fill="none" stroke="currentColor" strokeWidth="1.9">
+            <path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 5.6-7 10-7 10z" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </span>
+      );
+    case 'mission':
+      return (
+        <span className={`${wrapClass} bg-sky-500`}>
+          <svg viewBox="0 0 24 24" className={iconClass} fill="none" stroke="currentColor" strokeWidth="1.9">
+            <circle cx="12" cy="12" r="8" strokeLinecap="round" strokeLinejoin="round" />
+            <circle cx="12" cy="12" r="3.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </span>
+      );
+    case 'vision':
+      return (
+        <span className={`${wrapClass} bg-amber-500`}>
+          <svg viewBox="0 0 24 24" className={iconClass} fill="none" stroke="currentColor" strokeWidth="1.9">
+            <path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6-10-6-10-6z" strokeLinecap="round" strokeLinejoin="round" />
+            <circle cx="12" cy="12" r="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </span>
+      );
+    default:
+      return null;
+  }
+};
+
 const trainingShowcaseItems = [
   {
     id: 'training-specialist',
@@ -288,7 +335,10 @@ function GeneralAdminTrainingPage() {
                             : 'border border-slate-200 bg-slate-50 text-slate-700 hover:border-[#1170b0]/50 hover:text-[#0a3555]'
                         }`}
                       >
-                        {tab.title}
+                        <span className="inline-flex items-center gap-2">
+                          {renderTrainingTabIcon(tab.id)}
+                          {tab.title}
+                        </span>
                       </button>
                     );
                   })}

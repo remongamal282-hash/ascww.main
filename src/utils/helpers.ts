@@ -13,6 +13,17 @@ export const PROJECTS_ARCHIVE_PATH = ROUTES.projectsArchive;
 export const TENDERS_ENDPOINT = `${API_BASE_ENDPOINT}/tenders`;
 export const TENDER_FILE_ENDPOINT = `${API_BASE_ENDPOINT}/tenders/file`;
 export const TENDERS_ARCHIVE_PATH = ROUTES.tendersArchive;
+export const CAREERS_ENDPOINT = `${API_BASE_ENDPOINT}/careers`;
+export const CAREER_FILE_ENDPOINT = `${API_BASE_ENDPOINT}/careers/file`;
+export const CAREER_IMAGE_ENDPOINT = `${API_BASE_ENDPOINT}/careers/image`;
+export const CAREERS_PCR_ENDPOINT = `${API_BASE_ENDPOINT}/careers/pcr`;
+export const CAREERS_GER_ENDPOINT = `${API_BASE_ENDPOINT}/careers/ger`;
+export const CAREERS_WED_ENDPOINT = `${API_BASE_ENDPOINT}/careers/wed`;
+export const CAREERS_WTR_ENDPOINT = `${API_BASE_ENDPOINT}/careers/wtr`;
+export const CAREERS_PED_ENDPOINT = `${API_BASE_ENDPOINT}/careers/ped`;
+export const CAREERS_PTR_ENDPOINT = `${API_BASE_ENDPOINT}/careers/ptr`;
+export const CAREERS_ID_ENDPOINT = `${API_BASE_ENDPOINT}/careers/id`;
+export const CAREERS_AN_ENDPOINT = `${API_BASE_ENDPOINT}/careers/an`;
 export const BOSS_SINGLE_LINE_PHRASE = 'تحية تقدير وإعزاز لكل مواطن يساعد ويساهم في تحقيق هذا الهدف المنشود';
 
 const buildDetailsPath = (pattern: string, id: string) => pattern.replace(':id', encodeURIComponent(id));

@@ -30,6 +30,8 @@ const TendersArchive = lazy(() => import('./pages/TendersArchive'));
 const TenderDetails = lazy(() => import('./pages/TenderDetails'));
 const GeneralAdminTrainingPage = lazy(() => import('./pages/GeneralAdminTrainingPage'));
 const CallCenterPage = lazy(() => import('./pages/CallCenterPage'));
+const JobsAndCompetitionPage = lazy(() => import('./pages/JobsAndCompetitionPage'));
+const ResultOfWorkerPage = lazy(() => import('./pages/ResultOfWorkerPage'));
 
 function App() {
   return (
@@ -70,6 +72,8 @@ function App() {
           <Route path={ROUTES.tenderDetails} element={<TenderDetails />} />
           <Route path={ROUTES.generalAdminTraining} element={<GeneralAdminTrainingPage />} />
           <Route path={ROUTES.callCenter} element={<CallCenterPage />} />
+          <Route path={ROUTES.jobsAndCompetition} element={<JobsAndCompetitionPage />} />
+          <Route path={ROUTES.resultOfWorker} element={<ResultOfWorkerPage />} />
           <Route path="/news-company/:id" element={<NewsDetails />} />
           <Route path="/projects-company/:id" element={<ProjectDetails />} />
           <Route path="/allTenders/:id" element={<TenderDetails />} />
