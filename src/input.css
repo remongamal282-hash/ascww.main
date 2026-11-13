@@ -1230,8 +1230,7 @@
   }
 
   #hero-content {
-    border-radius: 0.75rem;
-    background: rgb(4 28 45 / 68%);
+    background: transparent;
     padding: 1rem 2.75rem;
   }
 }
